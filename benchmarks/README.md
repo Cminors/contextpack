@@ -27,7 +27,7 @@ The changed files are an imperfect reference set. Recall is therefore a retrieva
 | Repository | JS/TS files | Valid commits | Recall@5 | Recall@10 | MRR | Noise@10 | Test recall | Median tokens | Median analysis |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | `sindresorhus/p-map` | 6 | 12 | 1.000 | 1.000 | 0.757 | 0.501 | 1.000 | 1,498 | 666 ms |
-| `modelcontextprotocol/typescript-sdk` | 635 | 20 | 0.280 | 0.403 | 0.559 | 0.835 | 0.458 | 9,555 | 1,946 ms |
+| `modelcontextprotocol/typescript-sdk` | 635 | 20 | 0.292 | 0.414 | 0.605 | 0.825 | 0.472 | 9,002 | 2,029 ms |
 
 `p-map` only contained 12 commits that satisfied the feature-addition filter, so it does not meet the desired 20-valid-commit sample size. The MCP TypeScript SDK supplies the meaningful medium-repository result.
 
@@ -38,7 +38,8 @@ The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
 | Run | Recall@10 | MRR | Noise@10 | Median tokens | Median analysis |
 |---|---:|---:|---:|---:|---:|
 | V0.1 baseline, mixed commits | 0.210 | 0.267 | 0.925 | 13,854 | 3,351 ms |
-| Current feature-only evaluator | 0.403 | 0.559 | 0.835 | 9,555 | 1,946 ms |
+| Feature-only evaluator before structural expansion | 0.403 | 0.559 | 0.835 | 9,555 | 1,946 ms |
+| Current structural expansion | 0.414 | 0.605 | 0.825 | 9,002 | 2,029 ms |
 
 These rows are not a controlled model-only comparison because the commit filter was corrected at the same time. They document iteration progress, not a causal uplift claim.
 
@@ -52,16 +53,31 @@ These rows are not a controlled model-only comparison because the commit filter 
 - Lower priority for legacy implementations unless requested.
 - Configuration content matching only for explicit configuration/build intent.
 - A hard 105% limit on the final rendered context pack.
+- One- and two-level barrel/export propagation from task seeds.
+- Bounded same-directory feature expansion.
+- Category-aware prediction selection for tests, configs, examples, and barrels.
+
+## Rejected Experiments
+
+The following experiments were implemented and tested, then removed because they reduced the fixed five-commit smoke benchmark:
+
+- strong direct-test dependency promotion;
+- bidirectional same-stem test promotion;
+- frequency-normalized Git title terms;
+- plain-text exported-symbol reference expansion;
+- rare-term peak scoring.
+
+Keeping these negative results prevents repeating changes that look reasonable in isolation but reduce multi-file recall.
 
 ## Decision
 
-The medium-repository result does not pass the release gate of `Recall@10 >= 0.70` and `MRR >= 0.60`.
+The medium-repository result passes the MRR gate but does not pass the Recall@10 gate.
 
-- MRR is close to the threshold at 0.559.
+- MRR passes the threshold at 0.605.
 - Token size and analysis latency pass their goals.
 - Recall and test recall remain the limiting metrics.
 
-The next retrieval work should focus on cross-file expansion from high-confidence symbols: exported barrel files, direct tests, and same-feature files identified through symbol references. Adding a UI, more languages, or an embedded LLM is not justified by these results.
+The next retrieval work should use a real TypeScript Program and module resolver for symbol references rather than plain-text symbol scanning. Adding a UI, more languages, or an embedded LLM is not justified by these results.
 
 ## Reproduce
 

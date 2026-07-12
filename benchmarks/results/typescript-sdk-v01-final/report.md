@@ -5,37 +5,37 @@ This report measures a retrieval proxy, not Coding Agent success.
 ## Summary
 
 - Valid commits: 20/20
-- Recall@5: 0.292
-- Recall@10: 0.414
-- MRR: 0.605
-- Noise@10: 0.825
-- Median tokens: 9001.5
-- Median duration: 2028.5 ms
+- Recall@5: 0.280
+- Recall@10: 0.403
+- MRR: 0.559
+- Noise@10: 0.835
+- Median tokens: 9555
+- Median duration: 1945.5 ms
 
 ## Commits
 
 | Commit | Task title | R@5 | R@10 | MRR | Tokens |
 |---|---|---:|---:|---:|---:|
-| `24be4040` | feat(server): accept Standard Schemas in inputRequired.elicit (#2369) | 0.50 | 0.67 | 1.00 | 8692 |
-| `61866d7a` | feat(server): runtime-neutral OAuth discovery serving for web-standard hosts (#2422) | 0.25 | 0.50 | 0.50 | 7908 |
-| `7635115d` | feat(server): runtime-neutral requireBearerAuth for web-standard hosts (#2420) | 0.33 | 0.67 | 0.33 | 9005 |
-| `f172626a` | feat(packaging): ship CommonJS builds alongside ESM for v2 packages (#2405) | 0.00 | 0.10 | 0.10 | 11587 |
-| `6cc7b1cb` | feat(node): export toWebRequest(), the IncomingMessage→Request conversion inside toNodeHandler (#2390) | 0.40 | 0.40 | 1.00 | 8097 |
-| `c59dc3aa` | feat(server): expose icons on registerTool/registerPrompt (McpServer) (#2353) | 0.33 | 0.33 | 1.00 | 10038 |
-| `78fbe273` | feat(core): reserved trace context _meta keys and propagation docs (SEP-414) (#2270) | 0.00 | 0.00 | 0.09 | 7726 |
-| `49c0a711` | feat: deprecate roots, sampling, and logging runtime APIs (SEP-2577) (#2268) | 0.00 | 0.33 | 0.13 | 8875 |
-| `4a5c863a` | Add consumer-sourced e2e requirements and the legacy SSE matrix column (#2203) | 0.11 | 0.11 | 0.25 | 10419 |
-| `96db044f` | feat(core): add isSpecType / specTypeSchemas Records for runtime validation of spec types (#1887) | 0.33 | 0.67 | 0.20 | 5830 |
-| `db83829c` | feat(core): custom-method support (3-arg setRequestHandler + request schema overload) (#1974) | 0.13 | 0.38 | 0.50 | 8338 |
-| `e15a8ef3` | feat(compat): registerTool/registerPrompt accept raw Zod shape, auto-wrap with z.object() (#1901) | 0.33 | 0.33 | 1.00 | 8998 |
-| `7cccc2ac` | feat(express): restore Resource-Server auth glue (requireBearerAuth, mcpAuthMetadataRouter) (#1907) | 0.33 | 0.50 | 0.50 | 6348 |
-| `42cb6b2b` | feat(compat): export InMemoryTransport from public API surface (#1834) | 0.50 | 0.50 | 1.00 | 12455 |
-| `9ed62fe7` | feat(client): support custom claims in PrivateKeyJwtProvider (#1875) | 0.50 | 1.00 | 0.50 | 9436 |
-| `f73a5af4` | Add _meta support to registerPrompt (#1629) | 0.50 | 0.50 | 1.00 | 9792 |
-| `045c62a1` | feat!: remove WebSocketClientTransport (#1783) | 0.33 | 0.33 | 1.00 | 10763 |
-| `6711ed9a` | feat(client): add reconnectionScheduler to StreamableHTTPClientTransport (#1763) | 0.67 | 0.67 | 1.00 | 11090 |
-| `e563e63b` | feat: introduce minimal AuthProvider interface with OAuthClientProvider adapter (#1710) | 0.17 | 0.17 | 0.50 | 10134 |
-| `0784be1a` | feat: support Standard Schema for tool/prompt schemas (#1689) | 0.13 | 0.13 | 0.50 | 7891 |
+| `24be4040` | feat(server): accept Standard Schemas in inputRequired.elicit (#2369) | 0.50 | 0.67 | 0.50 | 8521 |
+| `61866d7a` | feat(server): runtime-neutral OAuth discovery serving for web-standard hosts (#2422) | 0.00 | 0.50 | 0.13 | 8169 |
+| `7635115d` | feat(server): runtime-neutral requireBearerAuth for web-standard hosts (#2420) | 0.33 | 0.67 | 0.50 | 7858 |
+| `f172626a` | feat(packaging): ship CommonJS builds alongside ESM for v2 packages (#2405) | 0.00 | 0.00 | 0.08 | 11089 |
+| `6cc7b1cb` | feat(node): export toWebRequest(), the IncomingMessage→Request conversion inside toNodeHandler (#2390) | 0.40 | 0.40 | 1.00 | 7447 |
+| `c59dc3aa` | feat(server): expose icons on registerTool/registerPrompt (McpServer) (#2353) | 0.33 | 0.33 | 1.00 | 9790 |
+| `78fbe273` | feat(core): reserved trace context _meta keys and propagation docs (SEP-414) (#2270) | 0.00 | 0.00 | 0.06 | 7686 |
+| `49c0a711` | feat: deprecate roots, sampling, and logging runtime APIs (SEP-2577) (#2268) | 0.00 | 0.33 | 0.13 | 9875 |
+| `4a5c863a` | Add consumer-sourced e2e requirements and the legacy SSE matrix column (#2203) | 0.00 | 0.00 | 0.08 | 11421 |
+| `96db044f` | feat(core): add isSpecType / specTypeSchemas Records for runtime validation of spec types (#1887) | 0.33 | 0.67 | 0.20 | 7096 |
+| `db83829c` | feat(core): custom-method support (3-arg setRequestHandler + request schema overload) (#1974) | 0.25 | 0.38 | 0.50 | 7355 |
+| `e15a8ef3` | feat(compat): registerTool/registerPrompt accept raw Zod shape, auto-wrap with z.object() (#1901) | 0.33 | 0.33 | 1.00 | 10086 |
+| `7cccc2ac` | feat(express): restore Resource-Server auth glue (requireBearerAuth, mcpAuthMetadataRouter) (#1907) | 0.33 | 0.50 | 0.50 | 5917 |
+| `42cb6b2b` | feat(compat): export InMemoryTransport from public API surface (#1834) | 0.50 | 0.50 | 1.00 | 12538 |
+| `9ed62fe7` | feat(client): support custom claims in PrivateKeyJwtProvider (#1875) | 0.50 | 1.00 | 0.50 | 10453 |
+| `f73a5af4` | Add _meta support to registerPrompt (#1629) | 0.50 | 0.50 | 1.00 | 9320 |
+| `045c62a1` | feat!: remove WebSocketClientTransport (#1783) | 0.33 | 0.33 | 1.00 | 11074 |
+| `6711ed9a` | feat(client): add reconnectionScheduler to StreamableHTTPClientTransport (#1763) | 0.67 | 0.67 | 1.00 | 11092 |
+| `e563e63b` | feat: introduce minimal AuthProvider interface with OAuthClientProvider adapter (#1710) | 0.17 | 0.17 | 0.50 | 9850 |
+| `0784be1a` | feat: support Standard Schema for tool/prompt schemas (#1689) | 0.13 | 0.13 | 0.50 | 7698 |
 
 ## Skipped
 

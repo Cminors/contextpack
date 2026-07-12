@@ -5,6 +5,7 @@ import { analyzeFiles } from "./ast.js";
 import { readGitHistory } from "./git-history.js";
 import { rankCandidates } from "../ranking/score.js";
 import { selectCandidates } from "../ranking/select.js";
+import { prioritizeCandidates } from "../ranking/predictions.js";
 
 function suggestedCommands(packages: Awaited<ReturnType<typeof discoverRepository>>["packages"]): SuggestedCommand[] {
   const commands: SuggestedCommand[] = [];
@@ -30,8 +31,14 @@ export async function analyzeTask(options: AnalysisOptions): Promise<ContextMani
   const terms = normalizeTaskTerms(options.task);
   const history = repository.snapshot.isGitRepository
     ? readGitHistory(repository.snapshot.root, options.historyCount, new Set(repository.sourceFiles))
-    : { commits: [], fileCommitCounts: new Map(), coChange: new Map(), titleTermsByFile: new Map() };
-  const candidates = rankCandidates(files, terms, history, repository.rules, extractConventionalScope(options.task));
+    : {
+        commits: [],
+        fileCommitCounts: new Map(),
+        coChange: new Map(),
+        titleTermsByFile: new Map(),
+      };
+  const rankedCandidates = rankCandidates(files, terms, history, repository.rules, extractConventionalScope(options.task));
+  const candidates = prioritizeCandidates(rankedCandidates, { limit: 20 });
   const selected = selectCandidates(candidates, files, options.budget);
   const snippetTokens = selected.reduce((sum, item) => sum + item.estimatedTokens, 0);
 

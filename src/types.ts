@@ -106,6 +106,14 @@ export interface ContextCandidate {
   estimatedTokens: number;
 }
 
+export interface PredictionOptions {
+  limit: number;
+  maxTests?: number;
+  maxConfigs?: number;
+  maxExamples?: number;
+  maxBarrels?: number;
+}
+
 export interface ContextSelection extends ContextCandidate {
   snippet: string;
 }

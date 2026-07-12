@@ -60,6 +60,21 @@ function matchedTermCount(terms: string[], text: string): number {
   return terms.filter((term) => matchesTerm(text, term)).length;
 }
 
+function sameFeatureStrength(
+  file: FileAnalysis,
+  terms: string[],
+  weights: Map<string, number>,
+  seeds: Set<string>,
+): number {
+  if (file.isConfig || seeds.has(file.path)) return 0;
+  const directory = path.posix.dirname(file.path);
+  const hasSeedInDirectory = [...seeds].some((seed) => path.posix.dirname(seed) === directory);
+  if (!hasSeedInDirectory) return 0;
+  const symbolText = file.symbols.map((item) => item.name).join(" ");
+  const match = weightedMatch(terms, `${path.posix.basename(file.path)} ${symbolText}`, weights);
+  return match >= 0.2 ? Math.min(0.55, match) : 0;
+}
+
 function bestSymbol(file: FileAnalysis, terms: string[], weights: Map<string, number>): SymbolRecord | null {
   return [...file.symbols].sort((left, right) => {
     const delta = weightedMatch(terms, right.name, weights) - weightedMatch(terms, left.name, weights);
@@ -99,14 +114,52 @@ function dependencyDistances(files: FileAnalysis[], seeds: Set<string>): Map<str
   return distances;
 }
 
+function barrelDistances(files: FileAnalysis[], seeds: Set<string>): Map<string, number> {
+  const byPath = new Map(files.map((file) => [file.path, file]));
+  const distances = new Map<string, number>();
+  const queue = [...seeds].map((filePath) => ({ filePath, distance: 0 }));
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current || current.distance >= 2) continue;
+    const file = byPath.get(current.filePath);
+    if (!file) continue;
+    for (const importerPath of file.importedBy) {
+      if (!/(?:^|\/)index\.[cm]?[jt]sx?$/i.test(importerPath) || distances.has(importerPath)) continue;
+      const distance = current.distance + 1;
+      distances.set(importerPath, distance);
+      queue.push({ filePath: importerPath, distance });
+    }
+  }
+  return distances;
+}
+
 function testStrength(file: FileAnalysis, files: FileAnalysis[], seeds: Set<string>): number {
   if (file.isTest && file.imports.some((item) => seeds.has(item))) return 1;
   if (!file.isTest && files.some((item) => item.isTest && item.imports.includes(file.path) && seeds.has(file.path))) return 0.8;
   const stem = path.posix.basename(file.path).replace(/\.(?:test|spec)?\.[^.]+$/, "");
-  return files.some((item) => item.path !== file.path && item.isTest && path.posix.basename(item.path).includes(stem)) ? 0.45 : 0;
+  const matchingTest = files.find((item) =>
+    item.path !== file.path && item.isTest && path.posix.basename(item.path).replace(/\.(?:test|spec)\.[^.]+$/, "") === stem,
+  );
+  if (matchingTest && (seeds.has(file.path) || seeds.has(matchingTest.path))) return 0.75;
+  return matchingTest ? 0.35 : 0;
 }
 
-function relationshipsFor(file: FileAnalysis, files: FileAnalysis[], history: GitHistoryIndex, seeds: Set<string>, rules: RuleRecord[]): CandidateRelationship[] {
+function directStructuralStrength(
+  file: FileAnalysis,
+  barrelDistance: number | undefined,
+): number {
+  if (barrelDistance === 1) return 1;
+  if (barrelDistance === 2) return 0.85;
+  return 0;
+}
+
+function relationshipsFor(
+  file: FileAnalysis,
+  files: FileAnalysis[],
+  history: GitHistoryIndex,
+  seeds: Set<string>,
+  rules: RuleRecord[],
+): CandidateRelationship[] {
   const relationships: CandidateRelationship[] = [];
   for (const target of file.imports.filter((item) => seeds.has(item)).slice(0, 3)) {
     relationships.push({ kind: "imports", target, strength: 1, detail: "Direct import of a lexical seed" });
@@ -183,11 +236,14 @@ export function rankCandidates(
     seeds = new Set(files.filter((file) => !file.isConfig).slice(0, 3).map((file) => file.path));
   }
   const distances = dependencyDistances(files, seeds);
+  const barrelGraph = barrelDistances(files, seeds);
 
   return files.map((file) => {
     const relevance = rawRelevance.get(file.path) ?? { lexical: 0, symbol: 0 };
     const distance = distances.get(file.path);
-    const dependency = distance === 0 ? 1 : distance === 1 ? 0.7 : distance === 2 ? 0.35 : 0;
+    const structural = directStructuralStrength(file, barrelGraph.get(file.path));
+    const sameFeature = sameFeatureStrength(file, terms, weights, seeds);
+    const dependency = Math.max(structural, sameFeature, distance === 0 ? 1 : distance === 1 ? 0.7 : distance === 2 ? 0.35 : 0);
     const coChange = Math.max(0, ...[...seeds].map((seed) => coChangeStrength(history, file.path, seed)));
     const title = weightedMatch(terms, [...(history.titleTermsByFile.get(file.path) ?? [])].join(" "), weights);
     const test = testStrength(file, files, seeds);

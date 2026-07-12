@@ -105,4 +105,48 @@ describe("candidate ranking", () => {
     expect(ranked[0]?.path).toBe(source.path);
     expect(ranked.find((item) => item.path === config.path)?.breakdown.rule).toBe(0);
   });
+
+  it("treats a barrel exporting a task seed as a strong structural neighbor", () => {
+    const implementation = file("src/auth.ts", [], ["src/index.ts"]);
+    const barrel = file("src/index.ts", ["src/auth.ts"]);
+    const ranked = rankCandidates([barrel, implementation], ["auth"], emptyGitHistory(), []);
+    expect(ranked.find((item) => item.path === barrel.path)?.breakdown.dependency).toBe(1);
+    expect(ranked.find((item) => item.path === barrel.path)?.relationships).toContainEqual(
+      expect.objectContaining({ kind: "imports", target: implementation.path }),
+    );
+  });
+
+  it("propagates a strong structural signal through two barrel levels", () => {
+    const implementation = file("src/types/feature.ts", [], ["src/types/index.ts"]);
+    const localBarrel = file("src/types/index.ts", [implementation.path], ["src/exports/public/index.ts"]);
+    const publicBarrel = file("src/exports/public/index.ts", [localBarrel.path]);
+    const ranked = rankCandidates([publicBarrel, localBarrel, implementation], ["feature"], emptyGitHistory(), []);
+    expect(ranked.find((item) => item.path === localBarrel.path)?.breakdown.dependency).toBe(1);
+    expect(ranked.find((item) => item.path === publicBarrel.path)?.breakdown.dependency).toBe(0.85);
+  });
+
+  it("maps a direct test to a task seed without overriding dependency rank", () => {
+    const source = {
+      ...file("src/transport.ts", [], ["test/integration.test.ts"]),
+      symbols: [{ name: "reconnectionScheduler", kind: "function" as const, startLine: 1, endLine: 1, exported: true, text: "" }],
+    };
+    const testFile = file("test/integration.test.ts", [source.path], [], true);
+    const ranked = rankCandidates([source, testFile], ["reconnection", "scheduler"], emptyGitHistory(), []);
+    const testCandidate = ranked.find((item) => item.path === testFile.path);
+    expect(testCandidate?.breakdown.dependency).toBe(0.7);
+    expect(testCandidate?.breakdown.test).toBe(1);
+  });
+
+  it("weakly expands to same-directory files sharing task-specific symbols", () => {
+    const seed = file("src/auth/provider.ts");
+    const neighbor = {
+      ...file("src/auth/metadata.ts"),
+      symbols: [{ name: "OAuthMetadata", kind: "interface" as const, startLine: 1, endLine: 1, exported: true, text: "" }],
+    };
+    const unrelated = file("src/client/request.ts");
+    const ranked = rankCandidates([unrelated, neighbor, seed], ["auth", "oauth", "metadata"], emptyGitHistory(), []);
+    expect(ranked.find((item) => item.path === neighbor.path)?.breakdown.dependency).toBeGreaterThan(0);
+    expect(ranked.find((item) => item.path === unrelated.path)?.breakdown.dependency).toBe(0);
+  });
+
 });
