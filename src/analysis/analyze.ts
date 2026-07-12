@@ -1,5 +1,5 @@
 import type { AnalysisOptions, ContextManifest, SuggestedCommand } from "../types.js";
-import { normalizeTaskTerms } from "../utils/task-terms.js";
+import { extractConventionalScope, normalizeTaskTerms } from "../utils/task-terms.js";
 import { discoverRepository } from "../repository/discover.js";
 import { analyzeFiles } from "./ast.js";
 import { readGitHistory } from "./git-history.js";
@@ -31,7 +31,7 @@ export async function analyzeTask(options: AnalysisOptions): Promise<ContextMani
   const history = repository.snapshot.isGitRepository
     ? readGitHistory(repository.snapshot.root, options.historyCount, new Set(repository.sourceFiles))
     : { commits: [], fileCommitCounts: new Map(), coChange: new Map(), titleTermsByFile: new Map() };
-  const candidates = rankCandidates(files, terms, history, repository.rules);
+  const candidates = rankCandidates(files, terms, history, repository.rules, extractConventionalScope(options.task));
   const selected = selectCandidates(candidates, files, options.budget);
   const snippetTokens = selected.reduce((sum, item) => sum + item.estimatedTokens, 0);
 

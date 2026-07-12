@@ -8,7 +8,6 @@ import type {
   ScoreBreakdown,
   SymbolRecord,
 } from "../types.js";
-import { lexicalMatch } from "../utils/task-terms.js";
 import { coChangeStrength } from "../analysis/git-history.js";
 
 export const SCORE_WEIGHTS = {
@@ -20,9 +19,50 @@ export const SCORE_WEIGHTS = {
   rule: 0.07,
 } as const;
 
-function bestSymbol(file: FileAnalysis, terms: string[]): SymbolRecord | null {
+function words(value: string): Set<string> {
+  return new Set(
+    value
+      .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+      .normalize("NFKC")
+      .toLowerCase()
+      .split(/[^a-z0-9\u3400-\u9fff]+/)
+      .filter(Boolean),
+  );
+}
+
+function matchesTerm(text: string, term: string): boolean {
+  const normalized = text.normalize("NFKC").toLowerCase();
+  return /[\u3400-\u9fff]/.test(term) ? normalized.includes(term) : words(text).has(term);
+}
+
+function termWeights(files: FileAnalysis[], terms: string[]): Map<string, number> {
+  const weights = new Map<string, number>();
+  for (const term of terms) {
+    const frequency = files.filter((file) =>
+      matchesTerm(`${file.path} ${file.symbols.map((item) => item.name).join(" ")}`, term),
+    ).length;
+    weights.set(term, Math.log((files.length + 1) / (frequency + 1)) + 1);
+  }
+  return weights;
+}
+
+function weightedMatch(terms: string[], text: string, weights: Map<string, number>): number {
+  const total = terms.reduce((sum, term) => sum + (weights.get(term) ?? 1), 0);
+  if (total === 0 || !text) return 0;
+  const matched = terms.reduce(
+    (sum, term) => sum + (matchesTerm(text, term) ? (weights.get(term) ?? 1) : 0),
+    0,
+  );
+  return Math.min(1, matched / total);
+}
+
+function matchedTermCount(terms: string[], text: string): number {
+  return terms.filter((term) => matchesTerm(text, term)).length;
+}
+
+function bestSymbol(file: FileAnalysis, terms: string[], weights: Map<string, number>): SymbolRecord | null {
   return [...file.symbols].sort((left, right) => {
-    const delta = lexicalMatch(terms, right.name) - lexicalMatch(terms, left.name);
+    const delta = weightedMatch(terms, right.name, weights) - weightedMatch(terms, left.name, weights);
     return delta || Number(right.exported) - Number(left.exported) || left.startLine - right.startLine;
   })[0] ?? null;
 }
@@ -90,15 +130,55 @@ function relationshipsFor(file: FileAnalysis, files: FileAnalysis[], history: Gi
   return relationships;
 }
 
-export function rankCandidates(files: FileAnalysis[], terms: string[], history: GitHistoryIndex, rules: RuleRecord[]): ContextCandidate[] {
+export function rankCandidates(
+  files: FileAnalysis[],
+  terms: string[],
+  history: GitHistoryIndex,
+  rules: RuleRecord[],
+  taskScope: string | null = null,
+): ContextCandidate[] {
+  const weights = termWeights(files, terms);
+  const filesByPath = new Map(files.map((file) => [file.path, file]));
+  const configurationIntent = terms.some((term) =>
+    ["build", "builds", "bundle", "bundling", "cjs", "commonjs", "config", "configuration", "esm", "package", "packages", "packaging"].includes(term),
+  );
   const rawRelevance = new Map<string, { lexical: number; symbol: number }>();
   for (const file of files) {
-    const lexical = lexicalMatch(terms, file.path);
-    const symbolScore = file.symbols.reduce((best, item) => Math.max(best, lexicalMatch(terms, item.name)), 0);
-    const titleScore = lexicalMatch(terms, [...(history.titleTermsByFile.get(file.path) ?? [])].join(" "));
-    rawRelevance.set(file.path, { lexical: Math.max(lexical, titleScore * 0.65), symbol: symbolScore });
+    const pathScore = weightedMatch(terms, file.path, weights);
+    const configContent = file.content.slice(0, 50_000);
+    const contentScore = configurationIntent && file.isConfig && !file.path.endsWith("package.json") && matchedTermCount(terms, configContent) >= 2
+      ? weightedMatch(terms, configContent, weights)
+      : 0;
+    const baseLexical = Math.max(pathScore, contentScore * 0.85);
+    const scopeMatch = taskScope && file.path.toLowerCase().split("/").includes(taskScope) ? 0.35 : 0;
+    const lexical = taskScope ? Math.min(1, baseLexical * 0.65 + scopeMatch) : baseLexical;
+    const symbolScore = file.symbols.reduce((best, item) => Math.max(best, weightedMatch(terms, item.name, weights)), 0);
+    rawRelevance.set(file.path, { lexical, symbol: symbolScore });
   }
-  let seeds = new Set([...rawRelevance].filter(([, value]) => Math.max(value.lexical, value.symbol) > 0).map(([filePath]) => filePath));
+  const rankedSeeds = [...rawRelevance]
+    .filter(([, value]) => Math.max(value.lexical, value.symbol) > 0)
+    .sort(([leftPath, left], [rightPath, right]) =>
+      Math.max(right.lexical, right.symbol) - Math.max(left.lexical, left.symbol) || leftPath.localeCompare(rightPath),
+    );
+  const seedPaths: string[] = [];
+  const categoryCounts = { config: 0, test: 0, example: 0 };
+  const packageCounts = new Map<string, number>();
+  for (const [filePath] of rankedSeeds) {
+    const file = filesByPath.get(filePath);
+    if (!file) continue;
+    if (file.isConfig && categoryCounts.config >= 2) continue;
+    if (file.isTest && categoryCounts.test >= 3) continue;
+    if (file.path.startsWith("examples/") && categoryCounts.example >= 4) continue;
+    const packageKey = file.packageDirectory && file.packageDirectory !== "." ? file.packageDirectory : null;
+    if (packageKey && (packageCounts.get(packageKey) ?? 0) >= 3) continue;
+    if (file.isConfig) categoryCounts.config += 1;
+    if (file.isTest) categoryCounts.test += 1;
+    if (file.path.startsWith("examples/")) categoryCounts.example += 1;
+    if (packageKey) packageCounts.set(packageKey, (packageCounts.get(packageKey) ?? 0) + 1);
+    seedPaths.push(filePath);
+    if (seedPaths.length >= 12) break;
+  }
+  let seeds = new Set(seedPaths);
   if (seeds.size === 0) {
     seeds = new Set(files.filter((file) => !file.isConfig).slice(0, 3).map((file) => file.path));
   }
@@ -107,11 +187,13 @@ export function rankCandidates(files: FileAnalysis[], terms: string[], history: 
   return files.map((file) => {
     const relevance = rawRelevance.get(file.path) ?? { lexical: 0, symbol: 0 };
     const distance = distances.get(file.path);
-    const dependency = distance === 0 ? 0.65 : distance === 1 ? 1 : distance === 2 ? 0.55 : 0;
+    const dependency = distance === 0 ? 1 : distance === 1 ? 0.7 : distance === 2 ? 0.35 : 0;
     const coChange = Math.max(0, ...[...seeds].map((seed) => coChangeStrength(history, file.path, seed)));
-    const title = lexicalMatch(terms, [...(history.titleTermsByFile.get(file.path) ?? [])].join(" "));
+    const title = weightedMatch(terms, [...(history.titleTermsByFile.get(file.path) ?? [])].join(" "), weights);
     const test = testStrength(file, files, seeds);
-    const rule = Math.min(1, applicableRules(file.path, rules).length * 0.5 + (file.isConfig ? 0.35 : 0));
+    const matchingRules = applicableRules(file.path, rules);
+    const scopedRule = matchingRules.some((item) => item.scopeDirectory !== "." || item.globs.length > 0) ? 0.5 : matchingRules.length > 0 ? 0.1 : 0;
+    const rule = Math.min(1, scopedRule + (configurationIntent && file.isConfig && relevance.lexical > 0 ? 0.25 : 0));
     const breakdown: ScoreBreakdown = {
       lexical: relevance.lexical,
       symbol: relevance.symbol,
@@ -120,16 +202,18 @@ export function rankCandidates(files: FileAnalysis[], terms: string[], history: 
       test,
       rule,
     };
-    const score = Object.entries(SCORE_WEIGHTS).reduce(
+    const rawScore = Object.entries(SCORE_WEIGHTS).reduce(
       (total, [key, weight]) => total + breakdown[key as keyof ScoreBreakdown] * weight,
       0,
     );
+    const legacyPenalty = !terms.includes("legacy") && /(?:^|[\/._-])legacy(?:[\/._-]|$)/i.test(file.path) ? 0.6 : 1;
+    const score = rawScore * legacyPenalty;
     const reasons = (Object.keys(SCORE_WEIGHTS) as Array<keyof ScoreBreakdown>)
       .filter((key) => breakdown[key] > 0)
       .sort((a, b) => breakdown[b] * SCORE_WEIGHTS[b] - breakdown[a] * SCORE_WEIGHTS[a])
       .slice(0, 3)
       .map((key) => `${key} signal ${breakdown[key].toFixed(2)}`);
-    const chosenSymbol = bestSymbol(file, terms);
+    const chosenSymbol = bestSymbol(file, terms, weights);
     return {
       path: file.path,
       symbol: chosenSymbol,

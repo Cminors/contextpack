@@ -117,7 +117,12 @@ function packageDirectoryFor(filePath: string, repository: DiscoveredRepository)
   return matches[0] ?? null;
 }
 
-function resolveImport(fromPath: string, specifier: string, knownFiles: Set<string>): string | null {
+function resolveImport(
+  fromPath: string,
+  specifier: string,
+  knownFiles: Set<string>,
+  repository: DiscoveredRepository,
+): string | null {
   const fromDirectory = path.posix.dirname(fromPath);
   const bases: string[] = [];
 
@@ -127,11 +132,29 @@ function resolveImport(fromPath: string, specifier: string, knownFiles: Set<stri
     const rest = specifier.slice(2);
     bases.push(`src/${rest}`, rest);
   } else {
-    return null;
+    const workspacePackage = repository.packages
+      .filter((item) => item.name)
+      .sort((left, right) => (right.name?.length ?? 0) - (left.name?.length ?? 0))
+      .find((item) => specifier === item.name || specifier.startsWith(`${item.name}/`));
+    if (!workspacePackage?.name) return null;
+    const subpath = specifier === workspacePackage.name ? "" : specifier.slice(workspacePackage.name.length + 1);
+    const directory = workspacePackage.directory === "." ? "" : workspacePackage.directory;
+    if (subpath) {
+      bases.push(path.posix.join(directory, "src", subpath), path.posix.join(directory, subpath));
+    } else {
+      bases.push(path.posix.join(directory, "src", "index"), path.posix.join(directory, "index"));
+    }
   }
 
   for (const base of bases) {
     const candidates = [base];
+    if (/\.[cm]?jsx?$/.test(base)) {
+      const withoutRuntimeExtension = base.replace(/\.[cm]?jsx?$/, "");
+      candidates.push(withoutRuntimeExtension);
+      for (const extension of [".ts", ".tsx", ".mts", ".cts"]) {
+        candidates.push(`${withoutRuntimeExtension}${extension}`, `${withoutRuntimeExtension}/index${extension}`);
+      }
+    }
     for (const extension of SOURCE_EXTENSIONS) {
       candidates.push(`${base}${extension}`, `${base}/index${extension}`);
     }
@@ -150,7 +173,7 @@ export async function analyzeFiles(repository: DiscoveredRepository): Promise<Fi
     const content = await fs.readFile(absolutePath, "utf8");
     const source = ts.createSourceFile(relativePath, content, ts.ScriptTarget.Latest, true, scriptKind(relativePath));
     const imports = importSpecifiers(source)
-      .map((specifier) => resolveImport(relativePath, specifier, knownFiles))
+      .map((specifier) => resolveImport(relativePath, specifier, knownFiles, repository))
       .filter((value): value is string => value !== null);
 
     analyses.push({
@@ -163,7 +186,7 @@ export async function analyzeFiles(repository: DiscoveredRepository): Promise<Fi
       importedBy: [],
       symbols: topLevelSymbols(source),
       isTest: testPath(relativePath),
-      isConfig: false,
+      isConfig: /(?:^|\/)[^/]*config\.[cm]?[jt]sx?$/i.test(relativePath),
       packageDirectory: packageDirectoryFor(relativePath, repository),
     });
   }

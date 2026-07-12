@@ -102,6 +102,10 @@ npm install
 npm run check
 ```
 
+## Benchmark status
+
+The current medium-repository benchmark reaches Recall@10 0.403 and MRR 0.559 across 20 feature commits in the MCP TypeScript SDK. This is below the project release gate, so ContextPack should still be treated as an experimental V0.1 retrieval tool. See [`benchmarks/README.md`](benchmarks/README.md) for the method, limitations, and raw results.
+
 ## License
 
 MIT

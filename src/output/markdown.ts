@@ -1,8 +1,8 @@
 import type { ContextManifest, EvaluationReport } from "../types.js";
 import { countTokens } from "./tokens.js";
 
-const codeFence = (path: string): string => {
-  const extension = path.split(".").pop()?.toLowerCase();
+const codeFence = (filePath: string): string => {
+  const extension = filePath.split(".").pop()?.toLowerCase();
   return extension === "ts" || extension === "tsx" || extension === "mts" || extension === "cts"
     ? "typescript"
     : extension === "js" || extension === "jsx" || extension === "mjs" || extension === "cjs"
@@ -14,7 +14,7 @@ function tableEscape(value: string): string {
   return value.replaceAll("|", "\\|").replaceAll("\n", " ");
 }
 
-export function renderContext(manifest: ContextManifest): string {
+function composeContext(manifest: ContextManifest): string {
   const selectedPaths = new Set(manifest.selected.map((item) => item.path));
   const applicableRules = manifest.rules.filter((rule) =>
     [...selectedPaths].some((filePath) => rule.scopeDirectory === "." || filePath.startsWith(`${rule.scopeDirectory}/`)),
@@ -31,7 +31,7 @@ export function renderContext(manifest: ContextManifest): string {
     "## 4. Why Included",
     manifest.selected.map((item) => `- \`${item.path}\`: ${item.reasons.join("; ")}`).join("\n") || "No snippets fit the budget.",
     "## 5. Relationships",
-    manifest.selected.flatMap((item) => item.relationships.map((relation) => `- \`${item.path}\` ${relation.kind} \`${relation.target}\` (${relation.strength.toFixed(2)}): ${relation.detail}`)).join("\n") || "No direct relationships were detected.",
+    manifest.selected.flatMap((item) => item.relationships.slice(0, 4).map((relation) => `- \`${item.path}\` ${relation.kind} \`${relation.target}\` (${relation.strength.toFixed(2)}): ${relation.detail}`)).join("\n") || "No direct relationships were detected.",
     "## 6. Applicable Rules",
     applicableRules.slice(0, 10).map((rule) => `- \`${rule.path}\` (${rule.kind}, scope \`${rule.scopeDirectory}\`)`).join("\n") || "No supported repository instruction files apply to the selected paths.",
     "## 7. Suggested Verification",
@@ -41,11 +41,28 @@ export function renderContext(manifest: ContextManifest): string {
     "## 9. Selected Snippets",
     manifest.selected.map((item) => `### \`${item.path}:${item.startLine}\`\n\n\`\`\`${codeFence(item.path)}\n${item.snippet}\n\`\`\``).join("\n\n"),
     "## 10. Budget",
-    `- Requested: ${manifest.budget.requestedTokens} tokens\n- Estimated snippets: ${manifest.budget.estimatedTokens} tokens\n- Omitted candidates: ${manifest.candidates.filter((item) => !item.selected).length}\n- Truncated: ${manifest.budget.truncated ? "yes" : "no"}`,
+    `- Requested: ${manifest.budget.requestedTokens} tokens\n- Estimated total: ${manifest.budget.estimatedTokens} tokens\n- Omitted candidates: ${manifest.candidates.filter((item) => !item.selected).length}\n- Truncated: ${manifest.budget.truncated ? "yes" : "no"}`,
   ];
-  const markdown = `${sections.join("\n\n")}\n`;
-  manifest.budget.estimatedTokens = countTokens(markdown);
-  return markdown;
+  return `${sections.join("\n\n")}\n`;
+}
+
+export function renderContext(manifest: ContextManifest): string {
+  const limit = Math.floor(manifest.budget.requestedTokens * 1.05);
+  while (true) {
+    let markdown = composeContext(manifest);
+    manifest.budget.estimatedTokens = countTokens(markdown);
+    markdown = composeContext(manifest);
+    manifest.budget.estimatedTokens = countTokens(markdown);
+    if (manifest.budget.estimatedTokens <= limit || manifest.selected.length === 0) {
+      return composeContext(manifest);
+    }
+    const removed = manifest.selected.pop();
+    if (removed) {
+      const candidate = manifest.candidates.find((item) => item.path === removed.path);
+      if (candidate) candidate.selected = false;
+      manifest.budget.truncated = true;
+    }
+  }
 }
 
 export function renderEvaluation(report: EvaluationReport): string {

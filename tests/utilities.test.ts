@@ -4,7 +4,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { ContextPackError, toContextPackError } from "../src/errors.js";
 import { commonDirectory, isWithinRoot, relativePosix, toPosixPath } from "../src/utils/path.js";
-import { lexicalMatch, normalizeTaskTerms } from "../src/utils/task-terms.js";
+import { extractConventionalScope, lexicalMatch, normalizeTaskTerms } from "../src/utils/task-terms.js";
 import { countTokens } from "../src/output/tokens.js";
 import { writeArtifacts } from "../src/output/write.js";
 
@@ -19,6 +19,12 @@ describe("utility contracts", () => {
     expect(terms).toContain("oauth");
     expect(lexicalMatch(terms, "src/auth/loginWithGithub.ts")).toBeGreaterThan(0.5);
     expect(lexicalMatch([], "anything")).toBe(0);
+    const conventional = normalizeTaskTerms("feat(server): add OAuth discovery (#123)");
+    expect(conventional).toEqual(expect.arrayContaining(["auth", "authorization", "discovery", "metadata", "oauth", "server"]));
+    expect(conventional).not.toContain("feat");
+    expect(conventional).not.toContain("123");
+    expect(extractConventionalScope("feat(server): add OAuth")).toBe("server");
+    expect(extractConventionalScope("add OAuth")).toBeNull();
   });
 
   it("handles repository-relative paths", () => {

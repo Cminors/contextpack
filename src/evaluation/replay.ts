@@ -12,10 +12,11 @@ import { renderContext } from "../output/markdown.js";
 
 const SOURCE = /\.[cm]?[jt]sx?$/i;
 const SKIP_TITLE = /\b(?:release|version|bump|deps?|dependencies|lockfile|format(?:ting)?|lint fixes?)\b/i;
+const FEATURE_TITLE = /^(?:feat(?:ure)?(?:\([^)]*\))?!?:|add\b|implement\b|introduce\b|support\b)/i;
 const MARKER = "---CONTEXTPACK-EVAL---";
 
 function listCommits(root: string, count: number): GitCommitRecord[] {
-  const result = runGit(root, ["log", "--no-merges", `-n${Math.max(count * 4, count)}`, "--name-only", `--format=${MARKER}%H%x09%P%x09%s`]);
+  const result = runGit(root, ["log", "--no-merges", `-n${Math.max(count * 20, count)}`, "--name-only", `--format=${MARKER}%H%x09%P%x09%s`]);
   if (!result.ok) throw new ContextPackError(`Cannot read Git history: ${result.stderr}`, 3, "GIT_HISTORY_FAILED");
   const records: GitCommitRecord[] = [];
   let current: (GitCommitRecord & { parents: string[] }) | null = null;
@@ -48,6 +49,7 @@ export async function runReplay(root: string, requestedCommits: number, budget: 
     let reason: string | null = null;
     if (!parent.ok) reason = "commit has no replayable parent";
     else if (SKIP_TITLE.test(commit.title)) reason = "mechanical, release, or dependency commit";
+    else if (!FEATURE_TITLE.test(commit.title)) reason = "outside the feature-addition task scope";
     else if (unique.length < 1 || unique.length > 15) reason = "outside the 1-15 source-file feature scope";
     if (reason) {
       skipped.push({ hash: commit.hash, title: commit.title, reason });

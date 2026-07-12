@@ -1,19 +1,34 @@
 const ENGLISH_STOP_WORDS = new Set([
   "add",
   "and",
+  "chore",
+  "docs",
+  "feat",
   "for",
   "from",
+  "implement",
   "into",
   "new",
+  "refactor",
+  "test",
+  "tests",
   "the",
   "this",
   "to",
+  "update",
   "with",
 ]);
 
 const CHINESE_STOP_WORDS = new Set(["一个", "以及", "功能", "增加", "新增", "模块", "支持", "现有"]);
 
 const TERM_ALIASES: Record<string, string[]> = {
+  builds: ["build"],
+  commonjs: ["cjs"],
+  discovery: ["metadata"],
+  hosts: ["host"],
+  oauth: ["auth", "authorization"],
+  packages: ["package"],
+  schemas: ["schema"],
   登录: ["auth", "authenticate", "authentication", "login", "signin"],
   用户: ["account", "profile", "user"],
   支付: ["billing", "checkout", "payment"],
@@ -48,8 +63,19 @@ function cjkTerms(value: string): string[] {
   return [...terms];
 }
 
+export function extractConventionalScope(task: string): string | null {
+  const match = task.match(/^(?:feat|feature|fix|docs|chore|refactor|test)\(([^)]+)\)!?:/i);
+  return match?.[1]?.normalize("NFKC").toLowerCase().trim() || null;
+}
+
 export function normalizeTaskTerms(task: string): string[] {
-  const expanded = splitCamelCase(task)
+  const cleanedTask = task
+    .replace(
+      /^(?:feat|feature|fix|docs|chore|refactor|test)(?:\(([^)]*)\))?!?:\s*/i,
+      (_match, scope: string | undefined) => scope ? `${scope} ` : "",
+    )
+    .replace(/\(?#\d+\)?/g, " ");
+  const expanded = splitCamelCase(cleanedTask)
     .normalize("NFKC")
     .toLowerCase()
     .replace(/[^a-z0-9\u3400-\u9fff]+/g, " ");
@@ -66,7 +92,7 @@ export function normalizeTaskTerms(task: string): string[] {
   }
 
   for (const [source, aliases] of Object.entries(TERM_ALIASES)) {
-    if (terms.has(source) || task.includes(source)) {
+    if (terms.has(source) || cleanedTask.includes(source)) {
       aliases.forEach((alias) => terms.add(alias));
     }
   }

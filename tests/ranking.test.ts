@@ -59,6 +59,50 @@ describe("candidate ranking", () => {
   it("falls back deterministically when the task has no lexical seed", () => {
     const ranked = rankCandidates([file("src/a.ts"), file("src/b.ts")], ["zzzz"], emptyGitHistory(), []);
     expect(ranked.map((item) => item.path)).toEqual(["src/a.ts", "src/b.ts"]);
-    expect(ranked.every((item) => item.breakdown.dependency === 0.65)).toBe(true);
+    expect(ranked.every((item) => item.breakdown.dependency === 1)).toBe(true);
+  });
+
+  it("caps broad lexical seeds and favors rare task terms", () => {
+    const files = Array.from({ length: 30 }, (_, index) => file(`packages/server/handler-${index}.ts`));
+    files.push(file("packages/core/inputRequired.ts"));
+    const ranked = rankCandidates(files, ["server", "input", "required"], emptyGitHistory(), []);
+    expect(ranked[0]?.path).toBe("packages/core/inputRequired.ts");
+    expect(ranked.filter((item) => item.breakdown.dependency === 1)).toHaveLength(12);
+  });
+
+  it("uses config contents without boosting every config file", () => {
+    const cjsConfig = { ...file("packages/server/tsdown.config.ts"), isConfig: true, content: "export default { format: ['esm', 'cjs'] };" };
+    const testConfig = { ...file("packages/server/vitest.config.ts"), isConfig: true, content: "export default { test: true };" };
+    const ranked = rankCandidates([testConfig, cjsConfig], ["commonjs", "cjs", "esm", "builds"], emptyGitHistory(), []);
+    expect(ranked[0]?.path).toBe("packages/server/tsdown.config.ts");
+    expect(ranked[1]?.breakdown.rule).toBe(0);
+  });
+
+  it("deprioritizes legacy implementations unless the task requests them", () => {
+    const current = file("packages/server/src/auth.ts");
+    const legacy = file("packages/server-legacy/src/auth.ts");
+    const currentTask = rankCandidates([legacy, current], ["server", "auth"], emptyGitHistory(), []);
+    const legacyTask = rankCandidates([legacy, current], ["server", "auth", "legacy"], emptyGitHistory(), []);
+    expect(currentTask[0]?.path).toBe(current.path);
+    expect(legacyTask[0]?.path).toBe(legacy.path);
+  });
+
+  it("uses a conventional commit scope as an exact path-segment signal", () => {
+    const scoped = file("packages/server/src/index.ts");
+    const unscoped = file("packages/client/src/server.ts");
+    const ranked = rankCandidates([unscoped, scoped], ["server"], emptyGitHistory(), [], "server");
+    expect(ranked[0]?.path).toBe(scoped.path);
+    expect(ranked[0]?.breakdown.lexical).toBeGreaterThan(ranked[1]?.breakdown.lexical ?? 1);
+  });
+
+  it("does not boost configuration files without configuration intent", () => {
+    const config = { ...file("packages/core/eslint.config.mjs"), isConfig: true, content: "trace context metadata" };
+    const source = {
+      ...file("packages/core/src/types/constants.ts"),
+      symbols: [{ name: "reservedTraceContext", kind: "variable" as const, startLine: 1, endLine: 1, exported: true, text: "" }],
+    };
+    const ranked = rankCandidates([config, source], ["trace", "context", "metadata"], emptyGitHistory(), [], "core");
+    expect(ranked[0]?.path).toBe(source.path);
+    expect(ranked.find((item) => item.path === config.path)?.breakdown.rule).toBe(0);
   });
 });
