@@ -1,0 +1,47 @@
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { afterEach, describe, expect, it } from "vitest";
+import { ContextPackError, toContextPackError } from "../src/errors.js";
+import { commonDirectory, isWithinRoot, relativePosix, toPosixPath } from "../src/utils/path.js";
+import { lexicalMatch, normalizeTaskTerms } from "../src/utils/task-terms.js";
+import { countTokens } from "../src/output/tokens.js";
+import { writeArtifacts } from "../src/output/write.js";
+
+const created: string[] = [];
+afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, { recursive: true, force: true }))));
+
+describe("utility contracts", () => {
+  it("normalizes English, camel case, and Chinese aliases", () => {
+    const terms = normalizeTaskTerms("给登录模块增加 GitHub OAuth");
+    expect(terms).toContain("login");
+    expect(terms).toContain("auth");
+    expect(terms).toContain("oauth");
+    expect(lexicalMatch(terms, "src/auth/loginWithGithub.ts")).toBeGreaterThan(0.5);
+    expect(lexicalMatch([], "anything")).toBe(0);
+  });
+
+  it("handles repository-relative paths", () => {
+    const root = path.resolve("project");
+    expect(toPosixPath("src\\auth.ts")).toBe("src/auth.ts");
+    expect(relativePosix(root, path.join(root, "src", "auth.ts"))).toBe("src/auth.ts");
+    expect(isWithinRoot(root, path.join(root, "src"))).toBe(true);
+    expect(isWithinRoot(root, path.resolve("elsewhere"))).toBe(false);
+    expect(commonDirectory(["packages/web/a.ts", "packages/web/b.ts"])).toBe("packages/web");
+    expect(commonDirectory([])).toBe(".");
+  });
+
+  it("preserves typed errors and wraps unknown failures", () => {
+    const typed = new ContextPackError("bad input", 1, "BAD");
+    expect(toContextPackError(typed)).toBe(typed);
+    expect(toContextPackError(new Error("boom"))).toMatchObject({ exitCode: 3, code: "ANALYSIS_FAILED" });
+  });
+
+  it("counts tokens and writes artifacts", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-output-"));
+    created.push(root);
+    expect(countTokens("hello context")).toBeGreaterThan(0);
+    await writeArtifacts(path.join(root, "nested"), { "a.md": "hello" });
+    expect(await fs.readFile(path.join(root, "nested", "a.md"), "utf8")).toBe("hello");
+  });
+});
