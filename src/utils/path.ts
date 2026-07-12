@@ -1,7 +1,7 @@
 import path from "node:path";
 
 export function toPosixPath(value: string): string {
-  return value.split(path.sep).join("/");
+  return value.replaceAll("\\", "/");
 }
 
 export function relativePosix(root: string, value: string): string {

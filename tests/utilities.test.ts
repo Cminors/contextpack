@@ -30,6 +30,7 @@ describe("utility contracts", () => {
   it("handles repository-relative paths", () => {
     const root = path.resolve("project");
     expect(toPosixPath("src\\auth.ts")).toBe("src/auth.ts");
+    expect(toPosixPath("packages\\web/src\\auth.ts")).toBe("packages/web/src/auth.ts");
     expect(relativePosix(root, path.join(root, "src", "auth.ts"))).toBe("src/auth.ts");
     expect(isWithinRoot(root, path.join(root, "src"))).toBe(true);
     expect(isWithinRoot(root, path.resolve("elsewhere"))).toBe(false);
