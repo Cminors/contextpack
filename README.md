@@ -1,37 +1,87 @@
+<div align="center">
+
 # ContextPack
 
-Build a small, explainable context pack before handing a feature task to Codex, Claude Code, Cursor, or another coding agent.
+**Give coding agents the right repository context before they start coding.**
 
-ContextPack is local and read-only. It does not call an LLM, require an API key, or edit source code. It ranks JavaScript and TypeScript files using task terms, symbols, imports, tests, repository rules, and local Git co-change history.
+Local, deterministic, and explainable task-context retrieval for JavaScript and TypeScript repositories.
 
-## Quick start
+[中文](README.zh-CN.md) | **English** | [Benchmark](benchmarks/README.md)
 
-Node.js 20 or newer is required.
+[![Status: Experimental](https://img.shields.io/badge/status-experimental-orange.svg)](#project-status)
+[![Node.js 20+](https://img.shields.io/badge/node-%3E%3D20-339933.svg?logo=node.js&logoColor=white)](package.json)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![CI](https://github.com/Cminors/contextpack/actions/workflows/ci.yml/badge.svg)](https://github.com/Cminors/contextpack/actions/workflows/ci.yml)
+
+</div>
+
+ContextPack turns a feature request into a compact, evidence-backed map of the code, tests, repository rules, and Git relationships a coding agent should inspect first.
 
 ```bash
-cd your-project
-npx contextpack task "add GitHub OAuth login"
+contextpack task "add GitHub OAuth login"
 ```
-
-The command writes:
 
 ```text
 .contextpack/tasks/add-github-oauth-login/
-├── context.md
-└── manifest.json
+|-- context.md       # Give this to Codex, Claude Code, Cursor, or another agent
+`-- manifest.json    # Scores, evidence, relationships, and budget metadata
 ```
 
-Give `context.md` to your coding agent. It contains a ranked task map, inclusion reasons, relationships, applicable repository rules, verification commands, risk surface, and selected code snippets.
+ContextPack does not call an LLM, require an API key, edit source code, or upload your repository.
 
-## Why this exists
+## Why ContextPack
 
-Coding agents can explore a whole repository, but that exploration consumes time and context. ContextPack answers a narrower question first: which code, tests, rules, and historical relationships are most likely to matter for this task?
+Coding agents can search an entire repository, but broad exploration spends context and often misses tests, export surfaces, or local instructions. ContextPack answers a narrower question:
 
-The ranking is deterministic and inspectable. It is not a semantic oracle and does not claim to replace an agent's own repository exploration.
+> For this task, which files and symbols should the agent understand first, and why?
+
+Every recommendation includes a score breakdown and concrete evidence. The same repository state, task, and options produce the same ranking.
+
+## What You Get
+
+A generated `context.md` contains:
+
+- a ranked task map of files and symbols;
+- selected code snippets under a configurable token budget;
+- import, export, test, and local Git co-change relationships;
+- applicable `AGENTS.md`, `CLAUDE.md`, Copilot, and Cursor rules;
+- existing verification commands from package scripts;
+- omitted candidates and risk-surface notes.
+
+Example task map:
+
+```text
+Rank  File / symbol                         Evidence
+1     src/auth/github.ts#GithubProvider     lexical + symbol
+2     src/auth/index.ts                     export barrel
+3     test/auth/github.test.ts              direct test relationship
+4     src/session/store.ts                  import + Git co-change
+```
+
+## Quick Start
+
+ContextPack currently ships as an experimental source preview. The npm package is not published yet.
+
+```bash
+git clone https://github.com/Cminors/contextpack.git
+cd contextpack
+npm ci
+npm run build
+npm link
+```
+
+Run it from an existing JavaScript or TypeScript repository:
+
+```bash
+cd /path/to/your-project
+contextpack task "add GitHub OAuth login"
+```
+
+Requirements: Node.js 20 or newer and Git for history-aware ranking.
 
 ## Commands
 
-### Generate a task context pack
+### Build a context pack
 
 ```bash
 contextpack task <description> \
@@ -40,72 +90,94 @@ contextpack task <description> \
   --history 500
 ```
 
-- `--budget`: 4000–32000 estimated tokens; default 12000.
-- `--format`: `markdown`, `json`, or `both`.
-- `--output`: custom output directory.
-- `--history`: number of local non-merge commits used for co-change signals.
+| Option | Purpose |
+|---|---|
+| `--budget <4000..32000>` | Maximum estimated context size; default `12000` |
+| `--format markdown\|json\|both` | Output format; default `both` |
+| `--history <count>` | Local non-merge commits used for history signals |
+| `--output <directory>` | Custom output directory |
 
-### Explain a result
+### Explain a recommendation
 
 ```bash
 contextpack explain src/auth.ts --task "add GitHub OAuth login"
 contextpack explain loginWithGithub --task "add GitHub OAuth login"
 ```
 
-This prints the score breakdown, reasons, and relationships for matching candidates.
-
-### Historical replay evaluation
+### Evaluate retrieval on repository history
 
 ```bash
 contextpack eval --commits 20 --budget 12000
 ```
 
-Evaluation replays commit titles against their parent revisions in detached temporary Git worktrees. It never checks out the user's current worktree. The report includes Recall@5, Recall@10, MRR, Noise@10, test recall, token estimates, and duration.
+Historical replay runs against parent revisions in detached temporary worktrees. It never checks out or modifies the active worktree.
 
-These metrics are retrieval proxies. Changed files are not a complete ideal-context set, and high recall does not mean a Coding Agent will complete a task successfully.
+## How Ranking Works
 
-## Supported scope
-
-- JavaScript, JSX, TypeScript, and TSX repositories.
-- npm, pnpm, Yarn, and Bun project metadata.
-- Single packages and common workspace layouts.
-- Small-to-medium feature additions.
-- `AGENTS.md`, `CLAUDE.md`, Copilot instructions, Cursor rules, README, and CONTRIBUTING discovery.
-
-ContextPack intentionally does not modify code, diagnose arbitrary bugs, provide a hosted service, or bundle an LLM.
-
-## Ranking model
+ContextPack combines six deterministic signals:
 
 | Signal | Weight |
 |---|---:|
-| Task/path lexical match | 28% |
+| Task and path lexical match | 28% |
 | Symbol relevance | 22% |
-| Dependency proximity | 18% |
-| Git title/co-change | 15% |
+| Dependency and export proximity | 18% |
+| Git title and co-change history | 15% |
 | Test relationship | 10% |
-| Rule/config relevance | 7% |
+| Rule and configuration relevance | 7% |
 
-Missing signals are treated as unavailable, not as negative evidence. Ties are resolved by repository-relative path for reproducibility.
+Candidate generation is bounded by workspace package, test, config, example, and export-barrel diversity. Missing signals are treated as unavailable, not negative evidence.
 
-## Security and privacy
+## Benchmark
 
-- Analysis stays on the local machine.
-- `.env`, private keys, credential files, dependencies, and build artifacts are excluded.
+Historical replay measures a retrieval proxy, not coding-agent success.
+
+| Repository | JS/TS files | Feature commits | Recall@10 | MRR | Median tokens | Median analysis |
+|---|---:|---:|---:|---:|---:|---:|
+| `sindresorhus/p-map` | 6 | 12 | 1.000 | 0.757 | 1,498 | 666 ms |
+| `modelcontextprotocol/typescript-sdk` | 635 | 20 | 0.414 | 0.605 | 9,002 | 2,029 ms |
+
+The medium-repository result passes the MRR target (`>= 0.60`) but remains below the Recall@10 target (`>= 0.70`). See the [method, raw reports, limitations, and rejected experiments](benchmarks/README.md).
+
+## Supported Scope
+
+**Supported today**
+
+- JavaScript, JSX, TypeScript, and TSX;
+- npm, pnpm, Yarn, and Bun metadata;
+- single-package repositories and common workspace layouts;
+- small-to-medium feature additions;
+- local Git history and common coding-agent instruction files.
+
+**Not supported yet**
+
+- automatic code changes;
+- arbitrary bug diagnosis, security audits, or large refactors;
+- Python, Go, Rust, Java, and other languages;
+- hosted storage, accounts, collaboration, or built-in LLM calls;
+- claims about improving final agent success rate.
+
+## Privacy And Safety
+
+- Repository analysis stays on the local machine.
+- `.env`, private keys, credentials, dependencies, and build outputs are excluded.
 - Snippets matching common secret patterns are not emitted.
-- Git is invoked with argument arrays and no shell interpolation.
-- Historical replay verifies that the current branch, HEAD, index, and untracked-file fingerprint remain unchanged.
+- Git commands use argument arrays without shell interpolation.
+- Evaluation verifies that branch, HEAD, index, and untracked files remain unchanged.
+
+## Project Status
+
+ContextPack is an experimental V0.1. The CLI is usable and tested, but the medium-repository recall target has not been reached. Current development is focused on TypeScript-aware cross-file retrieval rather than UI, additional languages, or embedded models.
 
 ## Development
 
 ```bash
-npm install
+npm ci
 npm run check
+npm run test:coverage
 ```
 
-## Benchmark status
-
-The current medium-repository benchmark reaches Recall@10 0.414 and MRR 0.605 across 20 feature commits in the MCP TypeScript SDK. MRR now passes the project gate, but recall remains below its 0.70 target, so ContextPack should still be treated as an experimental V0.1 retrieval tool. See [`benchmarks/README.md`](benchmarks/README.md) for the method, limitations, and raw results.
+Current local quality gate: 30 tests passing, 91%+ line coverage, and no production dependency vulnerabilities. GitHub CI verifies Node.js 20 and 22.
 
 ## License
 
-MIT
+[MIT](LICENSE)

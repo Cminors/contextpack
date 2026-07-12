@@ -31,6 +31,14 @@
     "cursor"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/Cminors/contextpack#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cminors/contextpack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Cminors/contextpack/issues"
+  },
   "overrides": {
     "esbuild": "0.28.1"
   },
