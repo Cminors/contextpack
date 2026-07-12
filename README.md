@@ -17,6 +17,8 @@ Local, deterministic, and explainable task-context retrieval for JavaScript and 
 
 ContextPack turns a feature request into a compact, evidence-backed map of the code, tests, repository rules, and Git relationships a coding agent should inspect first.
 
+> **In plain English:** A large repository can contain thousands of files. Before an AI starts changing code, ContextPack finds the small set of code, tests, and project rules that actually matter for the task, then prepares them as a focused briefing. It does not write the code; it helps the coding agent understand the right part of the project before it begins.
+
 ```bash
 contextpack task "add GitHub OAuth login"
 ```
