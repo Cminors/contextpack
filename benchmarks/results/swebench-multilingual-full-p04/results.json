@@ -1,0 +1,6682 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T16:41:55.293Z",
+  "sourceDataset": "SWE-bench/SWE-bench_Multilingual",
+  "sourceRevision": "2b7aced941b4873e9cad3e76abbae93f481d1beb",
+  "requestedInstances": 43,
+  "validInstances": 38,
+  "tokenBudget": 12000,
+  "lineBudgets": [
+    100,
+    250,
+    500
+  ],
+  "results": [
+    {
+      "instanceId": "axios__axios-4731",
+      "repo": "axios/axios",
+      "baseCommit": "c30252f685e8f4326722de84923fcbc8cf557f06",
+      "goldRegions": [
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 279,
+          "endLine": 284,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 6,
+          "endLine": 37
+        },
+        {
+          "path": "karma.conf.js",
+          "startLine": 61,
+          "endLine": 90
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 189,
+          "endLine": 220
+        },
+        {
+          "path": "lib/helpers/validator.js",
+          "startLine": 13,
+          "endLine": 44
+        },
+        {
+          "path": "test/specs/__helpers.js",
+          "startLine": 102,
+          "endLine": 124
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 134,
+          "endLine": 165
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 9,
+          "endLine": 40
+        },
+        {
+          "path": "lib/axios.js",
+          "startLine": 8,
+          "endLine": 39
+        },
+        {
+          "path": "test/specs/adapter.spec.js",
+          "startLine": 1,
+          "endLine": 28
+        },
+        {
+          "path": "test/specs/defaults.spec.js",
+          "startLine": 1,
+          "endLine": 26
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 302,
+          "endLine": 314
+        },
+        {
+          "path": "lib/core/Axios.js",
+          "startLine": 3,
+          "endLine": 34
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 125,
+          "endLine": 156
+        },
+        {
+          "path": "test/typescript/axios.ts",
+          "startLine": 243,
+          "endLine": 274
+        },
+        {
+          "path": "lib/helpers/isURLSameOrigin.js",
+          "startLine": 3,
+          "endLine": 34
+        },
+        {
+          "path": "lib/helpers/parseHeaders.js",
+          "startLine": 1,
+          "endLine": 16
+        }
+      ],
+      "goldFiles": [
+        "lib/adapters/http.js"
+      ],
+      "predictions": [
+        "lib/defaults/index.js",
+        "karma.conf.js",
+        "lib/adapters/http.js",
+        "lib/helpers/validator.js",
+        "test/specs/__helpers.js",
+        "index.d.ts",
+        "lib/utils.js",
+        "lib/axios.js",
+        "test/specs/adapter.spec.js",
+        "test/specs/defaults.spec.js",
+        "test/unit/adapters/http.js",
+        "lib/core/Axios.js",
+        "lib/adapters/xhr.js",
+        "test/typescript/axios.ts",
+        "lib/helpers/isURLSameOrigin.js",
+        "lib/helpers/parseHeaders.js",
+        "lib/cancel/CanceledError.js",
+        "test/specs/core/mergeConfig.spec.js",
+        "lib/helpers/isAxiosError.js",
+        "lib/helpers/toFormData.js"
+      ],
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "reciprocalRank": 0.3333333333333333,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 456,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3327,
+      "durationMs": 3730
+    },
+    {
+      "instanceId": "axios__axios-4738",
+      "repo": "axios/axios",
+      "baseCommit": "9bb016f95e6de871a44f3276fd06562704a0abb0",
+      "goldRegions": [
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 420,
+          "endLine": 428,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "test/specs/__helpers.js",
+          "startLine": 3,
+          "endLine": 38
+        },
+        {
+          "path": "karma.conf.js",
+          "startLine": 54,
+          "endLine": 85
+        },
+        {
+          "path": "test/specs/adapter.spec.js",
+          "startLine": 53,
+          "endLine": 84
+        },
+        {
+          "path": "lib/helpers/validator.js",
+          "startLine": 1,
+          "endLine": 23
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 397,
+          "endLine": 428
+        },
+        {
+          "path": "test/specs/instance.spec.js",
+          "startLine": 1,
+          "endLine": 27
+        },
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 16,
+          "endLine": 47
+        },
+        {
+          "path": "lib/core/AxiosError.js",
+          "startLine": 69,
+          "endLine": 98
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 270,
+          "endLine": 289
+        },
+        {
+          "path": "lib/axios.js",
+          "startLine": 8,
+          "endLine": 39
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 120,
+          "endLine": 151
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 125,
+          "endLine": 148
+        },
+        {
+          "path": "test/typescript/axios.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 72,
+          "endLine": 103
+        },
+        {
+          "path": "test/specs/core/AxiosError.spec.js",
+          "startLine": 1,
+          "endLine": 30
+        },
+        {
+          "path": "lib/core/Axios.js",
+          "startLine": 1,
+          "endLine": 31
+        }
+      ],
+      "goldFiles": [
+        "lib/adapters/http.js"
+      ],
+      "predictions": [
+        "test/specs/__helpers.js",
+        "karma.conf.js",
+        "test/specs/adapter.spec.js",
+        "lib/helpers/validator.js",
+        "lib/adapters/http.js",
+        "test/specs/instance.spec.js",
+        "lib/defaults/index.js",
+        "lib/core/AxiosError.js",
+        "lib/utils.js",
+        "lib/axios.js",
+        "lib/adapters/xhr.js",
+        "index.d.ts",
+        "test/typescript/axios.ts",
+        "test/unit/adapters/http.js",
+        "test/specs/core/AxiosError.spec.js",
+        "lib/core/Axios.js",
+        "lib/helpers/isURLSameOrigin.js",
+        "lib/cancel/CanceledError.js",
+        "lib/helpers/parseHeaders.js",
+        "lib/core/settle.js"
+      ],
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "reciprocalRank": 0.2,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 9,
+          "linePrecision": 0.036,
+          "lineRecall": 1,
+          "lineF1": 0.06949806949806948,
+          "hitRegionRate": 1,
+          "noiseRegionRate": 0.8888888888888888,
+          "contextEfficiency": 0.036,
+          "ndcg": 0.29187583711768694,
+          "firstUsefulHit": 147
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 477,
+          "coveredGoldLines": 9,
+          "linePrecision": 0.018867924528301886,
+          "lineRecall": 1,
+          "lineF1": 0.037037037037037035,
+          "hitRegionRate": 1,
+          "noiseRegionRate": 0.9375,
+          "contextEfficiency": 0.018867924528301886,
+          "ndcg": 0.29187583711768694,
+          "firstUsefulHit": 147
+        }
+      },
+      "estimatedTokens": 3472,
+      "durationMs": 3689
+    },
+    {
+      "instanceId": "axios__axios-5085",
+      "repo": "axios/axios",
+      "baseCommit": "85740c3e7a1fa48346dfcbd4497f463ccb1c1b05",
+      "goldRegions": [
+        {
+          "path": "index.d.ts",
+          "startLine": 39,
+          "endLine": 45,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/core/AxiosHeaders.js",
+          "startLine": 15,
+          "endLine": 21,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/core/AxiosHeaders.js",
+          "startLine": 102,
+          "endLine": 114,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/core/AxiosHeaders.js",
+          "startLine": 222,
+          "endLine": 234,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "lib/helpers/parseHeaders.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 27,
+          "endLine": 58
+        },
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 73,
+          "endLine": 108
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 78,
+          "endLine": 109
+        },
+        {
+          "path": "lib/helpers/validator.js",
+          "startLine": 1,
+          "endLine": 23
+        },
+        {
+          "path": "lib/core/Axios.js",
+          "startLine": 10,
+          "endLine": 41
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 152,
+          "endLine": 187
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 67,
+          "endLine": 98
+        },
+        {
+          "path": "lib/core/AxiosHeaders.js",
+          "startLine": 79,
+          "endLine": 110
+        },
+        {
+          "path": "karma.conf.cjs",
+          "startLine": 133,
+          "endLine": 164
+        },
+        {
+          "path": "lib/core/transformData.js",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "lib/helpers/formDataToJSON.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "test/specs/defaults.spec.js",
+          "startLine": 1,
+          "endLine": 34
+        },
+        {
+          "path": "lib/core/buildFullPath.js",
+          "startLine": 1,
+          "endLine": 22
+        },
+        {
+          "path": "lib/adapters/index.js",
+          "startLine": 6,
+          "endLine": 34
+        },
+        {
+          "path": "lib/helpers/cookies.js",
+          "startLine": 1,
+          "endLine": 35
+        }
+      ],
+      "goldFiles": [
+        "index.d.ts",
+        "lib/core/AxiosHeaders.js"
+      ],
+      "predictions": [
+        "lib/helpers/parseHeaders.js",
+        "lib/helpers/toFormData.js",
+        "lib/defaults/index.js",
+        "lib/adapters/http.js",
+        "lib/helpers/validator.js",
+        "lib/core/Axios.js",
+        "lib/adapters/xhr.js",
+        "lib/utils.js",
+        "lib/core/AxiosHeaders.js",
+        "karma.conf.cjs",
+        "lib/core/transformData.js",
+        "lib/helpers/formDataToJSON.js",
+        "test/specs/defaults.spec.js",
+        "lib/core/buildFullPath.js",
+        "lib/adapters/index.js",
+        "lib/helpers/cookies.js",
+        "lib/helpers/fromDataURI.js",
+        "lib/helpers/AxiosURLSearchParams.js",
+        "test/specs/xsrf.spec.js",
+        "lib/core/AxiosError.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0.5,
+      "reciprocalRank": 0.1111111111111111,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 9,
+          "linePrecision": 0.018,
+          "lineRecall": 0.225,
+          "lineF1": 0.03333333333333333,
+          "hitRegionRate": 0.25,
+          "noiseRegionRate": 0.9375,
+          "contextEfficiency": 0.018,
+          "ndcg": 0.09957050128039971,
+          "firstUsefulHit": 279
+        }
+      },
+      "estimatedTokens": 3536,
+      "durationMs": 3814
+    },
+    {
+      "instanceId": "axios__axios-5316",
+      "repo": "axios/axios",
+      "baseCommit": "65e8d1e28ce829f47a837e45129730e541950d3c",
+      "goldRegions": [
+        {
+          "path": ".eslintrc.cjs",
+          "startLine": 1,
+          "endLine": 12,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 19,
+          "endLine": 24,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 243,
+          "endLine": 251,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 262,
+          "endLine": 268,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/env/classes/FormData.js",
+          "startLine": 1,
+          "endLine": 2,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 2,
+          "endLine": 8,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 59,
+          "endLine": 75,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 99,
+          "endLine": 105,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 117,
+          "endLine": 123,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 512,
+          "endLine": 518,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 596,
+          "endLine": 601,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 673,
+          "endLine": 677,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 2,
+          "endLine": 33
+        },
+        {
+          "path": "lib/core/AxiosError.js",
+          "startLine": 1,
+          "endLine": 31
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 296,
+          "endLine": 325
+        },
+        {
+          "path": "lib/axios.js",
+          "startLine": 13,
+          "endLine": 44
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 233,
+          "endLine": 264
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 432,
+          "endLine": 456
+        },
+        {
+          "path": "lib/core/Axios.js",
+          "startLine": 150,
+          "endLine": 181
+        },
+        {
+          "path": "karma.conf.cjs",
+          "startLine": 56,
+          "endLine": 87
+        },
+        {
+          "path": "lib/core/dispatchRequest.js",
+          "startLine": 11,
+          "endLine": 42
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 47,
+          "endLine": 78
+        },
+        {
+          "path": "lib/adapters/adapters.js",
+          "startLine": 1,
+          "endLine": 24
+        },
+        {
+          "path": "index.d.cts",
+          "startLine": 355,
+          "endLine": 384
+        },
+        {
+          "path": "test/module/test.js",
+          "startLine": 68,
+          "endLine": 99
+        },
+        {
+          "path": "index.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "test/module/typings/esm/index.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 88,
+          "endLine": 119
+        }
+      ],
+      "goldFiles": [
+        ".eslintrc.cjs",
+        "lib/adapters/http.js",
+        "lib/env/classes/FormData.js",
+        "lib/helpers/toFormData.js",
+        "lib/utils.js"
+      ],
+      "predictions": [
+        "lib/defaults/index.js",
+        "lib/core/AxiosError.js",
+        "index.d.ts",
+        "lib/axios.js",
+        "lib/adapters/http.js",
+        "test/unit/adapters/http.js",
+        "lib/core/Axios.js",
+        "karma.conf.cjs",
+        "lib/core/dispatchRequest.js",
+        "lib/adapters/xhr.js",
+        "lib/adapters/adapters.js",
+        "index.d.cts",
+        "test/module/test.js",
+        "index.js",
+        "test/module/typings/esm/index.ts",
+        "lib/helpers/toFormData.js",
+        "gulpfile.js",
+        "lib/helpers/fromDataURI.js",
+        "lib/cancel/CancelToken.js",
+        "lib/helpers/isURLSameOrigin.js"
+      ],
+      "recallAt5": 0.2,
+      "recallAt10": 0.2,
+      "reciprocalRank": 0.2,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 12,
+          "linePrecision": 0.048,
+          "lineRecall": 0.13043478260869565,
+          "lineF1": 0.07017543859649122,
+          "hitRegionRate": 0.16666666666666666,
+          "noiseRegionRate": 0.8888888888888888,
+          "contextEfficiency": 0.048,
+          "ndcg": 0.08474882099437606,
+          "firstUsefulHit": 136
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 492,
+          "coveredGoldLines": 22,
+          "linePrecision": 0.044715447154471545,
+          "lineRecall": 0.2391304347826087,
+          "lineF1": 0.07534246575342465,
+          "hitRegionRate": 0.3333333333333333,
+          "noiseRegionRate": 0.875,
+          "contextEfficiency": 0.044715447154471545,
+          "ndcg": 0.1416458592723452,
+          "firstUsefulHit": 136
+        }
+      },
+      "estimatedTokens": 3534,
+      "durationMs": 5455
+    },
+    {
+      "instanceId": "axios__axios-5892",
+      "repo": "axios/axios",
+      "baseCommit": "ae003913a39f3bdf9bbbd8f71a1ed681fd044d8b",
+      "goldRegions": [
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 471,
+          "endLine": 477,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "test/specs/defaults.spec.js",
+          "startLine": 61,
+          "endLine": 96
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 78,
+          "endLine": 109
+        },
+        {
+          "path": "test/specs/headers.spec.js",
+          "startLine": 1,
+          "endLine": 31
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 458,
+          "endLine": 489
+        },
+        {
+          "path": "karma.conf.cjs",
+          "startLine": 119,
+          "endLine": 150
+        },
+        {
+          "path": "index.d.cts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 18,
+          "endLine": 49
+        },
+        {
+          "path": "lib/helpers/HttpStatusCode.js",
+          "startLine": 45,
+          "endLine": 72
+        },
+        {
+          "path": "lib/adapters/adapters.js",
+          "startLine": 1,
+          "endLine": 24
+        },
+        {
+          "path": "test/specs/instance.spec.js",
+          "startLine": 33,
+          "endLine": 68
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 175,
+          "endLine": 206
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 266,
+          "endLine": 297
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 457,
+          "endLine": 488
+        },
+        {
+          "path": "lib/core/dispatchRequest.js",
+          "startLine": 47,
+          "endLine": 82
+        },
+        {
+          "path": "lib/core/AxiosError.js",
+          "startLine": 1,
+          "endLine": 22
+        },
+        {
+          "path": "test/unit/utils/utils.js",
+          "startLine": 50,
+          "endLine": 67
+        }
+      ],
+      "goldFiles": [
+        "lib/adapters/http.js"
+      ],
+      "predictions": [
+        "test/specs/defaults.spec.js",
+        "index.d.ts",
+        "test/specs/headers.spec.js",
+        "lib/adapters/http.js",
+        "karma.conf.cjs",
+        "index.d.cts",
+        "lib/defaults/index.js",
+        "lib/helpers/HttpStatusCode.js",
+        "lib/adapters/adapters.js",
+        "test/specs/instance.spec.js",
+        "lib/adapters/xhr.js",
+        "lib/utils.js",
+        "test/unit/adapters/http.js",
+        "lib/core/dispatchRequest.js",
+        "lib/core/AxiosError.js",
+        "test/unit/utils/utils.js",
+        "test/unit/regression/bugs.js",
+        "lib/axios.js",
+        "lib/helpers/buildURL.js",
+        "lib/core/Axios.js"
+      ],
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "reciprocalRank": 0.25,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 7,
+          "linePrecision": 0.028,
+          "lineRecall": 1,
+          "lineF1": 0.054474708171206226,
+          "hitRegionRate": 1,
+          "noiseRegionRate": 0.875,
+          "contextEfficiency": 0.028,
+          "ndcg": 0.2800751145586051,
+          "firstUsefulHit": 113
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 487,
+          "coveredGoldLines": 7,
+          "linePrecision": 0.014373716632443531,
+          "lineRecall": 1,
+          "lineF1": 0.028340080971659916,
+          "hitRegionRate": 1,
+          "noiseRegionRate": 0.9375,
+          "contextEfficiency": 0.014373716632443531,
+          "ndcg": 0.2800751145586051,
+          "firstUsefulHit": 113
+        }
+      },
+      "estimatedTokens": 3359,
+      "durationMs": 4065
+    },
+    {
+      "instanceId": "axios__axios-6539",
+      "repo": "axios/axios",
+      "baseCommit": "c6cce43cd94489f655f4488c5a50ecaf781c94f2",
+      "goldRegions": [
+        {
+          "path": "lib/helpers/isAbsoluteURL.js",
+          "startLine": 8,
+          "endLine": 15,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "index.js",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 172,
+          "endLine": 200
+        },
+        {
+          "path": "lib/axios.js",
+          "startLine": 15,
+          "endLine": 46
+        },
+        {
+          "path": "examples/server.js",
+          "startLine": 66,
+          "endLine": 97
+        },
+        {
+          "path": "lib/adapters/adapters.js",
+          "startLine": 43,
+          "endLine": 74
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 219,
+          "endLine": 250
+        },
+        {
+          "path": "index.d.cts",
+          "startLine": 81,
+          "endLine": 114
+        },
+        {
+          "path": "karma.conf.cjs",
+          "startLine": 98,
+          "endLine": 129
+        },
+        {
+          "path": "gulpfile.js",
+          "startLine": 60,
+          "endLine": 91
+        },
+        {
+          "path": "bin/RepoBot.js",
+          "startLine": 45,
+          "endLine": 80
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 307,
+          "endLine": 338
+        },
+        {
+          "path": "test/unit/adapters/fetch.js",
+          "startLine": 18,
+          "endLine": 49
+        },
+        {
+          "path": "lib/adapters/fetch.js",
+          "startLine": 28,
+          "endLine": 59
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 1,
+          "endLine": 30
+        },
+        {
+          "path": "test/module/typings/esm/index.ts",
+          "startLine": 8,
+          "endLine": 39
+        },
+        {
+          "path": "lib/core/buildFullPath.js",
+          "startLine": 1,
+          "endLine": 22
+        }
+      ],
+      "goldFiles": [
+        "lib/helpers/isAbsoluteURL.js"
+      ],
+      "predictions": [
+        "index.js",
+        "index.d.ts",
+        "lib/axios.js",
+        "examples/server.js",
+        "lib/adapters/adapters.js",
+        "lib/adapters/http.js",
+        "index.d.cts",
+        "karma.conf.cjs",
+        "gulpfile.js",
+        "bin/RepoBot.js",
+        "test/unit/adapters/http.js",
+        "test/unit/adapters/fetch.js",
+        "lib/adapters/fetch.js",
+        "lib/adapters/xhr.js",
+        "test/module/typings/esm/index.ts",
+        "lib/core/buildFullPath.js",
+        "lib/core/AxiosError.js",
+        "lib/core/dispatchRequest.js",
+        "lib/defaults/index.js",
+        "lib/helpers/HttpStatusCode.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3597,
+      "durationMs": 7554
+    },
+    {
+      "instanceId": "babel__babel-13928",
+      "repo": "babel/babel",
+      "baseCommit": "5134505bf93013c5fa7df66704df8d04becb7f7d",
+      "goldRegions": [
+        {
+          "path": "packages/babel-parser/src/parser/expression.js",
+          "startLine": 2444,
+          "endLine": 2452,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "scripts/parser-tests/typescript/error-codes.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/babel-plugin-transform-react-jsx-self/src/index.js",
+          "startLine": 50,
+          "endLine": 81
+        },
+        {
+          "path": "packages/babel-plugin-syntax-typescript/src/index.js",
+          "startLine": 16,
+          "endLine": 47
+        },
+        {
+          "path": "packages/babel-parser/test/fixtures/experimental/class-static-block/await-binding-in-static-block/input.js",
+          "startLine": 1,
+          "endLine": 28
+        },
+        {
+          "path": "packages/babel-helper-plugin-utils/src/index.js",
+          "startLine": 7,
+          "endLine": 38
+        },
+        {
+          "path": "packages/babel-plugin-proposal-dynamic-import/src/index.js",
+          "startLine": 11,
+          "endLine": 42
+        },
+        {
+          "path": "packages/babel-plugin-transform-arrow-functions/src/index.js",
+          "startLine": 1,
+          "endLine": 33
+        },
+        {
+          "path": "packages/babel-preset-typescript/src/index.js",
+          "startLine": 1,
+          "endLine": 27
+        },
+        {
+          "path": "packages/babel-parser/typings/babel-parser.d.ts",
+          "startLine": 19,
+          "endLine": 50
+        },
+        {
+          "path": "packages/babel-core/src/config/files/types.ts",
+          "startLine": 8,
+          "endLine": 33
+        },
+        {
+          "path": "packages/babel-parser/src/util/production-parameter.js",
+          "startLine": 1,
+          "endLine": 30
+        },
+        {
+          "path": "packages/babel-core/src/transform-file-browser.ts",
+          "startLine": 1,
+          "endLine": 26
+        },
+        {
+          "path": "packages/babel-core/test/parse.js",
+          "startLine": 12,
+          "endLine": 43
+        },
+        {
+          "path": "packages/babel-standalone/src/dynamic-require-entrypoint.cjs",
+          "startLine": 1,
+          "endLine": 7
+        },
+        {
+          "path": "packages/babel-core/src/config/files/configuration.ts",
+          "startLine": 173,
+          "endLine": 208
+        },
+        {
+          "path": "packages/babel-core/src/config/files/package.ts",
+          "startLine": 1,
+          "endLine": 29
+        }
+      ],
+      "goldFiles": [
+        "packages/babel-parser/src/parser/expression.js"
+      ],
+      "predictions": [
+        "scripts/parser-tests/typescript/error-codes.js",
+        "packages/babel-plugin-transform-react-jsx-self/src/index.js",
+        "packages/babel-plugin-syntax-typescript/src/index.js",
+        "packages/babel-parser/test/fixtures/experimental/class-static-block/await-binding-in-static-block/input.js",
+        "packages/babel-helper-plugin-utils/src/index.js",
+        "packages/babel-plugin-proposal-dynamic-import/src/index.js",
+        "packages/babel-plugin-transform-arrow-functions/src/index.js",
+        "packages/babel-preset-typescript/src/index.js",
+        "packages/babel-parser/typings/babel-parser.d.ts",
+        "packages/babel-core/src/config/files/types.ts",
+        "packages/babel-parser/src/util/production-parameter.js",
+        "packages/babel-core/src/transform-file-browser.ts",
+        "packages/babel-core/test/parse.js",
+        "packages/babel-standalone/src/dynamic-require-entrypoint.cjs",
+        "packages/babel-core/src/config/files/configuration.ts",
+        "packages/babel-core/src/config/files/package.ts",
+        "packages/babel-preset-env/data/shipped-proposals.js",
+        "packages/babel-parser/src/options.js",
+        "packages/babel-preset-typescript/test/normalize-options.spec.js",
+        "packages/babel-parser/src/parser/base.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 466,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3655,
+      "durationMs": 91412
+    },
+    {
+      "instanceId": "babel__babel-14532",
+      "repo": "babel/babel",
+      "baseCommit": "fbd065256ca00d68089293ad48ea9aeba5481914",
+      "goldRegions": [
+        {
+          "path": "packages/babel-generator/src/node/parentheses.ts",
+          "startLine": 5,
+          "endLine": 10,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/babel-generator/src/node/parentheses.ts",
+          "startLine": 414,
+          "endLine": 419,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/babel-plugin-external-helpers/src/index.ts",
+          "startLine": 16,
+          "endLine": 47
+        },
+        {
+          "path": "packages/babel-core/src/index.ts",
+          "startLine": 25,
+          "endLine": 56
+        },
+        {
+          "path": "packages/babel-parser/typings/babel-parser.d.ts",
+          "startLine": 62,
+          "endLine": 97
+        },
+        {
+          "path": "packages/babel-parser/src/parser/index.js",
+          "startLine": 24,
+          "endLine": 55
+        },
+        {
+          "path": "packages/babel-parser/src/options.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/babel-plugin-syntax-flow/src/index.ts",
+          "startLine": 1,
+          "endLine": 34
+        },
+        {
+          "path": "packages/babel-helper-plugin-utils/src/index.ts",
+          "startLine": 31,
+          "endLine": 62
+        },
+        {
+          "path": "packages/babel-core/src/transformation/file/merge-map.ts",
+          "startLine": 1,
+          "endLine": 28
+        },
+        {
+          "path": "packages/babel-core/src/config/files/import-meta-resolve.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/babel-core/src/transformation/file/generate.ts",
+          "startLine": 8,
+          "endLine": 39
+        },
+        {
+          "path": "packages/babel-core/src/config/helpers/config-api.ts",
+          "startLine": 16,
+          "endLine": 47
+        },
+        {
+          "path": "packages/babel-core/src/config/index.ts",
+          "startLine": 8,
+          "endLine": 39
+        },
+        {
+          "path": "packages/babel-core/test/helpers/esm.js",
+          "startLine": 49,
+          "endLine": 80
+        },
+        {
+          "path": "packages/babel-parser/test/helpers/serialization.js",
+          "startLine": 36,
+          "endLine": 67
+        },
+        {
+          "path": "packages/babel-register/src/hook.js",
+          "startLine": 13,
+          "endLine": 44
+        },
+        {
+          "path": "eslint/babel-eslint-parser/src/worker/configuration.cjs",
+          "startLine": 24,
+          "endLine": 55
+        }
+      ],
+      "goldFiles": [
+        "packages/babel-generator/src/node/parentheses.ts"
+      ],
+      "predictions": [
+        "packages/babel-plugin-external-helpers/src/index.ts",
+        "packages/babel-core/src/index.ts",
+        "packages/babel-parser/typings/babel-parser.d.ts",
+        "packages/babel-parser/src/parser/index.js",
+        "packages/babel-parser/src/options.js",
+        "packages/babel-plugin-syntax-flow/src/index.ts",
+        "packages/babel-helper-plugin-utils/src/index.ts",
+        "packages/babel-core/src/transformation/file/merge-map.ts",
+        "packages/babel-core/src/config/files/import-meta-resolve.ts",
+        "packages/babel-core/src/transformation/file/generate.ts",
+        "packages/babel-core/src/config/helpers/config-api.ts",
+        "packages/babel-core/src/config/index.ts",
+        "packages/babel-core/test/helpers/esm.js",
+        "packages/babel-parser/test/helpers/serialization.js",
+        "packages/babel-register/src/hook.js",
+        "eslint/babel-eslint-parser/src/worker/configuration.cjs",
+        "packages/babel-preset-env/scripts/smoke-test.js",
+        "packages/babel-core/test/async.js",
+        "packages/babel-plugin-transform-modules-amd/test/importInterop-function.js",
+        "packages/babel-plugin-transform-modules-commonjs/test/importInterop-function.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4203,
+      "durationMs": 111319
+    },
+    {
+      "instanceId": "facebook__docusaurus-10130",
+      "repo": "facebook/docusaurus",
+      "baseCommit": "02e38d8ccf7811af27a9c15ddbadf4d26cfc0eab",
+      "goldRegions": [
+        {
+          "path": "packages/docusaurus/src/server/brokenLinks.ts",
+          "startLine": 125,
+          "endLine": 131,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/docusaurus-logger/src/__tests__/index.test.ts",
+          "startLine": 74,
+          "endLine": 109
+        },
+        {
+          "path": "packages/docusaurus-logger/src/index.ts",
+          "startLine": 123,
+          "endLine": 152
+        },
+        {
+          "path": "packages/docusaurus-cssnano-preset/src/remove-overridden-custom-properties/index.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/create-docusaurus/bin/index.js",
+          "startLine": 20,
+          "endLine": 51
+        },
+        {
+          "path": "examples/classic/src/components/HomepageFeatures/index.js",
+          "startLine": 3,
+          "endLine": 37
+        },
+        {
+          "path": "packages/create-docusaurus/templates/classic/src/components/HomepageFeatures/index.js",
+          "startLine": 3,
+          "endLine": 37
+        },
+        {
+          "path": "packages/create-docusaurus/src/index.ts",
+          "startLine": 233,
+          "endLine": 264
+        },
+        {
+          "path": "__tests__/validate-package-json.test.ts",
+          "startLine": 54,
+          "endLine": 85
+        },
+        {
+          "path": "admin/scripts/resizeImage.js",
+          "startLine": 3,
+          "endLine": 34
+        },
+        {
+          "path": "admin/scripts/generateExamples.js",
+          "startLine": 25,
+          "endLine": 60
+        },
+        {
+          "path": "argos/tests/screenshot.spec.ts",
+          "startLine": 84,
+          "endLine": 115
+        },
+        {
+          "path": "packages/docusaurus-cssnano-preset/src/remove-overridden-custom-properties/__tests__/index.test.ts",
+          "startLine": 1,
+          "endLine": 21
+        },
+        {
+          "path": "jest/snapshotPathNormalizer.ts",
+          "startLine": 9,
+          "endLine": 40
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/__tests__/frontMatter.test.ts",
+          "startLine": 72,
+          "endLine": 103
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/loader.ts",
+          "startLine": 167,
+          "endLine": 202
+        },
+        {
+          "path": "packages/docusaurus/src/server/routes.ts",
+          "startLine": 33,
+          "endLine": 64
+        }
+      ],
+      "goldFiles": [
+        "packages/docusaurus/src/server/brokenLinks.ts"
+      ],
+      "predictions": [
+        "packages/docusaurus-logger/src/__tests__/index.test.ts",
+        "packages/docusaurus-logger/src/index.ts",
+        "packages/docusaurus-cssnano-preset/src/remove-overridden-custom-properties/index.ts",
+        "packages/create-docusaurus/bin/index.js",
+        "examples/classic/src/components/HomepageFeatures/index.js",
+        "packages/create-docusaurus/templates/classic/src/components/HomepageFeatures/index.js",
+        "packages/create-docusaurus/src/index.ts",
+        "__tests__/validate-package-json.test.ts",
+        "admin/scripts/resizeImage.js",
+        "admin/scripts/generateExamples.js",
+        "argos/tests/screenshot.spec.ts",
+        "packages/docusaurus-cssnano-preset/src/remove-overridden-custom-properties/__tests__/index.test.ts",
+        "jest/snapshotPathNormalizer.ts",
+        "packages/docusaurus-mdx-loader/src/__tests__/frontMatter.test.ts",
+        "packages/docusaurus-mdx-loader/src/loader.ts",
+        "packages/docusaurus/src/server/routes.ts",
+        "packages/docusaurus-plugin-content-docs/src/routes.ts",
+        "examples/classic/sidebars.js",
+        "packages/create-docusaurus/templates/classic/sidebars.js",
+        "examples/classic-typescript/sidebars.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4097,
+      "durationMs": 19270
+    },
+    {
+      "instanceId": "facebook__docusaurus-10309",
+      "repo": "facebook/docusaurus",
+      "baseCommit": "5e9e1d051b2217b95498ecbc10f7e33f64e7a4d3",
+      "goldRegions": [
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/client/docsClientUtils.ts",
+          "startLine": 63,
+          "endLine": 76,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/create-docusaurus/bin/index.js",
+          "startLine": 20,
+          "endLine": 51
+        },
+        {
+          "path": "packages/docusaurus-logger/src/__tests__/index.test.ts",
+          "startLine": 74,
+          "endLine": 109
+        },
+        {
+          "path": "packages/create-docusaurus/src/index.ts",
+          "startLine": 26,
+          "endLine": 57
+        },
+        {
+          "path": "__tests__/validate-package-json.test.ts",
+          "startLine": 54,
+          "endLine": 85
+        },
+        {
+          "path": "admin/scripts/resizeImage.js",
+          "startLine": 3,
+          "endLine": 34
+        },
+        {
+          "path": "admin/scripts/generateExamples.js",
+          "startLine": 22,
+          "endLine": 57
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/remark/resolveMarkdownLinks/index.ts",
+          "startLine": 13,
+          "endLine": 44
+        },
+        {
+          "path": "packages/docusaurus-logger/src/index.ts",
+          "startLine": 123,
+          "endLine": 152
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/loader.ts",
+          "startLine": 175,
+          "endLine": 210
+        },
+        {
+          "path": "argos/tests/screenshot.spec.ts",
+          "startLine": 91,
+          "endLine": 122
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/processor.ts",
+          "startLine": 174,
+          "endLine": 206
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/remark/admonitions/index.ts",
+          "startLine": 113,
+          "endLine": 144
+        },
+        {
+          "path": "packages/docusaurus-plugin-client-redirects/src/collectRedirects.ts",
+          "startLine": 142,
+          "endLine": 173
+        },
+        {
+          "path": "packages/docusaurus-module-type-aliases/src/index.d.ts",
+          "startLine": 207,
+          "endLine": 232
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/index.ts",
+          "startLine": 102,
+          "endLine": 137
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/remark/unusedDirectives/__tests__/index.test.ts",
+          "startLine": 26,
+          "endLine": 57
+        }
+      ],
+      "goldFiles": [
+        "packages/docusaurus-plugin-content-docs/src/client/docsClientUtils.ts"
+      ],
+      "predictions": [
+        "packages/create-docusaurus/bin/index.js",
+        "packages/docusaurus-logger/src/__tests__/index.test.ts",
+        "packages/create-docusaurus/src/index.ts",
+        "__tests__/validate-package-json.test.ts",
+        "admin/scripts/resizeImage.js",
+        "admin/scripts/generateExamples.js",
+        "packages/docusaurus-mdx-loader/src/remark/resolveMarkdownLinks/index.ts",
+        "packages/docusaurus-logger/src/index.ts",
+        "packages/docusaurus-mdx-loader/src/loader.ts",
+        "argos/tests/screenshot.spec.ts",
+        "packages/docusaurus-mdx-loader/src/processor.ts",
+        "packages/docusaurus-mdx-loader/src/remark/admonitions/index.ts",
+        "packages/docusaurus-plugin-client-redirects/src/collectRedirects.ts",
+        "packages/docusaurus-module-type-aliases/src/index.d.ts",
+        "packages/docusaurus-plugin-content-docs/src/index.ts",
+        "packages/docusaurus-mdx-loader/src/remark/unusedDirectives/__tests__/index.test.ts",
+        "packages/docusaurus-plugin-client-redirects/src/__tests__/collectRedirects.test.ts",
+        "jest/snapshotPathNormalizer.ts",
+        "examples/classic/sidebars.js",
+        "packages/create-docusaurus/templates/classic/sidebars.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4376,
+      "durationMs": 14385
+    },
+    {
+      "instanceId": "facebook__docusaurus-8927",
+      "repo": "facebook/docusaurus",
+      "baseCommit": "41f1c1e3c26ad1e24acd3306077e2534dd8fa0db",
+      "goldRegions": [
+        {
+          "path": "packages/docusaurus-utils/src/markdownLinks.ts",
+          "startLine": 102,
+          "endLine": 113,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/docusaurus-utils/src/markdownLinks.ts",
+          "startLine": 135,
+          "endLine": 147,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/docusaurus-utils/src/markdownLinks.ts",
+          "startLine": 151,
+          "endLine": 157,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/docusaurus-mdx-loader/src/remark/transformImage/__tests__/index.test.ts",
+          "startLine": 38,
+          "endLine": 69
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/remark/transformImage/index.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/create-docusaurus/bin/index.js",
+          "startLine": 20,
+          "endLine": 51
+        },
+        {
+          "path": "packages/docusaurus-logger/src/__tests__/index.test.ts",
+          "startLine": 74,
+          "endLine": 109
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/loader.ts",
+          "startLine": 117,
+          "endLine": 148
+        },
+        {
+          "path": "__tests__/validate-package-json.test.ts",
+          "startLine": 54,
+          "endLine": 85
+        },
+        {
+          "path": "admin/scripts/generateExamples.js",
+          "startLine": 21,
+          "endLine": 52
+        },
+        {
+          "path": "admin/scripts/resizeImage.js",
+          "startLine": 81,
+          "endLine": 106
+        },
+        {
+          "path": "packages/create-docusaurus/src/index.ts",
+          "startLine": 11,
+          "endLine": 42
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/remark/transformLinks/__tests__/index.test.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/remark/transformLinks/index.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/docusaurus-utils/src/index.ts",
+          "startLine": 61,
+          "endLine": 96
+        },
+        {
+          "path": "packages/docusaurus-plugin-client-redirects/src/extensionRedirects.ts",
+          "startLine": 2,
+          "endLine": 33
+        },
+        {
+          "path": "packages/docusaurus-plugin-client-redirects/src/collectRedirects.ts",
+          "startLine": 64,
+          "endLine": 99
+        },
+        {
+          "path": "packages/docusaurus-logger/src/index.ts",
+          "startLine": 123,
+          "endLine": 152
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/remark/mdx1Compat/codeCompatPlugin.ts",
+          "startLine": 4,
+          "endLine": 35
+        }
+      ],
+      "goldFiles": [
+        "packages/docusaurus-utils/src/markdownLinks.ts"
+      ],
+      "predictions": [
+        "packages/docusaurus-mdx-loader/src/remark/transformImage/__tests__/index.test.ts",
+        "packages/docusaurus-mdx-loader/src/remark/transformImage/index.ts",
+        "packages/create-docusaurus/bin/index.js",
+        "packages/docusaurus-logger/src/__tests__/index.test.ts",
+        "packages/docusaurus-mdx-loader/src/loader.ts",
+        "__tests__/validate-package-json.test.ts",
+        "admin/scripts/generateExamples.js",
+        "admin/scripts/resizeImage.js",
+        "packages/create-docusaurus/src/index.ts",
+        "packages/docusaurus-mdx-loader/src/remark/transformLinks/__tests__/index.test.ts",
+        "packages/docusaurus-mdx-loader/src/remark/transformLinks/index.ts",
+        "packages/docusaurus-utils/src/index.ts",
+        "packages/docusaurus-plugin-client-redirects/src/extensionRedirects.ts",
+        "packages/docusaurus-plugin-client-redirects/src/collectRedirects.ts",
+        "packages/docusaurus-logger/src/index.ts",
+        "packages/docusaurus-mdx-loader/src/remark/mdx1Compat/codeCompatPlugin.ts",
+        "packages/docusaurus-utils-validation/src/validationSchemas.ts",
+        "packages/docusaurus-plugin-client-redirects/src/__tests__/extensionRedirects.test.ts",
+        "packages/docusaurus-mdx-loader/src/remark/toc/__tests__/index.test.ts",
+        "packages/docusaurus-utils/src/markdownUtils.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4199,
+      "durationMs": 18135
+    },
+    {
+      "instanceId": "facebook__docusaurus-9183",
+      "repo": "facebook/docusaurus",
+      "baseCommit": "b96004e77ebfb23e7349fa495d2177008186bd42",
+      "goldRegions": [
+        {
+          "path": "packages/docusaurus-theme-classic/src/options.ts",
+          "startLine": 313,
+          "endLine": 318,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/docusaurus-theme-classic/src/options.ts",
+          "startLine": 385,
+          "endLine": 393,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/docusaurus-theme-classic/src/theme/CodeBlock/Content/String.tsx",
+          "startLine": 24,
+          "endLine": 29,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/docusaurus-theme-classic/src/theme/CodeBlock/Content/String.tsx",
+          "startLine": 35,
+          "endLine": 42,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "website/docusaurus.config.js",
+          "startLine": 461,
+          "endLine": 467,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/__tests__/options.test.ts",
+          "startLine": 30,
+          "endLine": 61
+        },
+        {
+          "path": "packages/docusaurus-theme-classic/src/index.ts",
+          "startLine": 155,
+          "endLine": 190
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/versions/files.ts",
+          "startLine": 121,
+          "endLine": 151
+        },
+        {
+          "path": "packages/docusaurus-theme-classic/src/options.ts",
+          "startLine": 30,
+          "endLine": 59
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/plugin-content-docs.d.ts",
+          "startLine": 167,
+          "endLine": 202
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/loader.ts",
+          "startLine": 83,
+          "endLine": 114
+        },
+        {
+          "path": "packages/docusaurus-types/src/config.d.ts",
+          "startLine": 15,
+          "endLine": 46
+        },
+        {
+          "path": "admin/scripts/generateExamples.js",
+          "startLine": 33,
+          "endLine": 68
+        },
+        {
+          "path": "packages/create-docusaurus/bin/index.js",
+          "startLine": 11,
+          "endLine": 42
+        },
+        {
+          "path": "packages/docusaurus-theme-classic/src/__tests__/options.test.ts",
+          "startLine": 17,
+          "endLine": 48
+        },
+        {
+          "path": "packages/docusaurus-theme-classic/src/theme/prism-include-languages.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-blog/src/__tests__/options.test.ts",
+          "startLine": 17,
+          "endLine": 48
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-blog/src/plugin-content-blog.d.ts",
+          "startLine": 10,
+          "endLine": 45
+        },
+        {
+          "path": "packages/docusaurus-plugin-pwa/src/plugin-pwa.d.ts",
+          "startLine": 53,
+          "endLine": 88
+        },
+        {
+          "path": "packages/docusaurus-types/src/routing.d.ts",
+          "startLine": 91,
+          "endLine": 116
+        },
+        {
+          "path": "packages/docusaurus-utils/src/markdownUtils.ts",
+          "startLine": 33,
+          "endLine": 64
+        }
+      ],
+      "goldFiles": [
+        "packages/docusaurus-theme-classic/src/options.ts",
+        "packages/docusaurus-theme-classic/src/theme/CodeBlock/Content/String.tsx",
+        "website/docusaurus.config.js"
+      ],
+      "predictions": [
+        "packages/docusaurus-plugin-content-docs/src/__tests__/options.test.ts",
+        "packages/docusaurus-theme-classic/src/index.ts",
+        "packages/docusaurus-plugin-content-docs/src/versions/files.ts",
+        "packages/docusaurus-theme-classic/src/options.ts",
+        "packages/docusaurus-plugin-content-docs/src/plugin-content-docs.d.ts",
+        "packages/docusaurus-mdx-loader/src/loader.ts",
+        "packages/docusaurus-types/src/config.d.ts",
+        "admin/scripts/generateExamples.js",
+        "packages/create-docusaurus/bin/index.js",
+        "packages/docusaurus-theme-classic/src/__tests__/options.test.ts",
+        "packages/docusaurus-theme-classic/src/theme/prism-include-languages.ts",
+        "packages/docusaurus-plugin-content-blog/src/__tests__/options.test.ts",
+        "packages/docusaurus-plugin-content-blog/src/plugin-content-blog.d.ts",
+        "packages/docusaurus-plugin-pwa/src/plugin-pwa.d.ts",
+        "packages/docusaurus-types/src/routing.d.ts",
+        "packages/docusaurus-utils/src/markdownUtils.ts",
+        "packages/docusaurus-logger/src/index.ts",
+        "packages/docusaurus-plugin-content-docs/src/__tests__/cli.test.ts",
+        "packages/docusaurus/src/server/configValidation.ts",
+        "packages/docusaurus-logger/src/__tests__/index.test.ts"
+      ],
+      "recallAt5": 0.3333333333333333,
+      "recallAt10": 0.3333333333333333,
+      "reciprocalRank": 0.25,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4143,
+      "durationMs": 18330
+    },
+    {
+      "instanceId": "facebook__docusaurus-9897",
+      "repo": "facebook/docusaurus",
+      "baseCommit": "0589b1475d56b0b541348aa56f201ec7c56c56d5",
+      "goldRegions": [
+        {
+          "path": "packages/docusaurus-utils/src/markdownUtils.ts",
+          "startLine": 70,
+          "endLine": 78,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/docusaurus-plugin-content-blog/src/plugin-content-blog.d.ts",
+          "startLine": 176,
+          "endLine": 209
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/plugin-content-docs.d.ts",
+          "startLine": 414,
+          "endLine": 449
+        },
+        {
+          "path": "packages/create-docusaurus/bin/index.js",
+          "startLine": 20,
+          "endLine": 51
+        },
+        {
+          "path": "packages/docusaurus-logger/src/__tests__/index.test.ts",
+          "startLine": 74,
+          "endLine": 109
+        },
+        {
+          "path": "packages/create-docusaurus/src/index.ts",
+          "startLine": 26,
+          "endLine": 57
+        },
+        {
+          "path": "__tests__/validate-package-json.test.ts",
+          "startLine": 54,
+          "endLine": 85
+        },
+        {
+          "path": "admin/scripts/generateExamples.js",
+          "startLine": 12,
+          "endLine": 43
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/docs.ts",
+          "startLine": 383,
+          "endLine": 403
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/__tests__/docs.test.ts",
+          "startLine": 234,
+          "endLine": 253
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-blog/src/__tests__/index.test.ts",
+          "startLine": 144,
+          "endLine": 175
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/versions/files.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/docusaurus-logger/src/index.ts",
+          "startLine": 176,
+          "endLine": 198
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/__tests__/cli.test.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/sidebars/__tests__/index.test.ts",
+          "startLine": 24,
+          "endLine": 59
+        },
+        {
+          "path": "packages/docusaurus-plugin-pwa/src/registerSw.ts",
+          "startLine": 1,
+          "endLine": 28
+        },
+        {
+          "path": "packages/docusaurus-mdx-loader/src/loader.ts",
+          "startLine": 167,
+          "endLine": 202
+        }
+      ],
+      "goldFiles": [
+        "packages/docusaurus-utils/src/markdownUtils.ts"
+      ],
+      "predictions": [
+        "packages/docusaurus-plugin-content-blog/src/plugin-content-blog.d.ts",
+        "packages/docusaurus-plugin-content-docs/src/plugin-content-docs.d.ts",
+        "packages/create-docusaurus/bin/index.js",
+        "packages/docusaurus-logger/src/__tests__/index.test.ts",
+        "packages/create-docusaurus/src/index.ts",
+        "__tests__/validate-package-json.test.ts",
+        "admin/scripts/generateExamples.js",
+        "packages/docusaurus-plugin-content-docs/src/docs.ts",
+        "packages/docusaurus-plugin-content-docs/src/__tests__/docs.test.ts",
+        "packages/docusaurus-plugin-content-blog/src/__tests__/index.test.ts",
+        "packages/docusaurus-plugin-content-docs/src/versions/files.ts",
+        "packages/docusaurus-logger/src/index.ts",
+        "packages/docusaurus-plugin-content-docs/src/__tests__/cli.test.ts",
+        "packages/docusaurus-plugin-content-docs/src/sidebars/__tests__/index.test.ts",
+        "packages/docusaurus-plugin-pwa/src/registerSw.ts",
+        "packages/docusaurus-mdx-loader/src/loader.ts",
+        "packages/docusaurus-plugin-ideal-image/src/deps.d.ts",
+        "packages/docusaurus-plugin-pwa/src/plugin-pwa.d.ts",
+        "packages/docusaurus-theme-common/src/internal.ts",
+        "website/src/plugins/changelog/index.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 494,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3889,
+      "durationMs": 20289
+    },
+    {
+      "instanceId": "immutable-js__immutable-js-2005",
+      "repo": "immutable-js/immutable-js",
+      "baseCommit": "77434b3cbbc8ee21206f4cc6965e1c9b09cc92b6",
+      "goldRegions": [
+        {
+          "path": "src/CollectionImpl.js",
+          "startLine": 750,
+          "endLine": 756,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/CollectionImpl.js",
+          "startLine": 767,
+          "endLine": 773,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "__tests__/issues.ts",
+          "startLine": 1,
+          "endLine": 36
+        },
+        {
+          "path": "__tests__/OrderedSet.ts",
+          "startLine": 1,
+          "endLine": 28
+        },
+        {
+          "path": "__tests__/Set.ts",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "src/Hash.js",
+          "startLine": 3,
+          "endLine": 33
+        },
+        {
+          "path": "__tests__/MultiRequire.js",
+          "startLine": 59,
+          "endLine": 90
+        },
+        {
+          "path": "src/is.js",
+          "startLine": 1,
+          "endLine": 9
+        },
+        {
+          "path": "src/CollectionImpl.js",
+          "startLine": 475,
+          "endLine": 500
+        },
+        {
+          "path": "src/OrderedMap.js",
+          "startLine": 135,
+          "endLine": 165
+        },
+        {
+          "path": "type-definitions/flow-tests/record.js",
+          "startLine": 16,
+          "endLine": 47
+        },
+        {
+          "path": "src/OrderedSet.js",
+          "startLine": 7,
+          "endLine": 38
+        },
+        {
+          "path": "src/Seq.js",
+          "startLine": 299,
+          "endLine": 322
+        },
+        {
+          "path": "src/Stack.js",
+          "startLine": 127,
+          "endLine": 142
+        },
+        {
+          "path": "src/Set.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "src/List.js",
+          "startLine": 99,
+          "endLine": 128
+        },
+        {
+          "path": "type-definitions/immutable.d.ts",
+          "startLine": 205,
+          "endLine": 224
+        },
+        {
+          "path": "resources/jestPreprocessor.js",
+          "startLine": 37,
+          "endLine": 67
+        }
+      ],
+      "goldFiles": [
+        "src/CollectionImpl.js"
+      ],
+      "predictions": [
+        "__tests__/issues.ts",
+        "__tests__/OrderedSet.ts",
+        "__tests__/Set.ts",
+        "src/Hash.js",
+        "__tests__/MultiRequire.js",
+        "src/is.js",
+        "src/CollectionImpl.js",
+        "src/OrderedMap.js",
+        "type-definitions/flow-tests/record.js",
+        "src/OrderedSet.js",
+        "src/Seq.js",
+        "src/Stack.js",
+        "src/Set.js",
+        "src/List.js",
+        "type-definitions/immutable.d.ts",
+        "resources/jestPreprocessor.js",
+        "src/Record.js",
+        "__tests__/Equality.ts",
+        "__tests__/Conversion.ts",
+        "website/src/static/getTypeDefs.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 1,
+      "reciprocalRank": 0.14285714285714285,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 439,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3239,
+      "durationMs": 3174
+    },
+    {
+      "instanceId": "immutable-js__immutable-js-2006",
+      "repo": "immutable-js/immutable-js",
+      "baseCommit": "493afba6ec17d9c999dc5a15ac80c71c6bdba1c3",
+      "goldRegions": [
+        {
+          "path": "src/Operations.js",
+          "startLine": 408,
+          "endLine": 423,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "__tests__/List.ts",
+          "startLine": 159,
+          "endLine": 179
+        },
+        {
+          "path": "__tests__/Range.ts",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "__tests__/updateIn.ts",
+          "startLine": 216,
+          "endLine": 251
+        },
+        {
+          "path": "src/Record.js",
+          "startLine": 51,
+          "endLine": 86
+        },
+        {
+          "path": "src/Stack.js",
+          "startLine": 1,
+          "endLine": 27
+        },
+        {
+          "path": "src/Range.js",
+          "startLine": 1,
+          "endLine": 25
+        },
+        {
+          "path": "src/TrieUtils.js",
+          "startLine": 39,
+          "endLine": 70
+        },
+        {
+          "path": "src/CollectionImpl.js",
+          "startLine": 37,
+          "endLine": 63
+        },
+        {
+          "path": "src/Hash.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "src/Set.js",
+          "startLine": 53,
+          "endLine": 88
+        },
+        {
+          "path": "src/List.js",
+          "startLine": 4,
+          "endLine": 31
+        },
+        {
+          "path": "src/is.js",
+          "startLine": 1,
+          "endLine": 9
+        },
+        {
+          "path": "src/OrderedMap.js",
+          "startLine": 91,
+          "endLine": 104
+        },
+        {
+          "path": "website/src/RunkitEmbed.tsx",
+          "startLine": 2,
+          "endLine": 33
+        },
+        {
+          "path": "__tests__/minmax.ts",
+          "startLine": 40,
+          "endLine": 68
+        },
+        {
+          "path": "src/Repeat.js",
+          "startLine": 1,
+          "endLine": 24
+        }
+      ],
+      "goldFiles": [
+        "src/Operations.js"
+      ],
+      "predictions": [
+        "__tests__/List.ts",
+        "__tests__/Range.ts",
+        "__tests__/updateIn.ts",
+        "src/Record.js",
+        "src/Stack.js",
+        "src/Range.js",
+        "src/TrieUtils.js",
+        "src/CollectionImpl.js",
+        "src/Hash.js",
+        "src/Set.js",
+        "src/List.js",
+        "src/is.js",
+        "src/OrderedMap.js",
+        "website/src/RunkitEmbed.tsx",
+        "__tests__/minmax.ts",
+        "src/Repeat.js",
+        "src/Map.js",
+        "website/src/static/prism.ts",
+        "src/Operations.js",
+        "__tests__/Conversion.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0.05263157894736842,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 437,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3601,
+      "durationMs": 3597
+    },
+    {
+      "instanceId": "mrdoob__three.js-25687",
+      "repo": "mrdoob/three.js",
+      "baseCommit": "114134e195a451fdbaa8d2e9492d869d5c853814",
+      "goldRegions": [
+        {
+          "path": "src/core/Object3D.js",
+          "startLine": 718,
+          "endLine": 723,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/loaders/ObjectLoader.js",
+          "startLine": 963,
+          "endLine": 968,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "docs/page.js",
+          "startLine": 58,
+          "endLine": 88
+        },
+        {
+          "path": "docs/prettify/prettify.js",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "examples/jsm/cameras/CinematicCamera.js",
+          "startLine": 116,
+          "endLine": 151
+        },
+        {
+          "path": "examples/jsm/controls/OrbitControls.js",
+          "startLine": 63,
+          "endLine": 98
+        },
+        {
+          "path": "examples/jsm/exporters/ColladaExporter.js",
+          "startLine": 9,
+          "endLine": 40
+        },
+        {
+          "path": "editor/js/libs/app.js",
+          "startLine": 169,
+          "endLine": 204
+        },
+        {
+          "path": "editor/js/libs/codemirror/addon/tern.js",
+          "startLine": 33,
+          "endLine": 64
+        },
+        {
+          "path": "editor/js/libs/tern-threejs/threejs.js",
+          "startLine": 1644,
+          "endLine": 1679
+        },
+        {
+          "path": "examples/jsm/controls/TrackballControls.js",
+          "startLine": 127,
+          "endLine": 162
+        },
+        {
+          "path": "examples/jsm/loaders/STLLoader.js",
+          "startLine": 1,
+          "endLine": 16
+        }
+      ],
+      "goldFiles": [
+        "src/core/Object3D.js",
+        "src/loaders/ObjectLoader.js"
+      ],
+      "predictions": [
+        "docs/page.js",
+        "docs/prettify/prettify.js",
+        "examples/jsm/cameras/CinematicCamera.js",
+        "examples/jsm/controls/OrbitControls.js",
+        "examples/jsm/exporters/ColladaExporter.js",
+        "editor/js/libs/app.js",
+        "editor/js/libs/codemirror/addon/tern.js",
+        "editor/js/libs/tern-threejs/threejs.js",
+        "examples/jsm/controls/TrackballControls.js",
+        "manual/examples/resources/editor.js",
+        "manual/examples/resources/lessons-helper.js",
+        "manual/examples/shared-orbitcontrols.js",
+        "editor/js/Player.js",
+        "manual/resources/threejs-lesson-utils.js",
+        "editor/js/Loader.js",
+        "editor/js/Menubar.File.js",
+        "editor/js/History.js",
+        "editor/js/EditorControls.js",
+        "editor/js/Script.js",
+        "examples/jsm/controls/MapControls.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 320,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 8799,
+      "durationMs": 18555
+    },
+    {
+      "instanceId": "mrdoob__three.js-26589",
+      "repo": "mrdoob/three.js",
+      "baseCommit": "8d9f8d50b923d5f8a673590ae138bc5d86a3a256",
+      "goldRegions": [
+        {
+          "path": "src/objects/Line.js",
+          "startLine": 34,
+          "endLine": 40,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/objects/Mesh.js",
+          "startLine": 65,
+          "endLine": 71,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/objects/Points.js",
+          "startLine": 32,
+          "endLine": 38,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "examples/jsm/animation/CCDIKSolver.js",
+          "startLine": 107,
+          "endLine": 131
+        },
+        {
+          "path": "examples/jsm/animation/MMDPhysics.js",
+          "startLine": 1288,
+          "endLine": 1322
+        },
+        {
+          "path": "examples/jsm/animation/MMDAnimationHelper.js",
+          "startLine": 20,
+          "endLine": 49
+        },
+        {
+          "path": "examples/jsm/exporters/GLTFExporter.js",
+          "startLine": 486,
+          "endLine": 515
+        },
+        {
+          "path": "editor/js/libs/acorn/acorn.js",
+          "startLine": 1,
+          "endLine": 9
+        },
+        {
+          "path": "editor/js/libs/acorn/walk.js",
+          "startLine": 30,
+          "endLine": 63
+        },
+        {
+          "path": "editor/js/libs/codemirror/addon/tern.js",
+          "startLine": 57,
+          "endLine": 92
+        },
+        {
+          "path": "editor/js/libs/codemirror/codemirror.js",
+          "startLine": 585,
+          "endLine": 602
+        },
+        {
+          "path": "editor/js/libs/tern-threejs/threejs.js",
+          "startLine": 112,
+          "endLine": 147
+        },
+        {
+          "path": "editor/js/libs/ternjs/tern.js",
+          "startLine": 660,
+          "endLine": 678
+        },
+        {
+          "path": "manual/examples/resources/editor-settings.js",
+          "startLine": 116,
+          "endLine": 151
+        },
+        {
+          "path": "manual/examples/resources/editor.js",
+          "startLine": 1443,
+          "endLine": 1465
+        },
+        {
+          "path": "editor/js/libs/ternjs/infer.js",
+          "startLine": 1,
+          "endLine": 22
+        },
+        {
+          "path": "src/core/Object3D.js",
+          "startLine": 808,
+          "endLine": 840
+        },
+        {
+          "path": "examples/jsm/loaders/MTLLoader.js",
+          "startLine": 168,
+          "endLine": 187
+        },
+        {
+          "path": "examples/jsm/loaders/GLTFLoader.js",
+          "startLine": 2420,
+          "endLine": 2455
+        }
+      ],
+      "goldFiles": [
+        "src/objects/Line.js",
+        "src/objects/Mesh.js",
+        "src/objects/Points.js"
+      ],
+      "predictions": [
+        "examples/jsm/animation/CCDIKSolver.js",
+        "examples/jsm/animation/MMDPhysics.js",
+        "examples/jsm/animation/MMDAnimationHelper.js",
+        "examples/jsm/exporters/GLTFExporter.js",
+        "editor/js/libs/acorn/acorn.js",
+        "editor/js/libs/acorn/walk.js",
+        "editor/js/libs/codemirror/addon/tern.js",
+        "editor/js/libs/codemirror/codemirror.js",
+        "editor/js/libs/tern-threejs/threejs.js",
+        "editor/js/libs/ternjs/tern.js",
+        "manual/examples/resources/editor-settings.js",
+        "manual/examples/resources/editor.js",
+        "editor/js/libs/ternjs/infer.js",
+        "src/core/Object3D.js",
+        "examples/jsm/loaders/MTLLoader.js",
+        "examples/jsm/loaders/GLTFLoader.js",
+        "utils/packLDrawModel.js",
+        "editor/js/libs/ternjs/def.js",
+        "test/e2e/puppeteer.js",
+        "src/animation/AnimationUtils.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 442,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4045,
+      "durationMs": 19608
+    },
+    {
+      "instanceId": "preactjs__preact-2757",
+      "repo": "preactjs/preact",
+      "baseCommit": "b17a932342bfdeeaf1dc0fbe4f436c83e258d6c8",
+      "goldRegions": [
+        {
+          "path": "src/diff/index.js",
+          "startLine": 438,
+          "endLine": 444,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "compat/test/browser/render.test.js",
+          "startLine": 17,
+          "endLine": 52
+        },
+        {
+          "path": "src/component.js",
+          "startLine": 56,
+          "endLine": 87
+        },
+        {
+          "path": "test/browser/render.test.js",
+          "startLine": 308,
+          "endLine": 339
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 115,
+          "endLine": 142
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 88,
+          "endLine": 123
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 1,
+          "endLine": 26
+        },
+        {
+          "path": "src/internal.d.ts",
+          "startLine": 82,
+          "endLine": 113
+        },
+        {
+          "path": "compat/src/portals.js",
+          "startLine": 34,
+          "endLine": 69
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 6,
+          "endLine": 37
+        },
+        {
+          "path": "src/diff/children.js",
+          "startLine": 1,
+          "endLine": 13
+        },
+        {
+          "path": "src/diff/props.js",
+          "startLine": 93,
+          "endLine": 128
+        },
+        {
+          "path": "src/create-element.js",
+          "startLine": 57,
+          "endLine": 88
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 55,
+          "endLine": 86
+        },
+        {
+          "path": "src/render.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "src/create-context.js",
+          "startLine": 53,
+          "endLine": 67
+        },
+        {
+          "path": "src/index.d.ts",
+          "startLine": 1,
+          "endLine": 30
+        }
+      ],
+      "goldFiles": [
+        "src/diff/index.js"
+      ],
+      "predictions": [
+        "compat/test/browser/render.test.js",
+        "src/component.js",
+        "test/browser/render.test.js",
+        "compat/src/render.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "src/internal.d.ts",
+        "compat/src/portals.js",
+        "src/diff/index.js",
+        "src/diff/children.js",
+        "src/diff/props.js",
+        "src/create-element.js",
+        "hooks/src/index.d.ts",
+        "src/render.js",
+        "src/create-context.js",
+        "src/index.d.ts",
+        "test/browser/hydrate.test.js",
+        "test/browser/getDomSibling.test.js",
+        "compat/src/suspense-list.js",
+        "hooks/src/index.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 1,
+      "reciprocalRank": 0.1111111111111111,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 480,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4088,
+      "durationMs": 4141
+    },
+    {
+      "instanceId": "preactjs__preact-2896",
+      "repo": "preactjs/preact",
+      "baseCommit": "a9f7e676dc03b5008b8483e0937fc27c1af8287f",
+      "goldRegions": [
+        {
+          "path": "src/diff/children.js",
+          "startLine": 264,
+          "endLine": 273,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 251,
+          "endLine": 286
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 7,
+          "endLine": 38
+        },
+        {
+          "path": "compat/test/ts/memo.tsx",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "src/render.js",
+          "startLine": 7,
+          "endLine": 38
+        },
+        {
+          "path": "benches/scripts/bench.js",
+          "startLine": 2,
+          "endLine": 33
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 79,
+          "endLine": 110
+        },
+        {
+          "path": "benches/scripts/prepare.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "demo/reorder.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "debug/src/component-stack.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "benches/scripts/deopts.js",
+          "startLine": 64,
+          "endLine": 99
+        },
+        {
+          "path": "demo/list.js",
+          "startLine": 20,
+          "endLine": 51
+        },
+        {
+          "path": "demo/people/router.tsx",
+          "startLine": 1,
+          "endLine": 28
+        },
+        {
+          "path": "compat/src/index.d.ts",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "compat/src/forwardRef.js",
+          "startLine": 15,
+          "endLine": 46
+        },
+        {
+          "path": "debug/src/internal.d.ts",
+          "startLine": 4,
+          "endLine": 35
+        },
+        {
+          "path": "compat/test/ts/suspense.tsx",
+          "startLine": 17,
+          "endLine": 48
+        }
+      ],
+      "goldFiles": [
+        "src/diff/children.js"
+      ],
+      "predictions": [
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "compat/test/ts/memo.tsx",
+        "src/render.js",
+        "benches/scripts/bench.js",
+        "hooks/src/index.d.ts",
+        "benches/scripts/prepare.js",
+        "demo/reorder.js",
+        "debug/src/component-stack.js",
+        "benches/scripts/deopts.js",
+        "demo/list.js",
+        "demo/people/router.tsx",
+        "compat/src/index.d.ts",
+        "compat/src/forwardRef.js",
+        "debug/src/internal.d.ts",
+        "compat/test/ts/suspense.tsx",
+        "src/create-context.js",
+        "compat/src/memo.js",
+        "compat/src/render.js",
+        "src/clone-element.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4113,
+      "durationMs": 4087
+    },
+    {
+      "instanceId": "preactjs__preact-2927",
+      "repo": "preactjs/preact",
+      "baseCommit": "ee76c1eb169897412501d86fbe40122b34cd2e8d",
+      "goldRegions": [
+        {
+          "path": "src/diff/props.js",
+          "startLine": 113,
+          "endLine": 118,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "compat/test/browser/render.test.js",
+          "startLine": 41,
+          "endLine": 76
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 107,
+          "endLine": 135
+        },
+        {
+          "path": "src/internal.d.ts",
+          "startLine": 117,
+          "endLine": 148
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 256,
+          "endLine": 285
+        },
+        {
+          "path": "src/diff/children.js",
+          "startLine": 34,
+          "endLine": 57
+        },
+        {
+          "path": "test/browser/render.test.js",
+          "startLine": 812,
+          "endLine": 843
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 421,
+          "endLine": 452
+        },
+        {
+          "path": "compat/src/forwardRef.js",
+          "startLine": 15,
+          "endLine": 46
+        },
+        {
+          "path": "src/index.d.ts",
+          "startLine": 1,
+          "endLine": 30
+        },
+        {
+          "path": "src/render.js",
+          "startLine": 14,
+          "endLine": 49
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 133,
+          "endLine": 156
+        },
+        {
+          "path": "src/diff/props.js",
+          "startLine": 28,
+          "endLine": 59
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 48,
+          "endLine": 79
+        },
+        {
+          "path": "debug/test/browser/debug.test.js",
+          "startLine": 14,
+          "endLine": 45
+        },
+        {
+          "path": "compat/test/ts/scheduler.ts",
+          "startLine": 9,
+          "endLine": 13
+        },
+        {
+          "path": "compat/src/scheduler.js",
+          "startLine": 1,
+          "endLine": 11
+        }
+      ],
+      "goldFiles": [
+        "src/diff/props.js"
+      ],
+      "predictions": [
+        "compat/test/browser/render.test.js",
+        "compat/src/render.js",
+        "src/internal.d.ts",
+        "debug/src/debug.js",
+        "src/diff/children.js",
+        "test/browser/render.test.js",
+        "src/diff/index.js",
+        "compat/src/forwardRef.js",
+        "src/index.d.ts",
+        "src/render.js",
+        "compat/src/index.js",
+        "src/diff/props.js",
+        "hooks/src/index.d.ts",
+        "debug/test/browser/debug.test.js",
+        "compat/test/ts/scheduler.ts",
+        "compat/src/scheduler.js",
+        "compat/test/ts/suspense.tsx",
+        "compat/src/memo.js",
+        "src/util.js",
+        "hooks/src/index.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0.08333333333333333,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 449,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3752,
+      "durationMs": 3814
+    },
+    {
+      "instanceId": "preactjs__preact-3010",
+      "repo": "preactjs/preact",
+      "baseCommit": "c12331064f4ea967641cd5e419204422af050fbb",
+      "goldRegions": [
+        {
+          "path": "src/diff/children.js",
+          "startLine": 53,
+          "endLine": 59,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/index.d.ts",
+          "startLine": 48,
+          "endLine": 53,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "compat/test/browser/render.test.js",
+          "startLine": 357,
+          "endLine": 373
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 37,
+          "endLine": 68
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 22,
+          "endLine": 53
+        },
+        {
+          "path": "src/index.d.ts",
+          "startLine": 209,
+          "endLine": 239
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 404,
+          "endLine": 430
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 253,
+          "endLine": 284
+        },
+        {
+          "path": "test/browser/render.test.js",
+          "startLine": 81,
+          "endLine": 112
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 294,
+          "endLine": 309
+        },
+        {
+          "path": "src/diff/children.js",
+          "startLine": 99,
+          "endLine": 128
+        },
+        {
+          "path": "src/render.js",
+          "startLine": 8,
+          "endLine": 39
+        },
+        {
+          "path": "test/ts/Component-test.tsx",
+          "startLine": 81,
+          "endLine": 112
+        },
+        {
+          "path": "src/internal.d.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "src/create-element.js",
+          "startLine": 37,
+          "endLine": 65
+        },
+        {
+          "path": "src/diff/props.js",
+          "startLine": 32,
+          "endLine": 62
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 51,
+          "endLine": 82
+        },
+        {
+          "path": "debug/test/browser/debug-compat.test.js",
+          "startLine": 19,
+          "endLine": 50
+        }
+      ],
+      "goldFiles": [
+        "src/diff/children.js",
+        "src/index.d.ts"
+      ],
+      "predictions": [
+        "compat/test/browser/render.test.js",
+        "hooks/src/index.d.ts",
+        "compat/src/render.js",
+        "src/index.d.ts",
+        "debug/src/debug.js",
+        "src/diff/index.js",
+        "test/browser/render.test.js",
+        "hooks/src/index.js",
+        "src/diff/children.js",
+        "src/render.js",
+        "test/ts/Component-test.tsx",
+        "src/internal.d.ts",
+        "src/create-element.js",
+        "src/diff/props.js",
+        "compat/src/index.js",
+        "debug/test/browser/debug-compat.test.js",
+        "debug/test/browser/serializeVNode.test.js",
+        "src/component.js",
+        "test/_util/helpers.js",
+        "devtools/src/index.js"
+      ],
+      "recallAt5": 0.5,
+      "recallAt10": 1,
+      "reciprocalRank": 0.25,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 469,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3573,
+      "durationMs": 3513
+    },
+    {
+      "instanceId": "preactjs__preact-3062",
+      "repo": "preactjs/preact",
+      "baseCommit": "7556b61bd0d9f72bbd906c3abaebf2b1c9aeacbf",
+      "goldRegions": [
+        {
+          "path": "src/diff/props.js",
+          "startLine": 111,
+          "endLine": 116,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 1,
+          "endLine": 23
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 358,
+          "endLine": 387
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 101,
+          "endLine": 132
+        },
+        {
+          "path": "src/component.js",
+          "startLine": 80,
+          "endLine": 111
+        },
+        {
+          "path": "compat/src/portals.js",
+          "startLine": 47,
+          "endLine": 78
+        },
+        {
+          "path": "compat/test/browser/render.test.js",
+          "startLine": 191,
+          "endLine": 225
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 55,
+          "endLine": 86
+        },
+        {
+          "path": "karma.conf.js",
+          "startLine": 122,
+          "endLine": 157
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 101,
+          "endLine": 131
+        },
+        {
+          "path": "compat/src/suspense-list.js",
+          "startLine": 1,
+          "endLine": 30
+        },
+        {
+          "path": "src/create-element.js",
+          "startLine": 60,
+          "endLine": 91
+        },
+        {
+          "path": "benches/scripts/tracing.d.ts",
+          "startLine": 4,
+          "endLine": 21
+        },
+        {
+          "path": "debug/test/browser/debug.test.js",
+          "startLine": 32,
+          "endLine": 54
+        },
+        {
+          "path": "hooks/test/browser/useLayoutEffect.test.js",
+          "startLine": 191,
+          "endLine": 226
+        },
+        {
+          "path": "src/create-context.js",
+          "startLine": 14,
+          "endLine": 49
+        }
+      ],
+      "goldFiles": [
+        "src/diff/props.js"
+      ],
+      "predictions": [
+        "hooks/src/index.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "src/component.js",
+        "compat/src/portals.js",
+        "compat/test/browser/render.test.js",
+        "hooks/src/index.d.ts",
+        "karma.conf.js",
+        "src/diff/index.js",
+        "compat/src/render.js",
+        "compat/src/suspense-list.js",
+        "src/create-element.js",
+        "benches/scripts/tracing.d.ts",
+        "debug/test/browser/debug.test.js",
+        "hooks/test/browser/useLayoutEffect.test.js",
+        "src/create-context.js",
+        "test-utils/src/index.js",
+        "debug/test/browser/serializeVNode.test.js",
+        "jsx-runtime/src/index.js",
+        "compat/test/ts/scheduler.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 490,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3935,
+      "durationMs": 4566
+    },
+    {
+      "instanceId": "preactjs__preact-3345",
+      "repo": "preactjs/preact",
+      "baseCommit": "e0e17046753fe09881dfb8d5a69b44933d1fa1ea",
+      "goldRegions": [
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 74,
+          "endLine": 84,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 346,
+          "endLine": 352,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "babel.config.js",
+          "startLine": 1,
+          "endLine": 47
+        },
+        {
+          "path": "benches/proxy-packages/preact-local-proxy/index.js",
+          "startLine": 1,
+          "endLine": 19
+        },
+        {
+          "path": "benches/proxy-packages/preact-local-proxy/package.json",
+          "startLine": 1,
+          "endLine": 11
+        },
+        {
+          "path": "benches/proxy-packages/preact-master-proxy/index.js",
+          "startLine": 1,
+          "endLine": 19
+        },
+        {
+          "path": "benches/proxy-packages/preact-master-proxy/package.json",
+          "startLine": 1,
+          "endLine": 11
+        },
+        {
+          "path": "benches/proxy-packages/preact-v8-proxy/index.js",
+          "startLine": 1,
+          "endLine": 24
+        },
+        {
+          "path": "benches/scripts/analyze.js",
+          "startLine": 91,
+          "endLine": 122
+        },
+        {
+          "path": "benches/scripts/bench.js",
+          "startLine": 4,
+          "endLine": 35
+        },
+        {
+          "path": "benches/scripts/deopts.js",
+          "startLine": 56,
+          "endLine": 87
+        },
+        {
+          "path": "benches/scripts/global.d.ts",
+          "startLine": 1,
+          "endLine": 16
+        },
+        {
+          "path": "benches/scripts/index.js",
+          "startLine": 52,
+          "endLine": 83
+        },
+        {
+          "path": "benches/scripts/prepare.js",
+          "startLine": 7,
+          "endLine": 38
+        },
+        {
+          "path": "benches/scripts/tracing.d.ts",
+          "startLine": 171,
+          "endLine": 183
+        },
+        {
+          "path": "benches/scripts/utils.js",
+          "startLine": 20,
+          "endLine": 51
+        },
+        {
+          "path": "benches/src/keyed-children/components.js",
+          "startLine": 71,
+          "endLine": 106
+        },
+        {
+          "path": "benches/src/keyed-children/index.js",
+          "startLine": 1,
+          "endLine": 25
+        }
+      ],
+      "goldFiles": [
+        "hooks/src/index.js"
+      ],
+      "predictions": [
+        "babel.config.js",
+        "benches/package.json",
+        "benches/proxy-packages/preact-local-proxy/index.js",
+        "benches/proxy-packages/preact-local-proxy/package.json",
+        "benches/proxy-packages/preact-master-proxy/index.js",
+        "benches/proxy-packages/preact-master-proxy/package.json",
+        "benches/proxy-packages/preact-v8-proxy/index.js",
+        "benches/scripts/analyze.js",
+        "benches/scripts/bench.js",
+        "benches/scripts/deopts.js",
+        "benches/scripts/global.d.ts",
+        "benches/scripts/index.js",
+        "benches/scripts/prepare.js",
+        "benches/scripts/tracing.d.ts",
+        "benches/scripts/utils.js",
+        "benches/src/keyed-children/components.js",
+        "benches/src/keyed-children/index.js",
+        "benches/src/keyed-children/store.js",
+        "benches/src/util.js",
+        "compat/jsx-dev-runtime.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 413,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3090,
+      "durationMs": 5321
+    },
+    {
+      "instanceId": "preactjs__preact-3454",
+      "repo": "preactjs/preact",
+      "baseCommit": "00c8d1ff1498084c15408cf0014d4c7facdb5dd7",
+      "goldRegions": [
+        {
+          "path": "src/diff/props.js",
+          "startLine": 106,
+          "endLine": 112,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "compat/src/index.js",
+          "startLine": 21,
+          "endLine": 52
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 296,
+          "endLine": 331
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 332,
+          "endLine": 363
+        },
+        {
+          "path": "hooks/test/browser/combinations.test.js",
+          "startLine": 270,
+          "endLine": 292
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 113,
+          "endLine": 144
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 90,
+          "endLine": 121
+        },
+        {
+          "path": "benches/scripts/analyze.js",
+          "startLine": 197,
+          "endLine": 232
+        },
+        {
+          "path": "compat/src/portals.js",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "debug/src/component-stack.js",
+          "startLine": 85,
+          "endLine": 116
+        },
+        {
+          "path": "jsx-runtime/src/index.js",
+          "startLine": 12,
+          "endLine": 43
+        },
+        {
+          "path": "benches/scripts/index.js",
+          "startLine": 14,
+          "endLine": 45
+        },
+        {
+          "path": "debug/test/browser/debug.test.js",
+          "startLine": 358,
+          "endLine": 389
+        },
+        {
+          "path": "compat/test/browser/render.test.js",
+          "startLine": 318,
+          "endLine": 353
+        },
+        {
+          "path": "compat/test/browser/events.test.js",
+          "startLine": 91,
+          "endLine": 126
+        },
+        {
+          "path": "hooks/test/browser/useLayoutEffect.test.js",
+          "startLine": 1,
+          "endLine": 22
+        },
+        {
+          "path": "benches/scripts/bench.js",
+          "startLine": 14,
+          "endLine": 45
+        }
+      ],
+      "goldFiles": [
+        "src/diff/props.js"
+      ],
+      "predictions": [
+        "compat/src/index.js",
+        "debug/src/debug.js",
+        "hooks/src/index.js",
+        "hooks/test/browser/combinations.test.js",
+        "compat/src/render.js",
+        "hooks/src/index.d.ts",
+        "benches/scripts/analyze.js",
+        "compat/src/portals.js",
+        "debug/src/component-stack.js",
+        "jsx-runtime/src/index.js",
+        "benches/scripts/index.js",
+        "debug/test/browser/debug.test.js",
+        "compat/test/browser/render.test.js",
+        "compat/test/browser/events.test.js",
+        "hooks/test/browser/useLayoutEffect.test.js",
+        "benches/scripts/bench.js",
+        "compat/test/ts/forward-ref.tsx",
+        "compat/src/suspense-list.js",
+        "compat/src/suspense.js",
+        "benches/scripts/deopts.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4384,
+      "durationMs": 4425
+    },
+    {
+      "instanceId": "preactjs__preact-3562",
+      "repo": "preactjs/preact",
+      "baseCommit": "0b9a9275b47e446106e6e97c78011896f7db2a61",
+      "goldRegions": [
+        {
+          "path": "compat/src/render.js",
+          "startLine": 161,
+          "endLine": 166,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "hooks/test/browser/useLayoutEffect.test.js",
+          "startLine": 93,
+          "endLine": 122
+        },
+        {
+          "path": "hooks/test/browser/useEffect.test.js",
+          "startLine": 7,
+          "endLine": 42
+        },
+        {
+          "path": "compat/src/suspense.js",
+          "startLine": 203,
+          "endLine": 234
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 144,
+          "endLine": 168
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 75,
+          "endLine": 110
+        },
+        {
+          "path": "src/component.js",
+          "startLine": 45,
+          "endLine": 76
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 3,
+          "endLine": 15
+        },
+        {
+          "path": "src/internal.d.ts",
+          "startLine": 125,
+          "endLine": 152
+        },
+        {
+          "path": "test/browser/lifecycles/componentDidCatch.test.js",
+          "startLine": 1,
+          "endLine": 35
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 6,
+          "endLine": 37
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 34,
+          "endLine": 58
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 90,
+          "endLine": 121
+        },
+        {
+          "path": "src/create-element.js",
+          "startLine": 72,
+          "endLine": 99
+        },
+        {
+          "path": "karma.conf.js",
+          "startLine": 37,
+          "endLine": 68
+        },
+        {
+          "path": "benches/scripts/tracing.d.ts",
+          "startLine": 50,
+          "endLine": 80
+        },
+        {
+          "path": "compat/src/suspense-list.js",
+          "startLine": 87,
+          "endLine": 116
+        }
+      ],
+      "goldFiles": [
+        "compat/src/render.js"
+      ],
+      "predictions": [
+        "hooks/test/browser/useLayoutEffect.test.js",
+        "hooks/test/browser/useEffect.test.js",
+        "compat/src/suspense.js",
+        "compat/src/index.js",
+        "debug/src/debug.js",
+        "src/component.js",
+        "src/diff/index.js",
+        "src/internal.d.ts",
+        "test/browser/lifecycles/componentDidCatch.test.js",
+        "compat/src/render.js",
+        "hooks/src/index.js",
+        "hooks/src/index.d.ts",
+        "src/create-element.js",
+        "karma.conf.js",
+        "benches/scripts/tracing.d.ts",
+        "compat/src/suspense-list.js",
+        "debug/test/browser/debug.test.js",
+        "hooks/test/browser/useEffectAssertions.test.js",
+        "compat/test/browser/events.test.js",
+        "test-utils/src/index.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 1,
+      "reciprocalRank": 0.1,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 477,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3786,
+      "durationMs": 3988
+    },
+    {
+      "instanceId": "preactjs__preact-3567",
+      "repo": "preactjs/preact",
+      "baseCommit": "c77e6284c199761d59467d8cc596a2f03540e72c",
+      "goldRegions": [
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 41,
+          "endLine": 49,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 66,
+          "endLine": 71,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 175,
+          "endLine": 181,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 190,
+          "endLine": 196,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 230,
+          "endLine": 238,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/internal.d.ts",
+          "startLine": 49,
+          "endLine": 60,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "compat/src/suspense.js",
+          "startLine": 22,
+          "endLine": 53
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 22,
+          "endLine": 53
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 99,
+          "endLine": 130
+        },
+        {
+          "path": "src/component.js",
+          "startLine": 1,
+          "endLine": 24
+        },
+        {
+          "path": "test/browser/lifecycles/componentDidCatch.test.js",
+          "startLine": 8,
+          "endLine": 43
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 272,
+          "endLine": 302
+        },
+        {
+          "path": "src/internal.d.ts",
+          "startLine": 22,
+          "endLine": 53
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 299,
+          "endLine": 330
+        },
+        {
+          "path": "compat/test/browser/render.test.js",
+          "startLine": 104,
+          "endLine": 139
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 92,
+          "endLine": 123
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 90,
+          "endLine": 121
+        },
+        {
+          "path": "hooks/src/internal.d.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "demo/spiral.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "debug/test/browser/debug.options.test.js",
+          "startLine": 74,
+          "endLine": 109
+        },
+        {
+          "path": "debug/test/browser/debug-hooks.test.js",
+          "startLine": 74,
+          "endLine": 109
+        },
+        {
+          "path": "karma.conf.js",
+          "startLine": 203,
+          "endLine": 238
+        }
+      ],
+      "goldFiles": [
+        "hooks/src/index.js",
+        "hooks/src/internal.d.ts"
+      ],
+      "predictions": [
+        "compat/src/suspense.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "src/component.js",
+        "test/browser/lifecycles/componentDidCatch.test.js",
+        "src/diff/index.js",
+        "src/internal.d.ts",
+        "hooks/src/index.js",
+        "compat/test/browser/render.test.js",
+        "compat/src/render.js",
+        "hooks/src/index.d.ts",
+        "hooks/src/internal.d.ts",
+        "demo/spiral.js",
+        "debug/test/browser/debug.options.test.js",
+        "debug/test/browser/debug-hooks.test.js",
+        "karma.conf.js",
+        "hooks/test/browser/componentDidCatch.test.js",
+        "compat/src/suspense-list.js",
+        "test-utils/src/index.js",
+        "src/diff/catch-error.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0.5,
+      "reciprocalRank": 0.125,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3647,
+      "durationMs": 4088
+    },
+    {
+      "instanceId": "preactjs__preact-3689",
+      "repo": "preactjs/preact",
+      "baseCommit": "9457b221fdacd1052ffdb385918e1bab4b10e833",
+      "goldRegions": [
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 1,
+          "endLine": 4,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 135,
+          "endLine": 139,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 345,
+          "endLine": 351,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 353,
+          "endLine": 360,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/internal.d.ts",
+          "startLine": 1,
+          "endLine": 6,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/internal.d.ts",
+          "startLine": 75,
+          "endLine": 79,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 24,
+          "endLine": 59
+        },
+        {
+          "path": "src/internal.d.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "src/diff/catch-error.js",
+          "startLine": 1,
+          "endLine": 27
+        },
+        {
+          "path": "compat/src/suspense.js",
+          "startLine": 1,
+          "endLine": 28
+        },
+        {
+          "path": "src/index.d.ts",
+          "startLine": 47,
+          "endLine": 77
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 341,
+          "endLine": 362
+        },
+        {
+          "path": "test/browser/lifecycles/componentDidCatch.test.js",
+          "startLine": 17,
+          "endLine": 52
+        },
+        {
+          "path": "hooks/test/browser/componentDidCatch.test.js",
+          "startLine": 13,
+          "endLine": 48
+        },
+        {
+          "path": "compat/src/suspense-list.js",
+          "startLine": 100,
+          "endLine": 127
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 282,
+          "endLine": 296
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 7,
+          "endLine": 38
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 36,
+          "endLine": 64
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 1,
+          "endLine": 28
+        },
+        {
+          "path": "test/polyfills.js",
+          "startLine": 68,
+          "endLine": 97
+        },
+        {
+          "path": "compat/test/browser/componentDidCatch.test.js",
+          "startLine": 9,
+          "endLine": 44
+        },
+        {
+          "path": "src/diff/children.js",
+          "startLine": 70,
+          "endLine": 86
+        }
+      ],
+      "goldFiles": [
+        "hooks/src/index.d.ts",
+        "hooks/src/index.js",
+        "hooks/src/internal.d.ts"
+      ],
+      "predictions": [
+        "debug/src/debug.js",
+        "src/internal.d.ts",
+        "src/diff/catch-error.js",
+        "compat/src/suspense.js",
+        "src/index.d.ts",
+        "hooks/src/index.js",
+        "test/browser/lifecycles/componentDidCatch.test.js",
+        "hooks/test/browser/componentDidCatch.test.js",
+        "compat/src/suspense-list.js",
+        "src/diff/index.js",
+        "compat/src/render.js",
+        "hooks/src/index.d.ts",
+        "compat/src/index.js",
+        "test/polyfills.js",
+        "compat/test/browser/componentDidCatch.test.js",
+        "src/diff/children.js",
+        "hooks/test/browser/useEffect.test.js",
+        "jsx-runtime/src/index.js",
+        "debug/test/browser/serializeVNode.test.js",
+        "hooks/src/internal.d.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0.3333333333333333,
+      "reciprocalRank": 0.16666666666666666,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 15,
+          "linePrecision": 0.06,
+          "lineRecall": 0.42857142857142855,
+          "lineF1": 0.10526315789473684,
+          "hitRegionRate": 0.3333333333333333,
+          "noiseRegionRate": 0.8888888888888888,
+          "contextEfficiency": 0.06,
+          "ndcg": 0.2001483471632922,
+          "firstUsefulHit": 159
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 463,
+          "coveredGoldLines": 15,
+          "linePrecision": 0.032397408207343416,
+          "lineRecall": 0.42857142857142855,
+          "lineF1": 0.06024096385542169,
+          "hitRegionRate": 0.3333333333333333,
+          "noiseRegionRate": 0.9375,
+          "contextEfficiency": 0.032397408207343416,
+          "ndcg": 0.2001483471632922,
+          "firstUsefulHit": 159
+        }
+      },
+      "estimatedTokens": 3338,
+      "durationMs": 3168
+    },
+    {
+      "instanceId": "preactjs__preact-3739",
+      "repo": "preactjs/preact",
+      "baseCommit": "2cafedee2ddf7c73795e887ef1970df4be2bca90",
+      "goldRegions": [
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 233,
+          "endLine": 239,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 362,
+          "endLine": 393
+        },
+        {
+          "path": "benches/scripts/bench.js",
+          "startLine": 16,
+          "endLine": 47
+        },
+        {
+          "path": "debug/test/browser/serializeVNode.test.js",
+          "startLine": 1,
+          "endLine": 34
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 88,
+          "endLine": 119
+        },
+        {
+          "path": "debug/test/browser/debug.test.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "debug/src/check-props.js",
+          "startLine": 1,
+          "endLine": 18
+        },
+        {
+          "path": "benches/scripts/analyze.js",
+          "startLine": 86,
+          "endLine": 117
+        },
+        {
+          "path": "demo/context.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "compat/src/index.d.ts",
+          "startLine": 1,
+          "endLine": 36
+        },
+        {
+          "path": "compat/scheduler.mjs",
+          "startLine": 1,
+          "endLine": 24
+        },
+        {
+          "path": "config/codemod-const.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "benches/scripts/deopts.js",
+          "startLine": 217,
+          "endLine": 252
+        },
+        {
+          "path": "debug/src/component-stack.js",
+          "startLine": 12,
+          "endLine": 43
+        },
+        {
+          "path": "demo/index.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "benches/scripts/index.js",
+          "startLine": 70,
+          "endLine": 101
+        },
+        {
+          "path": "compat/src/forwardRef.js",
+          "startLine": 4,
+          "endLine": 35
+        }
+      ],
+      "goldFiles": [
+        "hooks/src/index.js"
+      ],
+      "predictions": [
+        "debug/src/debug.js",
+        "benches/scripts/bench.js",
+        "debug/test/browser/serializeVNode.test.js",
+        "compat/src/index.js",
+        "debug/test/browser/debug.test.js",
+        "debug/src/check-props.js",
+        "benches/scripts/analyze.js",
+        "demo/context.js",
+        "compat/src/index.d.ts",
+        "compat/scheduler.mjs",
+        "config/codemod-const.js",
+        "benches/scripts/deopts.js",
+        "debug/src/component-stack.js",
+        "demo/index.js",
+        "benches/scripts/index.js",
+        "compat/src/forwardRef.js",
+        "config/codemod-strip-tdz.js",
+        "benches/src/util.js",
+        "benches/scripts/utils.js",
+        "compat/src/suspense.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3829,
+      "durationMs": 7325
+    },
+    {
+      "instanceId": "preactjs__preact-3763",
+      "repo": "preactjs/preact",
+      "baseCommit": "e968a5a4000dfa9bec7e8d7b26543b23def6d29d",
+      "goldRegions": [
+        {
+          "path": "src/diff/index.js",
+          "startLine": 96,
+          "endLine": 101,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 110,
+          "endLine": 120,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 156,
+          "endLine": 161,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 188,
+          "endLine": 193,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 524,
+          "endLine": 530,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 218,
+          "endLine": 240
+        },
+        {
+          "path": "debug/test/browser/debug.test.js",
+          "startLine": 14,
+          "endLine": 45
+        },
+        {
+          "path": "src/component.js",
+          "startLine": 46,
+          "endLine": 77
+        },
+        {
+          "path": "src/internal.d.ts",
+          "startLine": 125,
+          "endLine": 153
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 55,
+          "endLine": 86
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 420,
+          "endLine": 451
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 190,
+          "endLine": 211
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 41,
+          "endLine": 72
+        },
+        {
+          "path": "test/browser/lifecycles/componentDidUpdate.test.js",
+          "startLine": 281,
+          "endLine": 316
+        },
+        {
+          "path": "benches/scripts/analyze.js",
+          "startLine": 86,
+          "endLine": 117
+        },
+        {
+          "path": "test/browser/lifecycles/lifecycle.test.js",
+          "startLine": 199,
+          "endLine": 234
+        },
+        {
+          "path": "test-utils/test/shared/act.test.js",
+          "startLine": 339,
+          "endLine": 358
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 128,
+          "endLine": 159
+        },
+        {
+          "path": "compat/src/suspense-list.js",
+          "startLine": 100,
+          "endLine": 127
+        },
+        {
+          "path": "karma.conf.js",
+          "startLine": 43,
+          "endLine": 77
+        },
+        {
+          "path": "compat/test/browser/render.test.js",
+          "startLine": 23,
+          "endLine": 55
+        }
+      ],
+      "goldFiles": [
+        "src/diff/index.js"
+      ],
+      "predictions": [
+        "debug/src/debug.js",
+        "debug/test/browser/debug.test.js",
+        "src/component.js",
+        "src/internal.d.ts",
+        "hooks/src/index.d.ts",
+        "hooks/src/index.js",
+        "src/diff/index.js",
+        "compat/src/render.js",
+        "test/browser/lifecycles/componentDidUpdate.test.js",
+        "benches/scripts/analyze.js",
+        "test/browser/lifecycles/lifecycle.test.js",
+        "test-utils/test/shared/act.test.js",
+        "compat/src/index.js",
+        "compat/src/suspense-list.js",
+        "karma.conf.js",
+        "compat/test/browser/render.test.js",
+        "benches/scripts/index.js",
+        "demo/index.js",
+        "hooks/test/browser/useLayoutEffect.test.js",
+        "compat/src/suspense.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 1,
+      "reciprocalRank": 0.14285714285714285,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 4,
+          "linePrecision": 0.016,
+          "lineRecall": 0.1111111111111111,
+          "lineF1": 0.02797202797202797,
+          "hitRegionRate": 0.2,
+          "noiseRegionRate": 0.8888888888888888,
+          "contextEfficiency": 0.016,
+          "ndcg": 0.05146147920217466,
+          "firstUsefulHit": 181
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 486,
+          "coveredGoldLines": 4,
+          "linePrecision": 0.00823045267489712,
+          "lineRecall": 0.1111111111111111,
+          "lineF1": 0.015325670498084292,
+          "hitRegionRate": 0.2,
+          "noiseRegionRate": 0.9375,
+          "contextEfficiency": 0.00823045267489712,
+          "ndcg": 0.05146147920217466,
+          "firstUsefulHit": 181
+        }
+      },
+      "estimatedTokens": 3672,
+      "durationMs": 3713
+    },
+    {
+      "instanceId": "preactjs__preact-4152",
+      "repo": "preactjs/preact",
+      "baseCommit": "9c5a82efcc3dcbd0035c694817a3022d81264687",
+      "goldRegions": [
+        {
+          "path": "src/diff/children.js",
+          "startLine": 69,
+          "endLine": 75,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 314,
+          "endLine": 342
+        },
+        {
+          "path": "src/component.js",
+          "startLine": 172,
+          "endLine": 195
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 393,
+          "endLine": 412
+        },
+        {
+          "path": "compat/src/suspense-list.js",
+          "startLine": 1,
+          "endLine": 30
+        },
+        {
+          "path": "test/_util/helpers.js",
+          "startLine": 53,
+          "endLine": 84
+        },
+        {
+          "path": "debug/test/browser/debug.test.js",
+          "startLine": 349,
+          "endLine": 376
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 29,
+          "endLine": 60
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "test/browser/getDomSibling.test.js",
+          "startLine": 1,
+          "endLine": 34
+        },
+        {
+          "path": "src/diff/children.js",
+          "startLine": 1,
+          "endLine": 13
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 3,
+          "endLine": 15
+        },
+        {
+          "path": "src/create-context.js",
+          "startLine": 22,
+          "endLine": 54
+        },
+        {
+          "path": "compat/test/browser/createElement.test.js",
+          "startLine": 16,
+          "endLine": 46
+        },
+        {
+          "path": "test/browser/lifecycles/lifecycle.test.js",
+          "startLine": 339,
+          "endLine": 364
+        },
+        {
+          "path": "compat/src/suspense.js",
+          "startLine": 91,
+          "endLine": 122
+        },
+        {
+          "path": "test/browser/style.test.js",
+          "startLine": 204,
+          "endLine": 239
+        }
+      ],
+      "goldFiles": [
+        "src/diff/children.js"
+      ],
+      "predictions": [
+        "debug/src/debug.js",
+        "src/component.js",
+        "hooks/src/index.js",
+        "compat/src/suspense-list.js",
+        "test/_util/helpers.js",
+        "debug/test/browser/debug.test.js",
+        "compat/src/index.js",
+        "compat/src/render.js",
+        "test/browser/getDomSibling.test.js",
+        "src/diff/children.js",
+        "src/diff/index.js",
+        "src/create-context.js",
+        "compat/test/browser/createElement.test.js",
+        "test/browser/lifecycles/lifecycle.test.js",
+        "compat/src/suspense.js",
+        "test/browser/style.test.js",
+        "debug/src/check-props.js",
+        "src/render.js",
+        "benches/scripts/tracing.d.ts",
+        "debug/src/component-stack.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 1,
+      "reciprocalRank": 0.1,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 445,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3717,
+      "durationMs": 4228
+    },
+    {
+      "instanceId": "preactjs__preact-4182",
+      "repo": "preactjs/preact",
+      "baseCommit": "66cb6a78776b263a2fe4d1283426e699961095d2",
+      "goldRegions": [
+        {
+          "path": "src/diff/index.js",
+          "startLine": 271,
+          "endLine": 276,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "demo/list.jsx",
+          "startLine": 22,
+          "endLine": 53
+        },
+        {
+          "path": "demo/logger.jsx",
+          "startLine": 55,
+          "endLine": 90
+        },
+        {
+          "path": "demo/people/index.tsx",
+          "startLine": 4,
+          "endLine": 35
+        },
+        {
+          "path": "demo/index.jsx",
+          "startLine": 1,
+          "endLine": 31
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 22,
+          "endLine": 53
+        },
+        {
+          "path": "demo/todo.jsx",
+          "startLine": 5,
+          "endLine": 36
+        },
+        {
+          "path": "demo/stateOrderBug.jsx",
+          "startLine": 25,
+          "endLine": 60
+        },
+        {
+          "path": "demo/spiral.jsx",
+          "startLine": 86,
+          "endLine": 117
+        },
+        {
+          "path": "demo/reorder.jsx",
+          "startLine": 72,
+          "endLine": 105
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 106,
+          "endLine": 141
+        },
+        {
+          "path": "demo/textFields.jsx",
+          "startLine": 2,
+          "endLine": 33
+        },
+        {
+          "path": "demo/mobx.jsx",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "demo/profiler.jsx",
+          "startLine": 73,
+          "endLine": 89
+        },
+        {
+          "path": "demo/nested-suspense/index.jsx",
+          "startLine": 20,
+          "endLine": 51
+        },
+        {
+          "path": "demo/contenteditable.jsx",
+          "startLine": 1,
+          "endLine": 25
+        },
+        {
+          "path": "demo/reduxUpdate.jsx",
+          "startLine": 21,
+          "endLine": 52
+        }
+      ],
+      "goldFiles": [
+        "src/diff/index.js"
+      ],
+      "predictions": [
+        "demo/list.jsx",
+        "demo/logger.jsx",
+        "demo/people/index.tsx",
+        "demo/index.jsx",
+        "compat/src/index.js",
+        "demo/todo.jsx",
+        "demo/stateOrderBug.jsx",
+        "demo/spiral.jsx",
+        "demo/reorder.jsx",
+        "debug/src/debug.js",
+        "demo/textFields.jsx",
+        "demo/mobx.jsx",
+        "demo/profiler.jsx",
+        "demo/nested-suspense/index.jsx",
+        "demo/contenteditable.jsx",
+        "demo/reduxUpdate.jsx",
+        "demo/suspense.jsx",
+        "compat/src/index.d.ts",
+        "demo/key_bug.jsx",
+        "compat/src/render.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3399,
+      "durationMs": 4538
+    },
+    {
+      "instanceId": "preactjs__preact-4245",
+      "repo": "preactjs/preact",
+      "baseCommit": "13b0afb7a28adb3149d7125fb2b9c16edbcf8e94",
+      "goldRegions": [
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 25,
+          "endLine": 30,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 35,
+          "endLine": 40,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "benches/scripts/analyze.js",
+          "startLine": 184,
+          "endLine": 219
+        },
+        {
+          "path": "benches/scripts/index.js",
+          "startLine": 14,
+          "endLine": 45
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 106,
+          "endLine": 141
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 18,
+          "endLine": 49
+        },
+        {
+          "path": "benches/scripts/bench.js",
+          "startLine": 16,
+          "endLine": 47
+        },
+        {
+          "path": "compat/test/browser/useSyncExternalStore.test.js",
+          "startLine": 300,
+          "endLine": 323
+        },
+        {
+          "path": "benches/scripts/deopts.js",
+          "startLine": 121,
+          "endLine": 152
+        },
+        {
+          "path": "debug/test/browser/debug.test.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "compat/test/ts/suspense.tsx",
+          "startLine": 20,
+          "endLine": 51
+        },
+        {
+          "path": "compat/test/browser/hooks.test.js",
+          "startLine": 15,
+          "endLine": 50
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 303,
+          "endLine": 334
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 66,
+          "endLine": 97
+        },
+        {
+          "path": "demo/spiral.jsx",
+          "startLine": 90,
+          "endLine": 121
+        },
+        {
+          "path": "debug/src/component-stack.js",
+          "startLine": 12,
+          "endLine": 43
+        },
+        {
+          "path": "compat/src/suspense-list.js",
+          "startLine": 5,
+          "endLine": 36
+        }
+      ],
+      "goldFiles": [
+        "hooks/src/index.js"
+      ],
+      "predictions": [
+        "benches/scripts/analyze.js",
+        "benches/scripts/index.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "benches/scripts/bench.js",
+        "compat/test/browser/useSyncExternalStore.test.js",
+        "benches/scripts/deopts.js",
+        "debug/test/browser/debug.test.js",
+        "compat/test/ts/suspense.tsx",
+        "compat/test/browser/hooks.test.js",
+        "compat/src/render.js",
+        "hooks/src/index.js",
+        "hooks/src/index.d.ts",
+        "demo/spiral.jsx",
+        "debug/src/component-stack.js",
+        "compat/src/suspense-list.js",
+        "debug/test/browser/debug-compat.test.js",
+        "compat/test/ts/forward-ref.tsx",
+        "compat/src/suspense.js",
+        "hooks/src/internal.d.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0.08333333333333333,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4101,
+      "durationMs": 5329
+    },
+    {
+      "instanceId": "preactjs__preact-4316",
+      "repo": "preactjs/preact",
+      "baseCommit": "b820d8b73eade8bc5b3fbf7e5fe0dd5150de80e2",
+      "goldRegions": [
+        {
+          "path": "src/diff/props.js",
+          "startLine": 55,
+          "endLine": 61,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "compat/test/browser/events.test.js",
+          "startLine": 72,
+          "endLine": 107
+        },
+        {
+          "path": "src/component.js",
+          "startLine": 11,
+          "endLine": 42
+        },
+        {
+          "path": "src/diff/props.js",
+          "startLine": 107,
+          "endLine": 138
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 1,
+          "endLine": 16
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 214,
+          "endLine": 248
+        },
+        {
+          "path": "compat/test/browser/render.test.js",
+          "startLine": 156,
+          "endLine": 191
+        },
+        {
+          "path": "src/diff/children.js",
+          "startLine": 1,
+          "endLine": 13
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 144,
+          "endLine": 177
+        },
+        {
+          "path": "src/index.d.ts",
+          "startLine": 184,
+          "endLine": 214
+        },
+        {
+          "path": "compat/src/suspense-list.js",
+          "startLine": 83,
+          "endLine": 114
+        },
+        {
+          "path": "test-utils/test/shared/act.test.js",
+          "startLine": 210,
+          "endLine": 241
+        },
+        {
+          "path": "karma.conf.js",
+          "startLine": 221,
+          "endLine": 240
+        },
+        {
+          "path": "src/internal.d.ts",
+          "startLine": 82,
+          "endLine": 117
+        },
+        {
+          "path": "src/render.js",
+          "startLine": 5,
+          "endLine": 36
+        },
+        {
+          "path": "compat/test/browser/useSyncExternalStore.test.js",
+          "startLine": 279,
+          "endLine": 310
+        },
+        {
+          "path": "test/browser/render.test.js",
+          "startLine": 292,
+          "endLine": 319
+        }
+      ],
+      "goldFiles": [
+        "src/diff/props.js"
+      ],
+      "predictions": [
+        "compat/test/browser/events.test.js",
+        "src/component.js",
+        "src/diff/props.js",
+        "debug/src/debug.js",
+        "src/diff/index.js",
+        "compat/test/browser/render.test.js",
+        "src/diff/children.js",
+        "compat/src/render.js",
+        "src/index.d.ts",
+        "compat/src/suspense-list.js",
+        "test-utils/test/shared/act.test.js",
+        "karma.conf.js",
+        "src/internal.d.ts",
+        "src/render.js",
+        "compat/test/browser/useSyncExternalStore.test.js",
+        "test/browser/render.test.js",
+        "debug/test/browser/serializeVNode.test.js",
+        "jsx-runtime/src/index.js",
+        "compat/src/index.js",
+        "hooks/src/index.js"
+      ],
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "reciprocalRank": 0.3333333333333333,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 477,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4030,
+      "durationMs": 5390
+    },
+    {
+      "instanceId": "preactjs__preact-4436",
+      "repo": "preactjs/preact",
+      "baseCommit": "db0f4f2e7a2338ea40050f623f05505a798fc1a4",
+      "goldRegions": [
+        {
+          "path": "src/diff/index.js",
+          "startLine": 554,
+          "endLine": 567,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "src/internal.d.ts",
+          "startLine": 126,
+          "endLine": 132,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "src/component.js",
+          "startLine": 41,
+          "endLine": 72
+        },
+        {
+          "path": "hooks/src/index.js",
+          "startLine": 442,
+          "endLine": 459
+        },
+        {
+          "path": "hooks/test/browser/combinations.test.js",
+          "startLine": 394,
+          "endLine": 418
+        },
+        {
+          "path": "debug/src/debug.js",
+          "startLine": 143,
+          "endLine": 175
+        },
+        {
+          "path": "compat/src/index.js",
+          "startLine": 103,
+          "endLine": 134
+        },
+        {
+          "path": "src/diff/index.js",
+          "startLine": 311,
+          "endLine": 342
+        },
+        {
+          "path": "hooks/src/index.d.ts",
+          "startLine": 54,
+          "endLine": 85
+        },
+        {
+          "path": "compat/test/browser/render.test.js",
+          "startLine": 91,
+          "endLine": 126
+        },
+        {
+          "path": "src/diff/props.js",
+          "startLine": 5,
+          "endLine": 36
+        },
+        {
+          "path": "src/render.js",
+          "startLine": 12,
+          "endLine": 47
+        },
+        {
+          "path": "test-utils/src/index.js",
+          "startLine": 91,
+          "endLine": 122
+        },
+        {
+          "path": "src/diff/children.js",
+          "startLine": 122,
+          "endLine": 157
+        },
+        {
+          "path": "compat/src/render.js",
+          "startLine": 37,
+          "endLine": 68
+        },
+        {
+          "path": "debug/test/browser/debug.test.js",
+          "startLine": 310,
+          "endLine": 341
+        },
+        {
+          "path": "src/create-element.js",
+          "startLine": 41,
+          "endLine": 72
+        },
+        {
+          "path": "compat/test/browser/forwardRef.test.js",
+          "startLine": 231,
+          "endLine": 266
+        }
+      ],
+      "goldFiles": [
+        "src/diff/index.js",
+        "src/internal.d.ts"
+      ],
+      "predictions": [
+        "src/component.js",
+        "hooks/src/index.js",
+        "hooks/test/browser/combinations.test.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "src/diff/index.js",
+        "hooks/src/index.d.ts",
+        "compat/test/browser/render.test.js",
+        "src/diff/props.js",
+        "src/render.js",
+        "test-utils/src/index.js",
+        "src/diff/children.js",
+        "compat/src/render.js",
+        "debug/test/browser/debug.test.js",
+        "src/create-element.js",
+        "compat/test/browser/forwardRef.test.js",
+        "test/browser/render.test.js",
+        "src/internal.d.ts",
+        "compat/test/browser/useSyncExternalStore.test.js",
+        "jsx-runtime/src/index.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0.5,
+      "reciprocalRank": 0.16666666666666666,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4186,
+      "durationMs": 4297
+    },
+    {
+      "instanceId": "vuejs__core-11739",
+      "repo": "vuejs/core",
+      "baseCommit": "cb843e0be31f9e563ccfc30eca0c06f2a224b505",
+      "goldRegions": [
+        {
+          "path": "packages/compiler-sfc/src/script/utils.ts",
+          "startLine": 121,
+          "endLine": 135,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/compiler-sfc/src/style/cssVars.ts",
+          "startLine": 8,
+          "endLine": 16,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/runtime-core/src/hydration.ts",
+          "startLine": 18,
+          "endLine": 23,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/runtime-core/src/hydration.ts",
+          "startLine": 916,
+          "endLine": 922,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/shared/src/escapeHtml.ts",
+          "startLine": 50,
+          "endLine": 52,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/compiler-core/__tests__/parse.spec.ts",
+          "startLine": 2076,
+          "endLine": 2111
+        },
+        {
+          "path": "packages/compiler-core/__tests__/scopeId.spec.ts",
+          "startLine": 11,
+          "endLine": 46
+        },
+        {
+          "path": "packages-private/dts-test/component.test-d.ts",
+          "startLine": 53,
+          "endLine": 84
+        },
+        {
+          "path": "packages-private/dts-test/appUse.test-d.ts",
+          "startLine": 76,
+          "endLine": 107
+        },
+        {
+          "path": "packages-private/dts-test/componentTypeExtensions.test-d.tsx",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages-private/template-explorer/src/options.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages/compiler-core/__tests__/codegen.spec.ts",
+          "startLine": 494,
+          "endLine": 508
+        },
+        {
+          "path": "packages-private/template-explorer/src/index.ts",
+          "startLine": 82,
+          "endLine": 113
+        },
+        {
+          "path": "packages/compiler-dom/src/errors.ts",
+          "startLine": 35,
+          "endLine": 64
+        },
+        {
+          "path": "packages/compiler-dom/src/transforms/stringifyStatic.ts",
+          "startLine": 214,
+          "endLine": 247
+        },
+        {
+          "path": "packages-private/dts-test/utils.d.ts",
+          "startLine": 1,
+          "endLine": 22
+        },
+        {
+          "path": "packages/compiler-dom/__tests__/transforms/stringifyStatic.spec.ts",
+          "startLine": 123,
+          "endLine": 158
+        },
+        {
+          "path": "packages/compiler-dom/__tests__/transforms/vText.spec.ts",
+          "startLine": 39,
+          "endLine": 70
+        },
+        {
+          "path": "packages/compiler-dom/__tests__/transforms/vModel.spec.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "packages-private/dts-test/h.test-d.ts",
+          "startLine": 92,
+          "endLine": 123
+        },
+        {
+          "path": "packages-private/dts-test/tsx.test-d.tsx",
+          "startLine": 1,
+          "endLine": 32
+        }
+      ],
+      "goldFiles": [
+        "packages/compiler-sfc/src/script/utils.ts",
+        "packages/compiler-sfc/src/style/cssVars.ts",
+        "packages/runtime-core/src/hydration.ts",
+        "packages/shared/src/escapeHtml.ts"
+      ],
+      "predictions": [
+        "packages/compiler-core/__tests__/parse.spec.ts",
+        "packages/compiler-core/__tests__/scopeId.spec.ts",
+        "packages-private/dts-test/component.test-d.ts",
+        "packages-private/dts-test/appUse.test-d.ts",
+        "packages-private/dts-test/componentTypeExtensions.test-d.tsx",
+        "packages-private/template-explorer/src/options.ts",
+        "packages/compiler-core/__tests__/codegen.spec.ts",
+        "packages-private/template-explorer/src/index.ts",
+        "packages/compiler-dom/src/errors.ts",
+        "packages/compiler-dom/src/transforms/stringifyStatic.ts",
+        "packages-private/dts-test/utils.d.ts",
+        "packages/compiler-dom/__tests__/transforms/stringifyStatic.spec.ts",
+        "packages/compiler-dom/__tests__/transforms/vText.spec.ts",
+        "packages/compiler-dom/__tests__/transforms/vModel.spec.ts",
+        "packages-private/dts-test/h.test-d.ts",
+        "packages-private/dts-test/tsx.test-d.tsx",
+        "packages-private/dts-test/ref.test-d.ts",
+        "packages-private/dts-test/defineCustomElement.test-d.ts",
+        "packages-private/dts-test/componentInstance.test-d.tsx",
+        "packages-private/dts-test/watch.test-d.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 497,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4028,
+      "durationMs": 17995
+    },
+    {
+      "instanceId": "vuejs__core-11870",
+      "repo": "vuejs/core",
+      "baseCommit": "67d6596d40b1807b9cd8eb0d9282932ea77be3c0",
+      "goldRegions": [
+        {
+          "path": "packages/runtime-core/src/helpers/renderList.ts",
+          "startLine": 1,
+          "endLine": 5,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/runtime-core/src/helpers/renderList.ts",
+          "startLine": 63,
+          "endLine": 75,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/runtime-dom/src/index.ts",
+          "startLine": 34,
+          "endLine": 65
+        },
+        {
+          "path": "packages/reactivity/__tests__/computed.spec.ts",
+          "startLine": 6,
+          "endLine": 41
+        },
+        {
+          "path": "packages/reactivity/__tests__/reactive.spec.ts",
+          "startLine": 1,
+          "endLine": 31
+        },
+        {
+          "path": "packages/reactivity/src/ref.ts",
+          "startLine": 32,
+          "endLine": 63
+        },
+        {
+          "path": "packages/runtime-core/src/compat/global.ts",
+          "startLine": 58,
+          "endLine": 89
+        },
+        {
+          "path": "packages/reactivity/src/reactive.ts",
+          "startLine": 211,
+          "endLine": 223
+        },
+        {
+          "path": "packages/runtime-core/src/index.ts",
+          "startLine": 2,
+          "endLine": 33
+        },
+        {
+          "path": "packages/runtime-core/src/apiSetupHelpers.ts",
+          "startLine": 19,
+          "endLine": 49
+        },
+        {
+          "path": "packages/compiler-core/src/options.ts",
+          "startLine": 105,
+          "endLine": 136
+        },
+        {
+          "path": "packages/runtime-core/__tests__/apiWatch.spec.ts",
+          "startLine": 11,
+          "endLine": 46
+        },
+        {
+          "path": "packages/reactivity/src/effect.ts",
+          "startLine": 77,
+          "endLine": 108
+        },
+        {
+          "path": "packages/runtime-core/src/componentProps.ts",
+          "startLine": 711,
+          "endLine": 742
+        },
+        {
+          "path": "packages/runtime-dom/src/modules/events.ts",
+          "startLine": 78,
+          "endLine": 109
+        },
+        {
+          "path": "packages/compiler-sfc/src/compileScript.ts",
+          "startLine": 166,
+          "endLine": 201
+        },
+        {
+          "path": "packages/runtime-core/src/component.ts",
+          "startLine": 348,
+          "endLine": 376
+        },
+        {
+          "path": "packages/reactivity/__tests__/reactiveArray.spec.ts",
+          "startLine": 1,
+          "endLine": 30
+        }
+      ],
+      "goldFiles": [
+        "packages/runtime-core/src/helpers/renderList.ts"
+      ],
+      "predictions": [
+        "packages/runtime-dom/src/index.ts",
+        "packages/reactivity/__tests__/computed.spec.ts",
+        "packages/reactivity/__tests__/reactive.spec.ts",
+        "packages/reactivity/src/ref.ts",
+        "packages/runtime-core/src/compat/global.ts",
+        "packages/reactivity/src/reactive.ts",
+        "packages/runtime-core/src/index.ts",
+        "packages/runtime-core/src/apiSetupHelpers.ts",
+        "packages/compiler-core/src/options.ts",
+        "packages/runtime-core/__tests__/apiWatch.spec.ts",
+        "packages/reactivity/src/effect.ts",
+        "packages/runtime-core/src/componentProps.ts",
+        "packages/runtime-dom/src/modules/events.ts",
+        "packages/compiler-sfc/src/compileScript.ts",
+        "packages/runtime-core/src/component.ts",
+        "packages/reactivity/__tests__/reactiveArray.spec.ts",
+        "packages/runtime-core/src/componentPublicInstance.ts",
+        "packages/runtime-core/__tests__/apiSetupHelpers.spec.ts",
+        "packages/compiler-core/src/transforms/transformExpression.ts",
+        "packages/compiler-core/src/codegen.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 498,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3476,
+      "durationMs": 13303
+    },
+    {
+      "instanceId": "vuejs__core-11899",
+      "repo": "vuejs/core",
+      "baseCommit": "706d4ac1d0210b2d9134b3228280187fe02fc971",
+      "goldRegions": [
+        {
+          "path": "packages/compiler-sfc/src/style/pluginScoped.ts",
+          "startLine": 233,
+          "endLine": 248,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "packages/compiler-sfc/src/style/pluginScoped.ts",
+          "startLine": 286,
+          "endLine": 290,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/compiler-dom/src/transforms/stringifyStatic.ts",
+          "startLine": 28,
+          "endLine": 59
+        },
+        {
+          "path": "packages/compiler-core/__tests__/parse.spec.ts",
+          "startLine": 2295,
+          "endLine": 2330
+        },
+        {
+          "path": "packages/compiler-sfc/src/compileScript.ts",
+          "startLine": 57,
+          "endLine": 90
+        },
+        {
+          "path": "packages-private/dts-test/ref.test-d.ts",
+          "startLine": 101,
+          "endLine": 132
+        },
+        {
+          "path": "packages-private/template-explorer/src/index.ts",
+          "startLine": 158,
+          "endLine": 189
+        },
+        {
+          "path": "packages/compiler-core/__tests__/transform.spec.ts",
+          "startLine": 100,
+          "endLine": 135
+        },
+        {
+          "path": "packages/compiler-core/__tests__/transforms/cacheStatic.spec.ts",
+          "startLine": 90,
+          "endLine": 121
+        },
+        {
+          "path": "packages-private/dts-test/tsx.test-d.tsx",
+          "startLine": 1,
+          "endLine": 35
+        },
+        {
+          "path": "packages/compiler-core/src/transforms/transformExpression.ts",
+          "startLine": 1,
+          "endLine": 24
+        },
+        {
+          "path": "packages/runtime-dom/src/index.ts",
+          "startLine": 90,
+          "endLine": 121
+        },
+        {
+          "path": "packages/compiler-sfc/src/compileStyle.ts",
+          "startLine": 27,
+          "endLine": 58
+        },
+        {
+          "path": "packages/compiler-dom/src/errors.ts",
+          "startLine": 26,
+          "endLine": 57
+        },
+        {
+          "path": "packages-private/dts-test/defineComponent.test-d.tsx",
+          "startLine": 897,
+          "endLine": 927
+        },
+        {
+          "path": "packages/compiler-sfc/src/script/defineProps.ts",
+          "startLine": 30,
+          "endLine": 39
+        },
+        {
+          "path": "packages/compiler-sfc/__tests__/compileStyle.spec.ts",
+          "startLine": 27,
+          "endLine": 58
+        },
+        {
+          "path": "packages/compiler-dom/__tests__/transforms/stringifyStatic.spec.ts",
+          "startLine": 65,
+          "endLine": 100
+        }
+      ],
+      "goldFiles": [
+        "packages/compiler-sfc/src/style/pluginScoped.ts"
+      ],
+      "predictions": [
+        "packages/compiler-dom/src/transforms/stringifyStatic.ts",
+        "packages/compiler-core/__tests__/parse.spec.ts",
+        "packages/compiler-sfc/src/compileScript.ts",
+        "packages-private/dts-test/ref.test-d.ts",
+        "packages-private/template-explorer/src/index.ts",
+        "packages/compiler-core/__tests__/transform.spec.ts",
+        "packages/compiler-core/__tests__/transforms/cacheStatic.spec.ts",
+        "packages-private/dts-test/tsx.test-d.tsx",
+        "packages/compiler-core/src/transforms/transformExpression.ts",
+        "packages/runtime-dom/src/index.ts",
+        "packages/compiler-sfc/src/compileStyle.ts",
+        "packages/compiler-dom/src/errors.ts",
+        "packages-private/dts-test/defineComponent.test-d.tsx",
+        "packages/compiler-sfc/src/script/defineProps.ts",
+        "packages/compiler-sfc/__tests__/compileStyle.spec.ts",
+        "packages/compiler-dom/__tests__/transforms/stringifyStatic.spec.ts",
+        "packages/shared/src/general.ts",
+        "packages/runtime-core/src/componentProps.ts",
+        "packages/compiler-core/src/ast.ts",
+        "packages/runtime-dom/src/modules/events.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 498,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 4241,
+      "durationMs": 18221
+    },
+    {
+      "instanceId": "vuejs__core-11915",
+      "repo": "vuejs/core",
+      "baseCommit": "d0b513eb463f580e29378e43d112ff6859aa366e",
+      "goldRegions": [
+        {
+          "path": "packages/compiler-core/src/tokenizer.ts",
+          "startLine": 438,
+          "endLine": 444,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "packages/runtime-core/src/apiSetupHelpers.ts",
+          "startLine": 32,
+          "endLine": 49
+        },
+        {
+          "path": "packages/reactivity/src/reactive.ts",
+          "startLine": 211,
+          "endLine": 223
+        },
+        {
+          "path": "packages/compiler-core/src/options.ts",
+          "startLine": 20,
+          "endLine": 33
+        },
+        {
+          "path": "packages/runtime-core/src/hmr.ts",
+          "startLine": 24,
+          "endLine": 51
+        },
+        {
+          "path": "packages/reactivity/src/ref.ts",
+          "startLine": 153,
+          "endLine": 165
+        },
+        {
+          "path": "packages/reactivity/src/effect.ts",
+          "startLine": 84,
+          "endLine": 110
+        },
+        {
+          "path": "packages/runtime-core/src/component.ts",
+          "startLine": 125,
+          "endLine": 144
+        },
+        {
+          "path": "packages/reactivity/__tests__/computed.spec.ts",
+          "startLine": 832,
+          "endLine": 850
+        },
+        {
+          "path": "packages/compiler-core/src/errors.ts",
+          "startLine": 141,
+          "endLine": 176
+        },
+        {
+          "path": "packages/reactivity/src/computed.ts",
+          "startLine": 126,
+          "endLine": 154
+        },
+        {
+          "path": "packages/runtime-dom/src/index.ts",
+          "startLine": 201,
+          "endLine": 222
+        },
+        {
+          "path": "packages/reactivity/__tests__/reactive.spec.ts",
+          "startLine": 120,
+          "endLine": 148
+        },
+        {
+          "path": "packages/compiler-core/src/tokenizer.ts",
+          "startLine": 115,
+          "endLine": 139
+        },
+        {
+          "path": "packages/runtime-core/src/components/Suspense.ts",
+          "startLine": 249,
+          "endLine": 267
+        },
+        {
+          "path": "packages/runtime-dom/src/jsx.ts",
+          "startLine": 76,
+          "endLine": 111
+        },
+        {
+          "path": "scripts/release.js",
+          "startLine": 545,
+          "endLine": 569
+        }
+      ],
+      "goldFiles": [
+        "packages/compiler-core/src/tokenizer.ts"
+      ],
+      "predictions": [
+        "packages/runtime-core/src/apiSetupHelpers.ts",
+        "packages/reactivity/src/reactive.ts",
+        "packages/compiler-core/src/options.ts",
+        "packages/runtime-core/src/hmr.ts",
+        "packages/reactivity/src/ref.ts",
+        "packages/reactivity/src/effect.ts",
+        "packages/runtime-core/src/component.ts",
+        "packages/reactivity/__tests__/computed.spec.ts",
+        "packages/compiler-core/src/errors.ts",
+        "packages/reactivity/src/computed.ts",
+        "packages/runtime-dom/src/index.ts",
+        "packages/reactivity/__tests__/reactive.spec.ts",
+        "packages/compiler-core/src/tokenizer.ts",
+        "packages/runtime-core/src/components/Suspense.ts",
+        "packages/runtime-dom/src/jsx.ts",
+        "scripts/release.js",
+        "packages/compiler-core/src/codegen.ts",
+        "packages/shared/src/patchFlags.ts",
+        "packages/compiler-core/src/transforms/transformExpression.ts",
+        "packages/runtime-core/src/components/KeepAlive.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0.07692307692307693,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 373,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3014,
+      "durationMs": 10664
+    }
+  ],
+  "skipped": [
+    {
+      "instanceId": "babel__babel-15445",
+      "reason": "Analysis timed out after 30000 ms."
+    },
+    {
+      "instanceId": "babel__babel-15649",
+      "reason": "Analysis timed out after 30000 ms."
+    },
+    {
+      "instanceId": "babel__babel-16130",
+      "reason": "Analysis timed out after 30000 ms."
+    },
+    {
+      "instanceId": "mrdoob__three.js-27395",
+      "reason": "Cannot fetch mrdoob/three.js@b99b3fd955864f534b1e2649518112f7e50fef21: Git fetch timed out after 180000 ms."
+    },
+    {
+      "instanceId": "vuejs__core-11589",
+      "reason": "Cannot fetch vuejs/core@3653bc0f45d6fedf84e29b64ca52584359c383c0: fatal: unable to access 'https://github.com/vuejs/core.git/': TLS connect error: error:0A000126:SSL routines::unexpected eof while reading"
+    }
+  ],
+  "aggregate": {
+    "recallAt5": 0.1324561403508772,
+    "recallAt10": 0.3254385964912281,
+    "mrr": 0.08629362711772684,
+    "medianTokens": 3769,
+    "medianDurationMs": 4943.5,
+    "regionMetrics": {
+      "100": {
+        "budgetLines": 100,
+        "medianEmittedLines": 100,
+        "linePrecision": 0,
+        "lineRecall": 0,
+        "lineF1": 0,
+        "hitRegionRate": 0,
+        "noiseRegionRate": 1,
+        "contextEfficiency": 0,
+        "ndcg": 0,
+        "usefulHitRate": 0,
+        "medianFirstUsefulHit": null
+      },
+      "250": {
+        "budgetLines": 250,
+        "medianEmittedLines": 250,
+        "linePrecision": 0.004947368421052632,
+        "lineRecall": 0.07026624532345355,
+        "lineF1": 0.008615352687698204,
+        "hitRegionRate": 0.07105263157894738,
+        "noiseRegionRate": 0.985014619883041,
+        "contextEfficiency": 0.004947368421052632,
+        "ndcg": 0.023902884185161448,
+        "usefulHitRate": 0.13157894736842105,
+        "medianFirstUsefulHit": 147
+      },
+      "500": {
+        "budgetLines": 500,
+        "medianEmittedLines": 491,
+        "linePrecision": 0.0035943407683541448,
+        "lineRecall": 0.07904770985434602,
+        "lineF1": 0.006568935564446339,
+        "hitRegionRate": 0.08201754385964913,
+        "noiseRegionRate": 0.9884868421052632,
+        "contextEfficiency": 0.0035943407683541448,
+        "ndcg": 0.028020451015644834,
+        "usefulHitRate": 0.15789473684210525,
+        "medianFirstUsefulHit": 153
+      }
+    }
+  },
+  "limitations": [
+    "Gold regions are old-side unified-diff hunks, not human-authored context annotations.",
+    "Insertion-only hunks are represented by a one-line anchor in the base checkout.",
+    "Only existing JavaScript and TypeScript patch files are scored; new and unsupported files are excluded.",
+    "Retrieval quality does not measure whether an agent can produce a correct patch or pass tests."
+  ]
+}

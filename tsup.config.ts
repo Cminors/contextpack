@@ -1,7 +1,10 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/cli.ts"],
+  entry: {
+    cli: "src/cli.ts",
+    "issue-worker": "src/evaluation/issue-worker.ts",
+  },
   format: ["esm"],
   target: "node20",
   external: ["typescript"],

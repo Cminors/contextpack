@@ -376,8 +376,11 @@ ContextPack 当前拥有两条评测轨：
 | MCP TypeScript SDK，标题模式 | 20 | 0.439 | 0.635 | 中型仓库文件检索 |
 | MCP TypeScript SDK，关键词消融 | 20 | 0.341 | 0.402 | 删除答案提示后的结果 |
 | SWE-bench Axios issue | 6 | 0.617 | 0.205 | 文件与区域级真实 issue 冒烟 |
+| SWE-bench JS/TS 固定集 | 38 个有效 / 43 个已尝试 | 0.325 | 0.086 | 七仓库 P0.4 基线 |
 
 查询感知的区域定位把 Axios 在 100、250、500 行预算下的行召回从全部 `0.000` 提升到 `0.167`、`0.355` 和 `0.411`，500 行 useful-hit rate 达到 `0.667`。但这仍只是六任务冒烟，区域噪声较高，不能据此宣称普遍提高 Agent 成功率。
+
+可恢复的 P0.4 运行器已经尝试全部 43 个固定 JS/TS 实例，并在重试临时失败后得到 38 个有效结果。仍有 5 个实例被跳过：3 个 Babel 分析超过重试时限、1 个 Three.js 获取达到 Git 超时、1 个 Vue 获取发生 TLS 错误。在 38 个有效实例上，100、250、500 行预算的行召回分别为 `0.000`、`0.070`、`0.079`。这些结果暴露出明显的跨仓库文件内定位差距，不能与仅包含 Axios 的六任务冒烟直接比较。
 
 完整方法、原始结果、限制和失败实验见 [Benchmark 文档](benchmarks/README.md)。
 
@@ -397,9 +400,16 @@ npm run benchmark:prepare:swebench
 contextpack eval-issues --instance axios__axios-4738
 contextpack eval-issues --repo axios/axios
 contextpack eval-issues --line-budgets 100,250,500
+
+# 可断点续跑的完整评测；分析限时 10 分钟，Git 获取限时 5 分钟
+contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/full-43
+contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/full-43 --resume
+
+# 只重试检查点里已记录为跳过的实例
+contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/full-43 --resume --retry-skipped
 ```
 
-评测数据和仓库快照保存在已忽略的 `.benchmarks/` 缓存中。真实 issue 报告把文件 Recall/MRR 和实际输出片段的行级指标分开，gold label 只在检索完成后用于评分。
+评测数据和仓库快照保存在已忽略的 `.benchmarks/` 缓存中。真实 issue 报告把文件 Recall/MRR 和实际输出片段的行级指标分开，gold label 只在检索完成后用于评分。`eval-issues` 会在每次实例完成或跳过后原子写入 `checkpoint.json`；只有数据集指纹、实例范围、Token/行预算和历史窗口一致时，`--resume` 才会接受该检查点。每个设置超时的分析都在隔离 Worker 中运行，仓库获取另有独立超时和低速中止，因此单个慢实例不会无限占住整轮评测。
 
 ## 如何反馈测试问题
 
@@ -416,7 +426,7 @@ contextpack eval-issues --line-budgets 100,250,500
 
 ## 当前状态
 
-ContextPack 目前是未发布的实验性源码预览版：核心 CLI、打包结构、自动测试、性能烟测、真实 issue 评测和第一版查询感知区域定位已经具备，但 npm 发布、正式 Release、零基础安装体验、完整 43 任务验证和更广泛可靠的文件内定位仍未完成。
+ContextPack 目前是未发布的实验性源码预览版：核心 CLI、打包结构、自动测试、性能烟测、可断点续跑的真实 issue 评测、38 个有效/43 个已尝试的外部基线和第一版查询感知区域定位已经具备，但 npm 发布、正式 Release、零基础安装体验、零跳过的 43 任务验证和更广泛可靠的文件内定位仍未完成。
 
 现阶段目标是让小范围测试者能够安全、清楚地试用并反馈问题，而不是进行大规模推广。
 

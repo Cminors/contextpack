@@ -91,3 +91,17 @@ export interface IssueBenchmarkReport {
   };
   limitations: string[];
 }
+
+export interface IssueBenchmarkCheckpoint {
+  version: 1;
+  updatedAt: string;
+  datasetFingerprint: string;
+  sourceDataset: string;
+  sourceRevision: string;
+  requestedInstanceIds: string[];
+  tokenBudget: number;
+  lineBudgets: number[];
+  historyCount: number;
+  results: IssueEvaluationResult[];
+  skipped: Array<{ instanceId: string; reason: string }>;
+}

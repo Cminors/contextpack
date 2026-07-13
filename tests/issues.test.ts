@@ -65,6 +65,7 @@ async function fixture(): Promise<{ root: string; dataset: string; cache: string
 describe("real issue benchmark", () => {
   it("evaluates an existing cached base commit without changing the source workspace", async () => {
     const data = await fixture();
+    const checkpoint = path.join(path.dirname(data.dataset), "checkpoint.json");
     const before = gitStatusFingerprint(data.root);
     const progress: string[] = [];
     const report = await runIssueBenchmark({
@@ -73,6 +74,7 @@ describe("real issue benchmark", () => {
       tokenBudget: 4000,
       lineBudgets: [2, 10],
       historyCount: 1,
+      checkpointPath: checkpoint,
       onProgress: (message) => progress.push(message),
     });
     expect(report).toMatchObject({
@@ -89,6 +91,23 @@ describe("real issue benchmark", () => {
     });
     expect(renderIssueEvaluation(report)).toContain("ContextPack Issue Retrieval Benchmark");
     expect(progress).toEqual(["[1/1] example__fixture-1"]);
+    const saved = JSON.parse(await fs.readFile(checkpoint, "utf8")) as { results: unknown[]; skipped: unknown[] };
+    expect(saved).toMatchObject({ version: 1, results: [{ instanceId: "example__fixture-1" }], skipped: [] });
+
+    await fs.rm(data.cache, { recursive: true, force: true });
+    const resumeProgress: string[] = [];
+    const resumed = await runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [2, 10],
+      historyCount: 1,
+      checkpointPath: checkpoint,
+      resume: true,
+      onProgress: (message) => resumeProgress.push(message),
+    });
+    expect(resumed.results).toEqual(report.results);
+    expect(resumeProgress).toEqual(["Resumed checkpoint: 1/1 completed"]);
     expect(gitStatusFingerprint(data.root)).toBe(before);
   }, 30_000);
 
@@ -124,5 +143,100 @@ describe("real issue benchmark", () => {
       lineBudgets: [],
       historyCount: 1,
     })).rejects.toMatchObject({ code: "INVALID_LINE_BUDGETS" });
+    await expect(runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [10],
+      historyCount: 1,
+      instanceTimeoutMs: 0,
+    })).rejects.toMatchObject({ code: "INVALID_INSTANCE_TIMEOUT" });
+    await expect(runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [10],
+      historyCount: 1,
+      gitTimeoutMs: 0,
+    })).rejects.toMatchObject({ code: "INVALID_GIT_TIMEOUT" });
+    await expect(runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [10],
+      historyCount: 1,
+      resume: true,
+    })).rejects.toMatchObject({ code: "CHECKPOINT_REQUIRED" });
+    await expect(runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [10],
+      historyCount: 1,
+      retrySkipped: true,
+    })).rejects.toMatchObject({ code: "RESUME_REQUIRED" });
   }, 30_000);
+
+  it("rejects a checkpoint from a different run configuration", async () => {
+    const data = await fixture();
+    const checkpoint = path.join(path.dirname(data.dataset), "mismatched-checkpoint.json");
+    await fs.writeFile(checkpoint, JSON.stringify({
+      version: 1,
+      updatedAt: new Date(0).toISOString(),
+      datasetFingerprint: "wrong",
+      sourceDataset: "fixture/issues",
+      sourceRevision: "fixture-v1",
+      requestedInstanceIds: ["example__fixture-1"],
+      tokenBudget: 4000,
+      lineBudgets: [10],
+      historyCount: 1,
+      results: [],
+      skipped: [],
+    }));
+    await expect(runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [10],
+      historyCount: 1,
+      checkpointPath: checkpoint,
+      resume: true,
+    })).rejects.toMatchObject({ code: "CHECKPOINT_MISMATCH" });
+  });
+
+  it("records hard timeouts and can retry skipped instances on resume", async () => {
+    const data = await fixture();
+    const checkpoint = path.join(path.dirname(data.dataset), "timeout-checkpoint.json");
+    await expect(runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [10],
+      historyCount: 1,
+      checkpointPath: checkpoint,
+      instanceTimeoutMs: 1,
+    })).rejects.toMatchObject({ code: "NO_VALID_INSTANCES" });
+    const timedOut = JSON.parse(await fs.readFile(checkpoint, "utf8")) as {
+      results: unknown[];
+      skipped: Array<{ instanceId: string; reason: string }>;
+    };
+    expect(timedOut.results).toEqual([]);
+    expect(timedOut.skipped).toEqual([expect.objectContaining({
+      instanceId: "example__fixture-1",
+      reason: expect.stringContaining("timed out"),
+    })]);
+
+    const retried = await runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [10],
+      historyCount: 1,
+      checkpointPath: checkpoint,
+      instanceTimeoutMs: 30_000,
+      resume: true,
+      retrySkipped: true,
+    });
+    expect(retried).toMatchObject({ validInstances: 1, skipped: [] });
+  }, 60_000);
 });

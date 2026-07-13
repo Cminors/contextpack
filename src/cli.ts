@@ -35,6 +35,12 @@ function lineBudgets(value: string): number[] {
   return values;
 }
 
+function seconds(value: string): number {
+  const result = integer(value);
+  if (result > 86_400) throw new InvalidArgumentError("must be between 1 and 86400 seconds");
+  return result;
+}
+
 function slug(value: string): string {
   return value.normalize("NFKC").toLowerCase().replace(/[^a-z0-9\u3400-\u9fff]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "task";
 }
@@ -95,6 +101,11 @@ program.command("eval-issues")
   .option("--instance <id>", "one exact instance id")
   .option("--repo <owner/name>", "one exact repository")
   .option("--output <directory>", "output directory")
+  .option("--checkpoint <path>", "checkpoint file (defaults inside output directory)")
+  .option("--instance-timeout <seconds>", "maximum analysis time per instance", seconds, 600)
+  .option("--git-timeout <seconds>", "maximum time for each repository fetch", seconds, 300)
+  .option("--resume", "continue completed instances from a matching checkpoint")
+  .option("--retry-skipped", "with --resume, retry instances recorded as skipped")
   .action(async (options: {
     dataset?: string;
     cache?: string;
@@ -105,8 +116,15 @@ program.command("eval-issues")
     instance?: string;
     repo?: string;
     output?: string;
+    checkpoint?: string;
+    instanceTimeout: number;
+    gitTimeout: number;
+    resume?: boolean;
+    retrySkipped?: boolean;
   }) => {
     const root = process.cwd();
+    const output = path.resolve(options.output ?? path.join(root, ".contextpack", "evals", "swe-bench-multilingual-js-ts"));
+    const checkpoint = path.resolve(options.checkpoint ?? path.join(output, "checkpoint.json"));
     const report = await runIssueBenchmark({
       datasetPath: path.resolve(options.dataset ?? path.join(root, ".benchmarks", "datasets", "swe-bench-multilingual-js-ts.jsonl")),
       cacheDirectory: path.resolve(options.cache ?? path.join(root, ".benchmarks", "repositories")),
@@ -116,16 +134,21 @@ program.command("eval-issues")
       ...(options.limit === undefined ? {} : { limit: options.limit }),
       ...(options.instance ? { instanceId: options.instance } : {}),
       ...(options.repo ? { repo: options.repo } : {}),
+      instanceTimeoutMs: options.instanceTimeout * 1000,
+      gitTimeoutMs: options.gitTimeout * 1000,
+      checkpointPath: checkpoint,
+      resume: options.resume ?? false,
+      retrySkipped: options.retrySkipped ?? false,
       onProgress: (message) => process.stderr.write(`${message}\n`),
     });
-    const output = path.resolve(options.output ?? path.join(root, ".contextpack", "evals", "swe-bench-multilingual-js-ts"));
     await writeArtifacts(output, {
       "report.md": renderIssueEvaluation(report),
       "results.json": `${JSON.stringify(report, null, 2)}\n`,
     });
     process.stdout.write(
       `Issue evaluation: ${output}\n`
-      + `Recall@10 ${report.aggregate.recallAt10.toFixed(3)}; MRR ${report.aggregate.mrr.toFixed(3)}.\n`,
+      + `Recall@10 ${report.aggregate.recallAt10.toFixed(3)}; MRR ${report.aggregate.mrr.toFixed(3)}.\n`
+      + `Checkpoint: ${checkpoint}\n`,
     );
   });
 

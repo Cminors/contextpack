@@ -111,6 +111,26 @@ All six tasks still complete without skips. File Recall@10 is unchanged, MRR imp
 
 This is evidence that the localization mechanism works on the fixed smoke track, not that within-file retrieval is solved generally. Two of the six tasks still have no useful region at 500 lines, and region noise remains high. A first full 43-task attempt exceeded a 30-minute local execution limit while processing the Babel repository and produced no aggregate artifact; full-set runtime and cancellation therefore remain a separate evaluation-infrastructure task. Raw six-task results are stored in `benchmarks/results/swebench-multilingual-axios-p03/`.
 
+## P0.4 Resumable Full-set Runner
+
+P0.4 makes the external evaluator durable before another 43-task attempt. With `--instance-timeout`, each analysis runs in an isolated Worker that can be terminated without ending the outer run. Repository fetches use the independent `--git-timeout` limit plus Git's low-speed cutoff. After every completed or skipped instance, the evaluator atomically replaces `checkpoint.json`. `--resume` reuses completed entries, while `--resume --retry-skipped` keeps successful results and retries only failures.
+
+A checkpoint is rejected when its dataset fingerprint, selected instance IDs, token budget, line budgets, or Git history window differ from the requested run. This prevents accidental aggregation across incompatible experiments. A built-CLI Axios smoke run completed normally and a second invocation resumed the finished checkpoint without checking out or analyzing the repository again.
+
+The P0.4 fixed-set run attempted all 43 instances. The first aggregate contained 33 valid results and 10 skips. `--resume --retry-skipped` retained those 33 successes and recovered five more transient failures, producing the checked-in 38-valid baseline:
+
+| Attempted | Valid | Skipped | File R@5 | File R@10 | MRR | Median tokens | Median analysis |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 43 | 38 | 5 | 0.132 | 0.325 | 0.086 | 3,769 | 4,943.5 ms |
+
+| Line budget | Recall | Precision | F1 | Useful hit | Median first hit |
+|---:|---:|---:|---:|---:|---:|
+| 100 | 0.000 | 0.000 | 0.000 | 0.000 | n/a |
+| 250 | 0.070 | 0.005 | 0.009 | 0.132 | 147 |
+| 500 | 0.079 | 0.004 | 0.007 | 0.158 | 153 |
+
+Three Babel analyses remained above the shortened 30-second retry limit, one Three.js fetch reached the 180-second Git timeout, and one Vue fetch failed with a TLS disconnect. Aggregates use the 38 valid instances, not all 43 attempted instances. The lower full-set region recall and high noise show that the Axios localization gain does not generalize reliably yet. Raw results are stored in `benchmarks/results/swebench-multilingual-full-p04/`.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
@@ -164,7 +184,7 @@ The V0.2 content scorer and P0.3 query-aware region localizer are retained as th
 - Final median token use is lower than V0.1 on both tracks.
 - The P0.3 Axios track produces non-zero line recall at 100/250/500 lines without reducing file Recall@10.
 
-The external track still measures retrieval rather than Coding Agent success. The next evidence milestone is the complete fixed 43-task JS/TS run, followed by multi-region selection and CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
+The external track still measures retrieval rather than Coding Agent success. The next evidence milestone is to resolve the five skipped instances and establish a stable all-43 report, followed by multi-region selection and CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
 
 ## Reproduce
 
@@ -173,6 +193,8 @@ node dist/cli.js eval --commits 20 --budget 12000 --query-mode title --output be
 node dist/cli.js eval --commits 20 --budget 12000 --query-mode keyword-ablated --output benchmarks/results/<name>-ablated
 npm run benchmark:prepare:swebench
 node dist/cli.js eval-issues --repo axios/axios --history 50 --budget 12000 --line-budgets 100,250,500 --output benchmarks/results/swebench-multilingual-axios-p03
+node dist/cli.js eval-issues --history 100 --budget 12000 --line-budgets 100,250,500 --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/swebench-multilingual-full-43
+node dist/cli.js eval-issues --history 100 --budget 12000 --line-budgets 100,250,500 --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/swebench-multilingual-full-43 --resume
 ```
 
 Run the command from the root of the repository being evaluated. Raw final reports are stored in:

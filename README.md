@@ -376,8 +376,11 @@ Current key results:
 | MCP TypeScript SDK, title mode | 20 | 0.439 | 0.635 | medium-repository file retrieval |
 | MCP TypeScript SDK, keyword ablation | 20 | 0.341 | 0.402 | retrieval after answer hints are removed |
 | SWE-bench Axios issues | 6 | 0.617 | 0.205 | real-issue file and region smoke test |
+| SWE-bench JS/TS fixed set | 38 valid / 43 attempted | 0.325 | 0.086 | seven-repository P0.4 baseline |
 
 Query-aware region localization raises Axios line recall from `0.000` at every budget to `0.167`, `0.355`, and `0.411` at 100, 250, and 500 emitted lines. Useful-hit rate reaches `0.667` at 500 lines, but this is still a six-task smoke result with high region noise—not evidence of general agent success.
+
+The resumable P0.4 runner attempted all 43 fixed JS/TS instances and produced 38 valid results after retrying transient failures. Five instances remain skipped: three Babel analyses exceeded the retry timeout, one Three.js fetch reached the Git timeout, and one Vue fetch ended with a TLS error. On the 38 valid instances, line recall is `0.000`, `0.070`, and `0.079` at 100, 250, and 500 lines. These figures expose a substantial multi-repository localization gap; they are not directly comparable to the Axios-only smoke subset.
 
 See the [Benchmark document](benchmarks/README.md) for methodology, raw results, limitations, and rejected experiments.
 
@@ -397,9 +400,16 @@ npm run benchmark:prepare:swebench
 contextpack eval-issues --instance axios__axios-4738
 contextpack eval-issues --repo axios/axios
 contextpack eval-issues --line-budgets 100,250,500
+
+# Resumable full run with 10-minute analysis and 5-minute Git-fetch limits
+contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/full-43
+contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/full-43 --resume
+
+# Retry only instances previously recorded as skipped
+contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/full-43 --resume --retry-skipped
 ```
 
-Evaluation datasets and repository snapshots stay in the ignored `.benchmarks/` cache. Real-issue reports separate file Recall/MRR from the actual emitted regions. Gold labels are used only after retrieval has produced predictions.
+Evaluation datasets and repository snapshots stay in the ignored `.benchmarks/` cache. Real-issue reports separate file Recall/MRR from the actual emitted regions. Gold labels are used only after retrieval has produced predictions. `eval-issues` writes an atomic `checkpoint.json` after every attempted instance; `--resume` accepts it only when the dataset fingerprint, selected instances, token/line budgets, and history window still match. Each timed analysis runs in an isolated Worker, and repository fetches have a separate timeout and low-speed cutoff, so one slow instance cannot hold the complete run indefinitely.
 
 ## Reporting a test problem
 
@@ -416,7 +426,7 @@ Do not upload private source code, tokens, `.env` files, or other credentials.
 
 ## Project status
 
-ContextPack is an unpublished experimental source preview. The core CLI, package structure, automated tests, performance smoke test, real-issue evaluation, and a first query-aware region localizer are in place. npm publishing, a formal release, zero-knowledge installation, full 43-task validation, and broadly reliable within-file localization are not finished.
+ContextPack is an unpublished experimental source preview. The core CLI, package structure, automated tests, performance smoke test, resumable real-issue evaluation, a 38-valid/43-attempted external baseline, and a first query-aware region localizer are in place. npm publishing, a formal release, zero-knowledge installation, a zero-skip 43-task validation, and broadly reliable within-file localization are not finished.
 
 The current goal is to let a small group of testers use the project safely and report understandable feedback—not to promote it broadly.
 
