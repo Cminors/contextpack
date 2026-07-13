@@ -131,6 +131,8 @@ The P0.4 fixed-set run attempted all 43 instances. The first aggregate contained
 
 Three Babel analyses remained above the shortened 30-second retry limit, one Three.js fetch reached the 180-second Git timeout, and one Vue fetch failed with a TLS disconnect. Aggregates use the 38 valid instances, not all 43 attempted instances. The lower full-set region recall and high noise show that the Axios localization gain does not generalize reliably yet. Raw results are stored in `benchmarks/results/swebench-multilingual-full-p04/`.
 
+A task-level failure split makes the next retrieval bottleneck explicit. At least one gold file appears in the top ten predictions for 16 of 38 valid tasks. Six of those tasks also have a useful region within the 500-line budget, while ten retrieve a gold file but miss every gold region. The remaining 22 tasks have no gold-file hit in the top ten. Multi-region selection can address the ten localization failures, but it cannot repair the larger upstream file-ranking group by itself.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
@@ -184,7 +186,7 @@ The V0.2 content scorer and P0.3 query-aware region localizer are retained as th
 - Final median token use is lower than V0.1 on both tracks.
 - The P0.3 Axios track produces non-zero line recall at 100/250/500 lines without reducing file Recall@10.
 
-The external track still measures retrieval rather than Coding Agent success. The next evidence milestone is to resolve the five skipped instances and establish a stable all-43 report, followed by multi-region selection and CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
+The external track still measures retrieval rather than Coding Agent success. The next evidence milestone is to resolve the five skipped instances and establish a stable all-43 report. Retrieval work should then audit the 22 file-ranking misses before testing multi-region selection on the ten file-hit/region-miss tasks, followed by CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
 
 ## Reproduce
 
