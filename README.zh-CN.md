@@ -147,6 +147,7 @@ ContextPack 使用六类确定性信号：
 - JavaScript、JSX、TypeScript 和 TSX；
 - npm、pnpm、Yarn 和 Bun 项目元数据；
 - 单包项目和常见 workspace/monorepo；
+- `tsconfig` 路径别名和有边界、任务相关的 TypeScript 符号关系；
 - 小到中型的功能新增任务；
 - 本地 Git 历史和常见 Coding Agent 规则文件。
 
@@ -168,7 +169,7 @@ ContextPack 使用六类确定性信号：
 
 ## 项目状态
 
-ContextPack 当前是实验性 V0.1。CLI 已经可用并经过测试，但中型仓库的召回率尚未达到发布目标。当前开发重点是 TypeScript 感知的跨文件检索，而不是增加 UI、更多语言或内置模型。
+ContextPack 当前是实验性 V0.1，V0.2 检索开发已经开始。CLI 已经可用并经过测试，但中型仓库的召回率尚未达到发布目标。带根 `tsconfig` 的项目现在会使用编译器感知的路径解析和有边界的语义扩展；无根配置的 monorepo 继续使用更快的结构化路径，直到 Benchmark 证明扩大 Program 分析范围确有收益。
 
 ## 本地开发
 
@@ -178,7 +179,7 @@ npm run check
 npm run test:coverage
 ```
 
-当前本地质量门禁：30 项测试通过、行覆盖率超过 91%、生产依赖漏洞为 0。GitHub CI 会在 Node.js 20 和 22 上验证项目。
+当前本地质量门禁：33 项测试通过、行覆盖率超过 90%、生产依赖漏洞为 0。GitHub CI 会在 Node.js 20 和 22 上验证项目。
 
 ## 许可证
 

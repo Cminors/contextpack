@@ -114,6 +114,32 @@ function dependencyDistances(files: FileAnalysis[], seeds: Set<string>): Map<str
   return distances;
 }
 
+function semanticStrength(
+  file: FileAnalysis,
+  filesByPath: Map<string, FileAnalysis>,
+  seeds: Set<string>,
+  terms: string[],
+  weights: Map<string, number>,
+): number {
+  const relations: Array<{ degree: number; names: string[] }> = [];
+  for (const seedPath of file.references.filter((item) => seeds.has(item))) {
+    relations.push({ degree: file.references.length, names: file.referenceSymbols[seedPath] ?? [] });
+  }
+  for (const seedPath of file.referencedBy.filter((item) => seeds.has(item))) {
+    const seed = filesByPath.get(seedPath);
+    relations.push({ degree: seed?.references.length ?? 1, names: seed?.referenceSymbols[file.path] ?? [] });
+  }
+  return Math.max(
+    0,
+    ...relations.map(({ degree, names }) => {
+      const relevance = weightedMatch(terms, names.join(" "), weights);
+      if (relevance === 0) return 0;
+      const degreeStrength = Math.max(0.3, 0.85 - Math.log2(Math.max(1, degree)) * 0.1);
+      return degreeStrength * (0.6 + relevance * 0.4);
+    }),
+  );
+}
+
 function barrelDistances(files: FileAnalysis[], seeds: Set<string>): Map<string, number> {
   const byPath = new Map(files.map((file) => [file.path, file]));
   const distances = new Map<string, number>();
@@ -134,8 +160,13 @@ function barrelDistances(files: FileAnalysis[], seeds: Set<string>): Map<string,
 }
 
 function testStrength(file: FileAnalysis, files: FileAnalysis[], seeds: Set<string>): number {
-  if (file.isTest && file.imports.some((item) => seeds.has(item))) return 1;
-  if (!file.isTest && files.some((item) => item.isTest && item.imports.includes(file.path) && seeds.has(file.path))) return 0.8;
+  if (file.isTest && [...file.imports, ...file.references].some((item) => seeds.has(item))) return 1;
+  if (
+    !file.isTest &&
+    files.some(
+      (item) => item.isTest && [...item.imports, ...item.references].includes(file.path) && seeds.has(file.path),
+    )
+  ) return 0.8;
   const stem = path.posix.basename(file.path).replace(/\.(?:test|spec)?\.[^.]+$/, "");
   const matchingTest = files.find((item) =>
     item.path !== file.path && item.isTest && path.posix.basename(item.path).replace(/\.(?:test|spec)\.[^.]+$/, "") === stem,
@@ -166,6 +197,12 @@ function relationshipsFor(
   }
   for (const target of file.importedBy.filter((item) => seeds.has(item)).slice(0, 3)) {
     relationships.push({ kind: "imported-by", target, strength: 1, detail: "Imported by a lexical seed" });
+  }
+  for (const target of file.references.filter((item) => seeds.has(item)).slice(0, 3)) {
+    relationships.push({ kind: "references", target, strength: 1, detail: "References a symbol declared by a lexical seed" });
+  }
+  for (const target of file.referencedBy.filter((item) => seeds.has(item)).slice(0, 3)) {
+    relationships.push({ kind: "referenced-by", target, strength: 1, detail: "A lexical seed references a symbol declared here" });
   }
   if (file.isTest) {
     for (const target of file.imports.filter((item) => seeds.has(item)).slice(0, 3)) {
@@ -243,7 +280,8 @@ export function rankCandidates(
     const distance = distances.get(file.path);
     const structural = directStructuralStrength(file, barrelGraph.get(file.path));
     const sameFeature = sameFeatureStrength(file, terms, weights, seeds);
-    const dependency = Math.max(structural, sameFeature, distance === 0 ? 1 : distance === 1 ? 0.7 : distance === 2 ? 0.35 : 0);
+    const semantic = semanticStrength(file, filesByPath, seeds, terms, weights);
+    const dependency = Math.max(structural, sameFeature, semantic, distance === 0 ? 1 : distance === 1 ? 0.7 : distance === 2 ? 0.35 : 0);
     const coChange = Math.max(0, ...[...seeds].map((seed) => coChangeStrength(history, file.path, seed)));
     const title = weightedMatch(terms, [...(history.titleTermsByFile.get(file.path) ?? [])].join(" "), weights);
     const test = testStrength(file, files, seeds);

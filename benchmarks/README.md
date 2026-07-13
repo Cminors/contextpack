@@ -56,6 +56,7 @@ These rows are not a controlled model-only comparison because the commit filter 
 - One- and two-level barrel/export propagation from task seeds.
 - Bounded same-directory feature expansion.
 - Category-aware prediction selection for tests, configs, examples, and barrels.
+- Root-`tsconfig`-aware module resolution with bounded, task-focused TypeScript Program expansion.
 
 ## Rejected Experiments
 
@@ -66,6 +67,7 @@ The following experiments were implemented and tested, then removed because they
 - frequency-normalized Git title terms;
 - plain-text exported-symbol reference expansion;
 - rare-term peak scoring.
+- unconditional repository-wide TypeScript Program expansion: the fixed smoke set kept the same retrieval metrics while median analysis time initially increased from 3.45s to 13.98s; uniform semantic boosting also reduced Recall@10.
 
 Keeping these negative results prevents repeating changes that look reasonable in isolation but reduce multi-file recall.
 
@@ -77,7 +79,7 @@ The medium-repository result passes the MRR gate but does not pass the Recall@10
 - Token size and analysis latency pass their goals.
 - Recall and test recall remain the limiting metrics.
 
-The next retrieval work should use a real TypeScript Program and module resolver for symbol references rather than plain-text symbol scanning. Adding a UI, more languages, or an embedded LLM is not justified by these results.
+The first bounded TypeScript Program path is now enabled only for repositories with a root `tsconfig`. The next retrieval work should validate it on a medium repository with a representative root configuration before expanding it to config-less monorepos. Adding a UI, more languages, or an embedded LLM is not justified by these results.
 
 ## Reproduce
 

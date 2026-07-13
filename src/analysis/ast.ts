@@ -6,6 +6,178 @@ import { toPosixPath } from "../utils/path.js";
 
 const SOURCE_EXTENSIONS = [".ts", ".tsx", ".js", ".jsx", ".mts", ".cts", ".mjs", ".cjs"];
 
+interface ProgramIndex {
+  references: Map<string, string[]>;
+  referenceSymbols: Map<string, Record<string, string[]>>;
+}
+
+function canonicalPath(value: string): string {
+  const normalized = path.normalize(value);
+  return process.platform === "win32" ? normalized.toLowerCase() : normalized;
+}
+
+function typescriptExtension(fileName: string): ts.Extension {
+  const extension = path.extname(fileName).toLowerCase();
+  if (extension === ".tsx") return ts.Extension.Tsx;
+  if (extension === ".jsx") return ts.Extension.Jsx;
+  if (extension === ".js" || extension === ".mjs" || extension === ".cjs") return ts.Extension.Js;
+  if (extension === ".mts") return ts.Extension.Mts;
+  if (extension === ".cts") return ts.Extension.Cts;
+  return ts.Extension.Ts;
+}
+
+function rootTypeScriptConfig(root: string): string | null {
+  const configPath = path.join(root, "tsconfig.json");
+  return ts.sys.fileExists(configPath) ? configPath : null;
+}
+
+function compilerOptionsFor(root: string): ts.CompilerOptions {
+  const defaults: ts.CompilerOptions = {
+    allowJs: true,
+    checkJs: false,
+    module: ts.ModuleKind.NodeNext,
+    moduleResolution: ts.ModuleResolutionKind.NodeNext,
+    noEmit: true,
+    noLib: true,
+    skipLibCheck: true,
+    target: ts.ScriptTarget.Latest,
+    types: [],
+  };
+  const configPath = rootTypeScriptConfig(root);
+  if (!configPath) return defaults;
+  const config = ts.readConfigFile(configPath, ts.sys.readFile);
+  if (config.error) return defaults;
+  const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, path.dirname(configPath), undefined, configPath);
+  return {
+    ...defaults,
+    ...parsed.options,
+    allowJs: true,
+    checkJs: false,
+    noEmit: true,
+    noLib: true,
+    skipLibCheck: true,
+    types: [],
+  };
+}
+
+function createProgramIndex(repository: DiscoveredRepository, focusPaths: string[]): ProgramIndex {
+  const root = repository.snapshot.root;
+  const knownFiles = new Set(repository.sourceFiles);
+  const byAbsolutePath = new Map(
+    repository.sourceFiles.map((relativePath) => [canonicalPath(path.resolve(root, relativePath)), relativePath]),
+  );
+  const relativePathFor = (fileName: string): string | null => {
+    const absoluteMatch = byAbsolutePath.get(canonicalPath(fileName));
+    if (absoluteMatch) return absoluteMatch;
+    const relative = toPosixPath(path.relative(root, fileName));
+    return knownFiles.has(relative) ? relative : null;
+  };
+  const compilerOptions = compilerOptionsFor(root);
+  const moduleResolutionCache = ts.createModuleResolutionCache(root, canonicalPath, compilerOptions);
+  const compilerHost = ts.createCompilerHost(compilerOptions);
+  compilerHost.resolveModuleNames = (moduleNames, containingFile) => {
+    const containingPath = relativePathFor(containingFile);
+    return moduleNames.map((specifier) => {
+      const resolved = ts.resolveModuleName(
+        specifier,
+        containingFile,
+        compilerOptions,
+        ts.sys,
+        moduleResolutionCache,
+      ).resolvedModule;
+      if (resolved && relativePathFor(resolved.resolvedFileName)) return resolved;
+      if (!containingPath) return undefined;
+      const fallback = resolveImport(containingPath, specifier, knownFiles, repository);
+      if (!fallback) return undefined;
+      const resolvedFileName = path.resolve(root, fallback);
+      return {
+        resolvedFileName,
+        extension: typescriptExtension(resolvedFileName),
+        isExternalLibraryImport: false,
+      };
+    });
+  };
+  const program = ts.createProgram({
+    rootNames: focusPaths.map((relativePath) => path.resolve(root, relativePath)),
+    options: compilerOptions,
+    host: compilerHost,
+  });
+  const checker = program.getTypeChecker();
+  const references = new Map<string, string[]>();
+  const referenceSymbols = new Map<string, Record<string, string[]>>();
+  const targetCache = new Map<ts.Symbol, { name: string; paths: string[] }>();
+  const focus = new Set(focusPaths);
+
+  const targetsFor = (input: ts.Symbol): { name: string; paths: string[] } => {
+    const cached = targetCache.get(input);
+    if (cached) return cached;
+    let resolved = input;
+    if ((resolved.flags & ts.SymbolFlags.Alias) !== 0) {
+      try {
+        resolved = checker.getAliasedSymbol(resolved);
+      } catch {
+        // A broken or incomplete project can expose an alias without a resolvable target.
+      }
+    }
+    const paths = [
+      ...new Set(
+        (resolved.getDeclarations() ?? [])
+          .map((declaration) => relativePathFor(declaration.getSourceFile().fileName))
+          .filter((value): value is string => value !== null),
+      ),
+    ].sort();
+    const target = { name: resolved.getName(), paths };
+    targetCache.set(input, target);
+    return target;
+  };
+
+  for (const source of program.getSourceFiles()) {
+    const sourcePath = relativePathFor(source.fileName);
+    if (!sourcePath || !focus.has(sourcePath)) continue;
+    const targets = new Set<string>();
+    const namesByTarget = new Map<string, Set<string>>();
+    const addIdentifier = (node: ts.Identifier | undefined): void => {
+      if (!node) return;
+      const resolved = checker.getSymbolAtLocation(node);
+      if (!resolved) return;
+      const targetSymbol = targetsFor(resolved);
+      for (const target of targetSymbol.paths) {
+        if (target !== sourcePath) targets.add(target);
+        if (target !== sourcePath) {
+          const names = namesByTarget.get(target) ?? new Set<string>();
+          names.add(targetSymbol.name === "default" ? node.text : targetSymbol.name);
+          namesByTarget.set(target, names);
+        }
+      }
+    };
+    for (const statement of source.statements) {
+      if (ts.isImportDeclaration(statement) && statement.importClause) {
+        addIdentifier(statement.importClause.name);
+        const bindings = statement.importClause.namedBindings;
+        if (bindings && ts.isNamespaceImport(bindings)) addIdentifier(bindings.name);
+        if (bindings && ts.isNamedImports(bindings)) {
+          for (const element of bindings.elements) addIdentifier(element.name);
+        }
+      } else if (ts.isExportDeclaration(statement) && statement.exportClause && ts.isNamedExports(statement.exportClause)) {
+        for (const element of statement.exportClause.elements) {
+          if (ts.isIdentifier(element.name)) addIdentifier(element.name);
+        }
+      }
+    }
+    references.set(sourcePath, [...targets].sort());
+    referenceSymbols.set(
+      sourcePath,
+      Object.fromEntries(
+        [...namesByTarget]
+          .sort(([left], [right]) => left.localeCompare(right))
+          .map(([target, names]) => [target, [...names].sort()]),
+      ),
+    );
+  }
+
+  return { references, referenceSymbols };
+}
+
 function scriptKind(filePath: string): ts.ScriptKind {
   const extension = path.extname(filePath).toLowerCase();
   if (extension === ".tsx") return ts.ScriptKind.TSX;
@@ -166,6 +338,19 @@ function resolveImport(
 
 export async function analyzeFiles(repository: DiscoveredRepository): Promise<FileAnalysis[]> {
   const knownFiles = new Set(repository.sourceFiles);
+  const root = repository.snapshot.root;
+  const hasTypeScriptConfig = Boolean(rootTypeScriptConfig(repository.snapshot.root));
+  const compilerOptions = hasTypeScriptConfig ? compilerOptionsFor(root) : {};
+  const moduleResolutionCache = ts.createModuleResolutionCache(root, canonicalPath, compilerOptions);
+  const byAbsolutePath = new Map(
+    repository.sourceFiles.map((relativePath) => [canonicalPath(path.resolve(root, relativePath)), relativePath]),
+  );
+  const relativePathFor = (fileName: string): string | null => {
+    const absoluteMatch = byAbsolutePath.get(canonicalPath(fileName));
+    if (absoluteMatch) return absoluteMatch;
+    const relative = toPosixPath(path.relative(root, fileName));
+    return knownFiles.has(relative) ? relative : null;
+  };
   const analyses: FileAnalysis[] = [];
 
   for (const relativePath of repository.sourceFiles) {
@@ -173,7 +358,19 @@ export async function analyzeFiles(repository: DiscoveredRepository): Promise<Fi
     const content = await fs.readFile(absolutePath, "utf8");
     const source = ts.createSourceFile(relativePath, content, ts.ScriptTarget.Latest, true, scriptKind(relativePath));
     const imports = importSpecifiers(source)
-      .map((specifier) => resolveImport(relativePath, specifier, knownFiles, repository))
+      .map((specifier) => {
+        const resolved = hasTypeScriptConfig
+          ? ts.resolveModuleName(
+              specifier,
+              absolutePath,
+              compilerOptions,
+              ts.sys,
+              moduleResolutionCache,
+            ).resolvedModule
+          : undefined;
+        const resolvedPath = resolved ? relativePathFor(resolved.resolvedFileName) : null;
+        return resolvedPath ?? resolveImport(relativePath, specifier, knownFiles, repository);
+      })
       .filter((value): value is string => value !== null);
 
     analyses.push({
@@ -184,6 +381,9 @@ export async function analyzeFiles(repository: DiscoveredRepository): Promise<Fi
       lineCount: content.split(/\r?\n/).length,
       imports: [...new Set(imports)].sort(),
       importedBy: [],
+      references: [],
+      referencedBy: [],
+      referenceSymbols: {},
       symbols: topLevelSymbols(source),
       isTest: testPath(relativePath),
       isConfig: /(?:^|\/)[^/]*config\.[cm]?[jt]sx?$/i.test(relativePath),
@@ -203,6 +403,9 @@ export async function analyzeFiles(repository: DiscoveredRepository): Promise<Fi
       lineCount: content.split(/\r?\n/).length,
       imports: [],
       importedBy: [],
+      references: [],
+      referencedBy: [],
+      referenceSymbols: {},
       symbols: [],
       isTest: false,
       isConfig: true,
@@ -218,10 +421,42 @@ export async function analyzeFiles(repository: DiscoveredRepository): Promise<Fi
         imported.importedBy.push(analysis.path);
       }
     }
+    for (const referencedPath of analysis.references) {
+      const referenced = byPath.get(referencedPath);
+      if (referenced && !referenced.referencedBy.includes(analysis.path)) {
+        referenced.referencedBy.push(analysis.path);
+      }
+    }
   }
   for (const analysis of analyses) {
     analysis.importedBy.sort();
+    analysis.referencedBy.sort();
   }
 
   return analyses.sort((left, right) => left.path.localeCompare(right.path));
+}
+
+export function enrichSemanticReferences(
+  repository: DiscoveredRepository,
+  analyses: FileAnalysis[],
+  focusPaths: string[],
+): boolean {
+  if (!rootTypeScriptConfig(repository.snapshot.root)) return false;
+  const sourcePaths = new Set(repository.sourceFiles);
+  const focus = [...new Set(focusPaths)].filter((filePath) => sourcePaths.has(filePath));
+  if (focus.length === 0) return false;
+  const programIndex = createProgramIndex(repository, focus);
+  const byPath = new Map(analyses.map((analysis) => [analysis.path, analysis]));
+  for (const filePath of focus) {
+    const analysis = byPath.get(filePath);
+    if (!analysis) continue;
+    analysis.references = programIndex.references.get(filePath) ?? [];
+    analysis.referenceSymbols = programIndex.referenceSymbols.get(filePath) ?? {};
+    for (const targetPath of analysis.references) {
+      const target = byPath.get(targetPath);
+      if (target && !target.referencedBy.includes(filePath)) target.referencedBy.push(filePath);
+    }
+  }
+  for (const analysis of analyses) analysis.referencedBy.sort();
+  return true;
 }

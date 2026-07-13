@@ -147,6 +147,7 @@ The medium-repository result passes the MRR target (`>= 0.60`) but remains below
 - JavaScript, JSX, TypeScript, and TSX;
 - npm, pnpm, Yarn, and Bun metadata;
 - single-package repositories and common workspace layouts;
+- `tsconfig` path aliases and bounded, task-focused TypeScript symbol relationships;
 - small-to-medium feature additions;
 - local Git history and common coding-agent instruction files.
 
@@ -168,7 +169,7 @@ The medium-repository result passes the MRR target (`>= 0.60`) but remains below
 
 ## Project Status
 
-ContextPack is an experimental V0.1. The CLI is usable and tested, but the medium-repository recall target has not been reached. Current development is focused on TypeScript-aware cross-file retrieval rather than UI, additional languages, or embedded models.
+ContextPack is an experimental V0.1 with V0.2 retrieval work in progress. The CLI is usable and tested, but the medium-repository recall target has not been reached. Repositories with a root `tsconfig` now receive compiler-aware path resolution and bounded semantic expansion; config-less monorepos stay on the faster structural path until benchmark evidence justifies broader Program analysis.
 
 ## Development
 
@@ -178,7 +179,7 @@ npm run check
 npm run test:coverage
 ```
 
-Current local quality gate: 30 tests passing, 91%+ line coverage, and no production dependency vulnerabilities. GitHub CI verifies Node.js 20 and 22.
+Current local quality gate: 33 tests passing, 90%+ line coverage, and no production dependency vulnerabilities. GitHub CI verifies Node.js 20 and 22.
 
 ## License
 

@@ -1,7 +1,7 @@
 import type { AnalysisOptions, ContextManifest, SuggestedCommand } from "../types.js";
 import { extractConventionalScope, normalizeTaskTerms } from "../utils/task-terms.js";
 import { discoverRepository } from "../repository/discover.js";
-import { analyzeFiles } from "./ast.js";
+import { analyzeFiles, enrichSemanticReferences } from "./ast.js";
 import { readGitHistory } from "./git-history.js";
 import { rankCandidates } from "../ranking/score.js";
 import { selectCandidates } from "../ranking/select.js";
@@ -37,7 +37,12 @@ export async function analyzeTask(options: AnalysisOptions): Promise<ContextMani
         coChange: new Map(),
         titleTermsByFile: new Map(),
       };
-  const rankedCandidates = rankCandidates(files, terms, history, repository.rules, extractConventionalScope(options.task));
+  const taskScope = extractConventionalScope(options.task);
+  const initialCandidates = rankCandidates(files, terms, history, repository.rules, taskScope);
+  const enriched = enrichSemanticReferences(repository, files, initialCandidates.slice(0, 12).map((candidate) => candidate.path));
+  const rankedCandidates = enriched
+    ? rankCandidates(files, terms, history, repository.rules, taskScope)
+    : initialCandidates;
   const candidates = prioritizeCandidates(rankedCandidates, { limit: 20 });
   const selected = selectCandidates(candidates, files, options.budget);
   const snippetTokens = selected.reduce((sum, item) => sum + item.estimatedTokens, 0);

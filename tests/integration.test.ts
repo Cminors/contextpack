@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { analyzeTask } from "../src/analysis/analyze.js";
-import { analyzeFiles } from "../src/analysis/ast.js";
+import { analyzeFiles, enrichSemanticReferences } from "../src/analysis/ast.js";
 import { discoverRepository } from "../src/repository/discover.js";
 import { renderContext } from "../src/output/markdown.js";
 
@@ -60,5 +60,50 @@ describe("task analysis", () => {
     const byPath = new Map(files.map((item) => [item.path, item]));
     expect(byPath.get("packages/core/src/index.ts")?.imports).toContain("packages/core/src/feature.ts");
     expect(byPath.get("packages/app/src/app.ts")?.imports).toContain("packages/core/src/index.ts");
+  });
+
+  it("uses TypeScript path aliases and follows imported symbols through barrels", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-program-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "packages", "core", "src"), { recursive: true });
+    await fs.mkdir(path.join(root, "packages", "app", "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "package.json"), JSON.stringify({ private: true, workspaces: ["packages/*"] }));
+    await fs.writeFile(
+      path.join(root, "tsconfig.json"),
+      JSON.stringify({ compilerOptions: { baseUrl: ".", paths: { "@core/*": ["packages/core/src/*"] } } }),
+    );
+    await fs.writeFile(
+      path.join(root, "packages", "core", "src", "feature.ts"),
+      "export interface OAuthMetadata { issuer: string; }\n",
+    );
+    await fs.writeFile(
+      path.join(root, "packages", "core", "src", "index.ts"),
+      "export type { OAuthMetadata } from './feature.js';\n",
+    );
+    await fs.writeFile(
+      path.join(root, "packages", "app", "src", "app.ts"),
+      "import type { OAuthMetadata } from '@core/index';\nexport type AppAuth = OAuthMetadata;\n",
+    );
+    const repository = await discoverRepository(root);
+    const files = await analyzeFiles(repository);
+    enrichSemanticReferences(repository, files, ["packages/app/src/app.ts"]);
+    const byPath = new Map(files.map((item) => [item.path, item]));
+    const app = byPath.get("packages/app/src/app.ts");
+    expect(app?.imports).toContain("packages/core/src/index.ts");
+    expect(app?.references).toContain("packages/core/src/feature.ts");
+    expect(byPath.get("packages/core/src/feature.ts")?.referencedBy).toContain("packages/app/src/app.ts");
+  });
+
+  it("does not inherit a TypeScript config from outside the repository root", async () => {
+    const parent = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-parent-config-"));
+    created.push(parent);
+    const root = path.join(parent, "project");
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(parent, "tsconfig.json"), JSON.stringify({ compilerOptions: { strict: true } }));
+    await fs.writeFile(path.join(root, "package.json"), JSON.stringify({ name: "fixture" }));
+    await fs.writeFile(path.join(root, "src", "index.ts"), "export const value = true;\n");
+    const repository = await discoverRepository(root);
+    const files = await analyzeFiles(repository);
+    expect(enrichSemanticReferences(repository, files, ["src/index.ts"])).toBe(false);
   });
 });

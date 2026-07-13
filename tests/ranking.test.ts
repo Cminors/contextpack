@@ -11,6 +11,9 @@ const file = (path: string, imports: string[] = [], importedBy: string[] = [], i
   lineCount: 1,
   imports,
   importedBy,
+  references: [],
+  referencedBy: [],
+  referenceSymbols: {},
   symbols: [{ name: path.includes("auth") ? "loginWithGithub" : "helper", kind: "function", startLine: 1, endLine: 1, exported: true, text: "" }],
   isTest,
   isConfig: false,
@@ -147,6 +150,23 @@ describe("candidate ranking", () => {
     const ranked = rankCandidates([unrelated, neighbor, seed], ["auth", "oauth", "metadata"], emptyGitHistory(), []);
     expect(ranked.find((item) => item.path === neighbor.path)?.breakdown.dependency).toBeGreaterThan(0);
     expect(ranked.find((item) => item.path === unrelated.path)?.breakdown.dependency).toBe(0);
+  });
+
+  it("uses precise symbol references without over-promoting high-fan-out hubs", () => {
+    const seed = file("src/oauth/index.ts");
+    seed.references = ["src/provider.ts"];
+    seed.referenceSymbols = { "src/provider.ts": ["OAuthProvider"] };
+    const precise = file("src/provider.ts");
+    precise.referencedBy = [seed.path];
+    const hubSeed = file("src/server/index.ts");
+    hubSeed.references = Array.from({ length: 16 }, (_, index) => `src/dependency-${index}.ts`);
+    hubSeed.referenceSymbols = Object.fromEntries(hubSeed.references.map((target) => [target, ["ServerRuntime"]]));
+    const hubNeighbor = file("src/dependency-0.ts");
+    hubNeighbor.referencedBy = [hubSeed.path];
+    const preciseRanked = rankCandidates([seed, precise], ["oauth"], emptyGitHistory(), []);
+    const hubRanked = rankCandidates([hubSeed, hubNeighbor], ["server"], emptyGitHistory(), []);
+    expect(preciseRanked.find((item) => item.path === precise.path)?.breakdown.dependency).toBe(0.85);
+    expect(hubRanked.find((item) => item.path === hubNeighbor.path)?.breakdown.dependency).toBeLessThan(0.5);
   });
 
 });

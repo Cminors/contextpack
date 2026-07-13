@@ -3,6 +3,8 @@ export type PackageManager = "npm" | "pnpm" | "yarn" | "bun" | "unknown";
 export type RelationshipKind =
   | "imports"
   | "imported-by"
+  | "references"
+  | "referenced-by"
   | "test-for"
   | "co-change"
   | "rule-applies";
@@ -50,6 +52,9 @@ export interface FileAnalysis {
   lineCount: number;
   imports: string[];
   importedBy: string[];
+  references: string[];
+  referencedBy: string[];
+  referenceSymbols: Record<string, string[]>;
   symbols: SymbolRecord[];
   isTest: boolean;
   isConfig: boolean;
