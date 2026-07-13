@@ -2,7 +2,8 @@ import path from "node:path";
 import { Command, InvalidArgumentError } from "commander";
 import { analyzeTask } from "./analysis/analyze.js";
 import { runReplay } from "./evaluation/replay.js";
-import { renderContext, renderEvaluation } from "./output/markdown.js";
+import { runIssueBenchmark } from "./evaluation/issues.js";
+import { renderContext, renderEvaluation, renderIssueEvaluation } from "./output/markdown.js";
 import { writeArtifacts } from "./output/write.js";
 import { toContextPackError } from "./errors.js";
 import type { EvaluationQueryMode } from "./types.js";
@@ -24,6 +25,14 @@ function budget(value: string): number {
 function evaluationQueryMode(value: string): EvaluationQueryMode {
   if (value === "title" || value === "keyword-ablated") return value;
   throw new InvalidArgumentError("must be title or keyword-ablated");
+}
+
+function lineBudgets(value: string): number[] {
+  const values = [...new Set(value.split(",").map((item) => integer(item.trim())))].sort((a, b) => a - b);
+  if (values.length === 0 || values.some((item) => item > 10_000)) {
+    throw new InvalidArgumentError("must be comma-separated line counts between 1 and 10000");
+  }
+  return values;
 }
 
 function slug(value: string): string {
@@ -73,6 +82,51 @@ program.command("eval")
     const output = path.resolve(options.output ?? path.join(report.repository.root, ".contextpack", "evals", defaultName));
     await writeArtifacts(output, { "report.md": renderEvaluation(report), "results.json": `${JSON.stringify(report, null, 2)}\n` });
     process.stdout.write(`Evaluation (${report.queryMode}): ${output}\nRecall@10 ${report.aggregate.recallAt10.toFixed(3)}; MRR ${report.aggregate.mrr.toFixed(3)}.\n`);
+  });
+
+program.command("eval-issues")
+  .description("Evaluate retrieval on normalized real issue/patch instances")
+  .option("--dataset <path>", "normalized issue JSONL dataset")
+  .option("--cache <directory>", "bare Git repository cache")
+  .option("--budget <tokens>", "context token budget", budget, 12000)
+  .option("--line-budgets <lines>", "comma-separated emitted-line budgets", lineBudgets, [100, 250, 500])
+  .option("--history <count>", "Git commits to fetch and inspect", integer, 100)
+  .option("--limit <count>", "maximum instances", integer)
+  .option("--instance <id>", "one exact instance id")
+  .option("--repo <owner/name>", "one exact repository")
+  .option("--output <directory>", "output directory")
+  .action(async (options: {
+    dataset?: string;
+    cache?: string;
+    budget: number;
+    lineBudgets: number[];
+    history: number;
+    limit?: number;
+    instance?: string;
+    repo?: string;
+    output?: string;
+  }) => {
+    const root = process.cwd();
+    const report = await runIssueBenchmark({
+      datasetPath: path.resolve(options.dataset ?? path.join(root, ".benchmarks", "datasets", "swe-bench-multilingual-js-ts.jsonl")),
+      cacheDirectory: path.resolve(options.cache ?? path.join(root, ".benchmarks", "repositories")),
+      tokenBudget: options.budget,
+      lineBudgets: options.lineBudgets,
+      historyCount: options.history,
+      ...(options.limit === undefined ? {} : { limit: options.limit }),
+      ...(options.instance ? { instanceId: options.instance } : {}),
+      ...(options.repo ? { repo: options.repo } : {}),
+      onProgress: (message) => process.stderr.write(`${message}\n`),
+    });
+    const output = path.resolve(options.output ?? path.join(root, ".contextpack", "evals", "swe-bench-multilingual-js-ts"));
+    await writeArtifacts(output, {
+      "report.md": renderIssueEvaluation(report),
+      "results.json": `${JSON.stringify(report, null, 2)}\n`,
+    });
+    process.stdout.write(
+      `Issue evaluation: ${output}\n`
+      + `Recall@10 ${report.aggregate.recallAt10.toFixed(3)}; MRR ${report.aggregate.mrr.toFixed(3)}.\n`,
+    );
   });
 
 program.parseAsync().catch((error: unknown) => {

@@ -44,6 +44,58 @@ The same 20 MCP SDK feature commits were replayed in both query modes with the s
 
 Eighteen of the 20 titles contained at least one removable answer hint; 30 hints were removed in total. Exact package, path, or declaration hints materially inflate the original historical-replay score. Keyword ablation preserves broader requirement language and records every removed hint for audit, but it does not synthesize an issue-style paraphrase.
 
+## V0.2 Structured Content Retrieval
+
+V0.2 adds a bounded BM25-style source scan over comments, identifiers, string literals, and test titles. It keeps field and line evidence, applies length normalization and capped term frequency, suppresses secret-like strings and module specifiers, and folds the result into the existing lexical signal. Content receives less weight when a Conventional Commit scope already provides a precise path prior.
+
+The same fixed 20 MCP SDK commits, query construction, and 12,000-token budget produced:
+
+| Implementation | Query mode | Recall@5 | Recall@10 | MRR | Noise@10 | Test recall | Median tokens | Median analysis |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| V0.1 structural baseline | `title` | 0.292 | 0.414 | 0.605 | 0.825 | 0.472 | 9,002 | 2,029 ms |
+| V0.2 structured content | `title` | 0.347 | 0.439 | 0.635 | 0.820 | 0.472 | 7,889 | 3,945 ms |
+| V0.1 structural baseline | `keyword-ablated` | 0.156 | 0.233 | 0.260 | 0.895 | 0.139 | 9,095 | 1,533 ms |
+| V0.2 structured content | `keyword-ablated` | 0.291 | 0.341 | 0.402 | 0.870 | 0.389 | 7,547 | 3,177 ms |
+
+The content scorer clears the predeclared ablated gates and also improves the title track. Output compaction limits selected snippets to 16, caps a snippet at 120 lines, and renders two relationships per selected file; prediction ranking remains a separate top-20 list.
+
+Latency was not stable across repeated full runs on the same machine. A preceding full run of the same retrieval scorer (before output-only compaction) measured 1,956 ms for title and 1,880 ms for keyword ablation, while the final artifact run measured 3,945 ms and 3,177 ms. The latest title result exceeds the 3,044 ms provisional gate, so latency should be remeasured in a controlled CI environment before calling the performance gate stable.
+
+## V0.3 Performance Observability
+
+`analyzeTask` now records repository discovery, file analysis, Git history, initial ranking, semantic enrichment, reranking, selection, and total duration separately. Historical replay also records Markdown rendering independently and reports per-phase medians.
+
+The deterministic `npm run perf:smoke` fixture contains 360 TS/JS/test files, warms the process once, runs five measured analyses, verifies identical candidate fingerprints, and fails when median analysis exceeds 4,000 ms. The 2026-07-13 local baseline was:
+
+| Discover | Files | Initial rank | Semantic | Rerank | Selection | Total |
+|---:|---:|---:|---:|---:|---:|---:|
+| 392 ms | 518 ms | 487 ms | 33 ms | 466 ms | 1 ms | 1,936 ms |
+
+A one-commit MCP SDK diagnostic measured 7,559 ms analysis and 27 ms rendering: discovery 1,137 ms, files 3,371 ms, Git 755 ms, and initial ranking 2,235 ms dominated. This confirms that rendering was not the source of the earlier variance. The synthetic gate is a deterministic quantity-regression alarm, not a replacement for full historical replay or a latency SLA.
+
+## P0.2 Real Issue And Line-level Evaluation
+
+P0.2 adds a second, external evaluation track based on the 43 JavaScript/TypeScript tasks from [SWE-bench Multilingual](https://www.swebench.com/multilingual.html). The adapter pins Hugging Face dataset revision `2b7aced941b4873e9cad3e76abbae93f481d1beb` (MIT) and verifies the official seven-repository/43-instance distribution. The downloaded Parquet file is cached outside Git with SHA-256 `28b7f874e48496399077d276f9f2b163a077ddf0a70dc507c148d58da826baa9`.
+
+The normalized JSONL retains the real issue text, repository, `base_commit`, source revision, and derived gold regions, but not the raw solution patch. Gold regions come from old-side unified-diff hunks so they refer to lines that exist in the pre-solution checkout. New files and non-JS/TS patch files are explicitly excluded; insertion-only hunks use a one-line base-side anchor. [SWE-bench's dataset schema](https://www.swebench.com/SWE-bench/guides/datasets/) is the upstream contract.
+
+Predictions and labels remain separated: ContextPack receives only the issue text and repository checkout. The evaluator reads gold regions after retrieval and reports:
+
+- file Recall@5, Recall@10, and MRR over the ranked candidate list;
+- line precision, recall, and F1 under fixed 100/250/500 emitted-line budgets;
+- gold-region hit rate and predicted-region noise rate;
+- context efficiency, nDCG, useful-hit rate, and first useful line rank.
+
+The first checked-in smoke baseline covers all six Axios tasks:
+
+| Tasks | File R@5 | File R@10 | MRR | Line recall @100 | @250 | @500 | Median analysis |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 6 | 0.500 | 0.617 | 0.177 | 0.000 | 0.000 | 0.000 | 5,152 ms |
+
+All six tasks completed without skips. File ranking found at least some gold files, but no emitted snippet overlapped a gold hunk. For example, `axios__axios-4738` ranked the correct file fifth while selecting lines 9-13; the patch hunk is at lines 420-428. This is direct evidence that the current one-symbol-per-file snippet policy loses useful within-file location even when file retrieval succeeds. The next model change should target line localization and must improve this fixed track without regressing the historical title and keyword-ablated tracks.
+
+This six-task run is a pipeline and diagnostic baseline, not a claim about the full 43-task benchmark. Raw results are stored in `benchmarks/results/swebench-multilingual-axios-p02/`.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
@@ -70,6 +122,9 @@ These rows are not a controlled model-only comparison because the commit filter 
 - Bounded same-directory feature expansion.
 - Category-aware prediction selection for tests, configs, examples, and barrels.
 - Root-`tsconfig`-aware module resolution with bounded, task-focused TypeScript Program expansion.
+- Structured source-content retrieval with BM25-style rarity, saturation, and length normalization.
+- Explainable content evidence containing only normalized task terms, source fields, and line numbers.
+- A compact output policy of at most 16 snippets, 120 lines per snippet, and two rendered relationships per file.
 
 ## Rejected Experiments
 
@@ -87,19 +142,22 @@ Keeping these negative results prevents repeating changes that look reasonable i
 
 ## Decision
 
-The medium-repository result passes the MRR gate but does not pass the Recall@10 gate.
+The V0.2 content scorer is retained as the default retrieval path.
 
-- MRR passes the threshold at 0.605.
-- Token size and analysis latency pass their goals.
-- Recall and test recall remain the limiting metrics.
+- Keyword-ablated Recall@10, MRR, and test recall exceed their predeclared gates by `0.058`, `0.122`, and `0.200` respectively.
+- Title Recall@10 and MRR improve rather than regress; Noise@10 falls on both tracks.
+- Final median token use is lower than V0.1 on both tracks.
+- The final title latency sample exceeds the provisional performance gate despite a faster preceding full run, so latency stability remains an explicit follow-up.
 
-The first bounded TypeScript Program path is enabled only for repositories with a root `tsconfig`. Benchmark V2 now makes keyword-agnostic localization the next retrieval priority: graph or reranking changes must improve the ablated track without regressing title mode. A future external issue/feature dataset is still required before measuring Coding Agent success. Adding a UI, more languages, or an embedded LLM is not justified by these results.
+A future external issue/feature dataset is still required before measuring Coding Agent success. The next evidence milestone is a fixed JS/TS issue and line-level benchmark; adding a UI, more languages, or an embedded LLM is not justified by these retrieval results alone.
 
 ## Reproduce
 
 ```powershell
 node dist/cli.js eval --commits 20 --budget 12000 --query-mode title --output benchmarks/results/<name>-title
 node dist/cli.js eval --commits 20 --budget 12000 --query-mode keyword-ablated --output benchmarks/results/<name>-ablated
+npm run benchmark:prepare:swebench
+node dist/cli.js eval-issues --repo axios/axios --history 50 --budget 12000 --line-budgets 100,250,500 --output benchmarks/results/swebench-multilingual-axios-p02
 ```
 
 Run the command from the root of the repository being evaluated. Raw final reports are stored in:
@@ -107,3 +165,6 @@ Run the command from the root of the repository being evaluated. Raw final repor
 - `benchmarks/results/p-map-final/`
 - `benchmarks/results/typescript-sdk-final/`
 - `benchmarks/results/typescript-sdk-v2-ablated-final/`
+- `benchmarks/results/typescript-sdk-v02-title-final/`
+- `benchmarks/results/typescript-sdk-v02-ablated-final/`
+- `benchmarks/results/swebench-multilingual-axios-p02/`

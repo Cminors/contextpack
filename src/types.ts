@@ -44,6 +44,20 @@ export interface SymbolRecord {
   text: string;
 }
 
+export type LexicalContentField = "comment" | "identifier" | "string" | "test-title";
+
+export interface LexicalOccurrence {
+  term: string;
+  field: LexicalContentField;
+  line: number;
+}
+
+export interface LexicalDocument {
+  length: number;
+  termWeights: Record<string, number>;
+  occurrences: LexicalOccurrence[];
+}
+
 export interface FileAnalysis {
   path: string;
   absolutePath: string;
@@ -59,6 +73,7 @@ export interface FileAnalysis {
   isTest: boolean;
   isConfig: boolean;
   packageDirectory: string | null;
+  lexicalDocument?: LexicalDocument;
 }
 
 export interface RuleRecord {
@@ -136,6 +151,17 @@ export interface ContextWarning {
   path?: string;
 }
 
+export interface AnalysisTimings {
+  discoverMs: number;
+  fileAnalysisMs: number;
+  gitHistoryMs: number;
+  initialRankingMs: number;
+  semanticEnrichmentMs: number;
+  rerankingMs: number;
+  selectionMs: number;
+  totalMs: number;
+}
+
 export interface ContextManifest {
   version: 1;
   generatedAt: string;
@@ -154,6 +180,7 @@ export interface ContextManifest {
   rules: RuleRecord[];
   commands: SuggestedCommand[];
   warnings: ContextWarning[];
+  timings: AnalysisTimings;
 }
 
 export interface AnalysisOptions {
@@ -186,6 +213,8 @@ export interface EvaluationCommitResult {
   testRecall: number | null;
   estimatedTokens: number;
   durationMs: number;
+  analysisTimings?: AnalysisTimings;
+  renderDurationMs?: number;
 }
 
 export type EvaluationQueryMode = "title" | "keyword-ablated";
@@ -213,6 +242,9 @@ export interface EvaluationReport {
     testRecall: number | null;
     medianTokens: number;
     medianDurationMs: number;
+    medianAnalysisDurationMs: number;
+    medianRenderDurationMs: number;
+    medianPhaseDurationsMs: AnalysisTimings;
   };
   limitations: string[];
 }

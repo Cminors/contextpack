@@ -169,4 +169,31 @@ describe("candidate ranking", () => {
     expect(hubRanked.find((item) => item.path === hubNeighbor.path)?.breakdown.dependency).toBeLessThan(0.5);
   });
 
+  it("uses behavior evidence when paths and symbols do not contain the task terms", () => {
+    const target = {
+      ...file("src/handler.ts"),
+      content: "export function processRequest() {\n  // Reject malformed payloads before dispatch.\n  return false;\n}",
+      lineCount: 4,
+      symbols: [{ name: "processRequest", kind: "function" as const, startLine: 1, endLine: 4, exported: true, text: "" }],
+    };
+    const unrelated = file("src/cache.ts");
+    const ranked = rankCandidates([unrelated, target], ["reject", "malformed", "payloads"], emptyGitHistory(), []);
+    expect(ranked[0]?.path).toBe(target.path);
+    expect(ranked[0]?.breakdown.lexical).toBeGreaterThan(0);
+    expect(ranked[0]?.reasons.join(" ")).toContain("content match");
+    expect(ranked[0]?.reasons.join(" ")).toContain("line 2");
+  });
+
+  it("keeps exact path relevance ahead of a content-only match", () => {
+    const exact = file("src/malformed-payload.ts");
+    const contentOnly = {
+      ...file("src/handler.ts"),
+      content: "// malformed payload\nexport const handler = true;",
+      symbols: [{ name: "handler", kind: "variable" as const, startLine: 2, endLine: 2, exported: true, text: "" }],
+    };
+    const ranked = rankCandidates([contentOnly, exact], ["malformed", "payload"], emptyGitHistory(), []);
+    expect(ranked[0]?.path).toBe(exact.path);
+    expect(ranked[0]?.breakdown.lexical).toBeGreaterThan(ranked[1]?.breakdown.lexical ?? 1);
+  });
+
 });

@@ -22,10 +22,15 @@ describe("task analysis", () => {
     const manifest = await analyzeTask({ root, task: "add GitHub login", budget: 4000, historyCount: 50 });
     const markdown = renderContext(manifest);
     expect(manifest.candidates[0]?.path).toBe("src/auth.ts");
+    expect(manifest.selected.length).toBeLessThanOrEqual(16);
     expect(manifest.selected.some((item) => item.path === "src/auth.test.ts")).toBe(true);
     expect(manifest.warnings.some((item) => item.code === "NO_GIT_REPOSITORY")).toBe(true);
     expect(markdown).not.toContain("should-not-appear");
     expect(manifest.budget.estimatedTokens).toBeLessThanOrEqual(4200);
+    const { totalMs, ...phases } = manifest.timings;
+    expect(Object.values(phases).every((value) => value >= 0)).toBe(true);
+    expect(totalMs).toBeGreaterThanOrEqual(Object.values(phases).reduce((sum, value) => sum + value, 0));
+    expect(manifest.timings.rerankingMs).toBe(0);
     for (let section = 1; section <= 10; section += 1) expect(markdown).toContain(`## ${section}.`);
   });
 
@@ -105,5 +110,26 @@ describe("task analysis", () => {
     const repository = await discoverRepository(root);
     const files = await analyzeFiles(repository);
     expect(enrichSemanticReferences(repository, files, ["src/index.ts"])).toBe(false);
+  });
+
+  it("builds a context pack from behavior evidence without path or symbol hints", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-content-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "package.json"), JSON.stringify({ name: "content-fixture" }));
+    await fs.writeFile(
+      path.join(root, "src", "processor.ts"),
+      "export function processRequest(input: unknown) {\n  // Reject malformed payloads before dispatch.\n  return Boolean(input);\n}\n",
+    );
+    await fs.writeFile(path.join(root, "src", "cache.ts"), "export function warmCache() { return true; }\n");
+    const manifest = await analyzeTask({
+      root,
+      task: "reject malformed payloads before dispatch",
+      budget: 4000,
+      historyCount: 10,
+    });
+    expect(manifest.candidates[0]?.path).toBe("src/processor.ts");
+    expect(manifest.candidates[0]?.reasons.join(" ")).toContain("content match");
+    expect(manifest.selected[0]?.snippet).toContain("Reject malformed payloads");
   });
 });

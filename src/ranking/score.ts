@@ -9,6 +9,7 @@ import type {
   SymbolRecord,
 } from "../types.js";
 import { coChangeStrength } from "../analysis/git-history.js";
+import { scoreContentMatches } from "./lexical.js";
 
 export const SCORE_WEIGHTS = {
   lexical: 0.28,
@@ -17,6 +18,11 @@ export const SCORE_WEIGHTS = {
   git: 0.15,
   test: 0.1,
   rule: 0.07,
+} as const;
+
+export const CONTENT_SCORE_SCALE = {
+  scoped: 0.2,
+  unscoped: 0.9,
 } as const;
 
 function words(value: string): Set<string> {
@@ -228,22 +234,25 @@ export function rankCandidates(
   taskScope: string | null = null,
 ): ContextCandidate[] {
   const weights = termWeights(files, terms);
+  const contentMatches = scoreContentMatches(files, terms);
   const filesByPath = new Map(files.map((file) => [file.path, file]));
   const configurationIntent = terms.some((term) =>
     ["build", "builds", "bundle", "bundling", "cjs", "commonjs", "config", "configuration", "esm", "package", "packages", "packaging"].includes(term),
   );
-  const rawRelevance = new Map<string, { lexical: number; symbol: number }>();
+  const rawRelevance = new Map<string, { lexical: number; symbol: number; content: ReturnType<typeof contentMatches.get> }>();
   for (const file of files) {
     const pathScore = weightedMatch(terms, file.path, weights);
+    const content = contentMatches.get(file.path);
     const configContent = file.content.slice(0, 50_000);
     const contentScore = configurationIntent && file.isConfig && !file.path.endsWith("package.json") && matchedTermCount(terms, configContent) >= 2
       ? weightedMatch(terms, configContent, weights)
       : 0;
-    const baseLexical = Math.max(pathScore, contentScore * 0.85);
+    const contentScale = taskScope ? CONTENT_SCORE_SCALE.scoped : CONTENT_SCORE_SCALE.unscoped;
+    const baseLexical = Math.max(pathScore, contentScore * 0.85, (content?.score ?? 0) * contentScale);
     const scopeMatch = taskScope && file.path.toLowerCase().split("/").includes(taskScope) ? 0.35 : 0;
     const lexical = taskScope ? Math.min(1, baseLexical * 0.65 + scopeMatch) : baseLexical;
     const symbolScore = file.symbols.reduce((best, item) => Math.max(best, weightedMatch(terms, item.name, weights)), 0);
-    rawRelevance.set(file.path, { lexical, symbol: symbolScore });
+    rawRelevance.set(file.path, { lexical, symbol: symbolScore, content });
   }
   const rankedSeeds = [...rawRelevance]
     .filter(([, value]) => Math.max(value.lexical, value.symbol) > 0)
@@ -276,7 +285,7 @@ export function rankCandidates(
   const barrelGraph = barrelDistances(files, seeds);
 
   return files.map((file) => {
-    const relevance = rawRelevance.get(file.path) ?? { lexical: 0, symbol: 0 };
+    const relevance = rawRelevance.get(file.path) ?? { lexical: 0, symbol: 0, content: undefined };
     const distance = distances.get(file.path);
     const structural = directStructuralStrength(file, barrelGraph.get(file.path));
     const sameFeature = sameFeatureStrength(file, terms, weights, seeds);
@@ -307,6 +316,14 @@ export function rankCandidates(
       .sort((a, b) => breakdown[b] * SCORE_WEIGHTS[b] - breakdown[a] * SCORE_WEIGHTS[a])
       .slice(0, 3)
       .map((key) => `${key} signal ${breakdown[key].toFixed(2)}`);
+    if (relevance.content && relevance.content.evidence.length > 0) {
+      const details = relevance.content.evidence
+        .map((item) => `"${item.term}" in ${item.field} at line ${item.line}`)
+        .join(", ");
+      const lexicalReason = reasons.findIndex((reason) => reason.startsWith("lexical signal"));
+      if (lexicalReason >= 0) reasons[lexicalReason] = `${reasons[lexicalReason]}; content match ${details}`;
+      else reasons.push(`content match ${details}`);
+    }
     const chosenSymbol = bestSymbol(file, terms, weights);
     return {
       path: file.path,

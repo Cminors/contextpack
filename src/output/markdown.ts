@@ -1,4 +1,5 @@
 import type { ContextManifest, EvaluationReport } from "../types.js";
+import type { IssueBenchmarkReport } from "../evaluation/issue-types.js";
 import { countTokens } from "./tokens.js";
 
 const codeFence = (filePath: string): string => {
@@ -31,7 +32,7 @@ function composeContext(manifest: ContextManifest): string {
     "## 4. Why Included",
     manifest.selected.map((item) => `- \`${item.path}\`: ${item.reasons.join("; ")}`).join("\n") || "No snippets fit the budget.",
     "## 5. Relationships",
-    manifest.selected.flatMap((item) => item.relationships.slice(0, 4).map((relation) => `- \`${item.path}\` ${relation.kind} \`${relation.target}\` (${relation.strength.toFixed(2)}): ${relation.detail}`)).join("\n") || "No direct relationships were detected.",
+    manifest.selected.flatMap((item) => item.relationships.slice(0, 2).map((relation) => `- \`${item.path}\` ${relation.kind} \`${relation.target}\` (${relation.strength.toFixed(2)}): ${relation.detail}`)).join("\n") || "No direct relationships were detected.",
     "## 6. Applicable Rules",
     applicableRules.slice(0, 10).map((rule) => `- \`${rule.path}\` (${rule.kind}, scope \`${rule.scopeDirectory}\`)`).join("\n") || "No supported repository instruction files apply to the selected paths.",
     "## 7. Suggested Verification",
@@ -70,5 +71,19 @@ export function renderEvaluation(report: EvaluationReport): string {
   const audits = report.results.map((item) =>
     `- \`${item.hash.slice(0, 8)}\` original: ${tableEscape(item.title)}; removed: ${item.redactedIdentifiers.map((value) => `\`${value}\``).join(", ") || "none"}`,
   );
-  return `# ContextPack Historical Replay\n\nThis report measures a retrieval proxy, not Coding Agent success.\n\n## Summary\n\n- Query mode: \`${report.queryMode}\`\n- Valid commits: ${report.validCommits}/${report.requestedCommits}\n- Recall@5: ${report.aggregate.recallAt5.toFixed(3)}\n- Recall@10: ${report.aggregate.recallAt10.toFixed(3)}\n- MRR: ${report.aggregate.mrr.toFixed(3)}\n- Noise@10: ${report.aggregate.noiseAt10.toFixed(3)}\n- Test recall: ${report.aggregate.testRecall === null ? "n/a" : report.aggregate.testRecall.toFixed(3)}\n- Median tokens: ${report.aggregate.medianTokens}\n- Median duration: ${report.aggregate.medianDurationMs} ms\n\n## Commits\n\n| Commit | Evaluation query | Hints removed | R@5 | R@10 | MRR | Tokens |\n|---|---|---:|---:|---:|---:|---:|\n${rows.join("\n")}\n\n## Query Audit\n\n${audits.join("\n")}\n\n## Skipped\n\n${report.skipped.map((item) => `- \`${item.hash.slice(0, 8)}\` ${tableEscape(item.title)} — ${item.reason}`).join("\n") || "None."}\n\n## Limitations\n\n${report.limitations.map((item) => `- ${item}`).join("\n")}\n`;
+  const phases = report.aggregate.medianPhaseDurationsMs;
+  return `# ContextPack Historical Replay\n\nThis report measures a retrieval proxy, not Coding Agent success.\n\n## Summary\n\n- Query mode: \`${report.queryMode}\`\n- Valid commits: ${report.validCommits}/${report.requestedCommits}\n- Recall@5: ${report.aggregate.recallAt5.toFixed(3)}\n- Recall@10: ${report.aggregate.recallAt10.toFixed(3)}\n- MRR: ${report.aggregate.mrr.toFixed(3)}\n- Noise@10: ${report.aggregate.noiseAt10.toFixed(3)}\n- Test recall: ${report.aggregate.testRecall === null ? "n/a" : report.aggregate.testRecall.toFixed(3)}\n- Median tokens: ${report.aggregate.medianTokens}\n- Median end-to-end duration: ${report.aggregate.medianDurationMs} ms\n- Median analysis duration: ${report.aggregate.medianAnalysisDurationMs} ms\n- Median render duration: ${report.aggregate.medianRenderDurationMs} ms\n- Median phases: discover ${phases.discoverMs} ms; files ${phases.fileAnalysisMs} ms; Git ${phases.gitHistoryMs} ms; initial rank ${phases.initialRankingMs} ms; semantic ${phases.semanticEnrichmentMs} ms; rerank ${phases.rerankingMs} ms; selection ${phases.selectionMs} ms\n\n## Commits\n\n| Commit | Evaluation query | Hints removed | R@5 | R@10 | MRR | Tokens |\n|---|---|---:|---:|---:|---:|---:|\n${rows.join("\n")}\n\n## Query Audit\n\n${audits.join("\n")}\n\n## Skipped\n\n${report.skipped.map((item) => `- \`${item.hash.slice(0, 8)}\` ${tableEscape(item.title)} — ${item.reason}`).join("\n") || "None."}\n\n## Limitations\n\n${report.limitations.map((item) => `- ${item}`).join("\n")}\n`;
+}
+
+export function renderIssueEvaluation(report: IssueBenchmarkReport): string {
+  const budgetRows = report.lineBudgets.map((budget) => {
+    const metrics = report.aggregate.regionMetrics[String(budget)];
+    if (!metrics) return "";
+    return `| ${budget} | ${metrics.lineRecall.toFixed(3)} | ${metrics.linePrecision.toFixed(3)} | ${metrics.lineF1.toFixed(3)} | ${metrics.hitRegionRate.toFixed(3)} | ${metrics.noiseRegionRate.toFixed(3)} | ${metrics.contextEfficiency.toFixed(3)} | ${metrics.ndcg.toFixed(3)} | ${metrics.usefulHitRate.toFixed(3)} | ${metrics.medianFirstUsefulHit ?? "n/a"} |`;
+  }).filter(Boolean);
+  const instanceRows = report.results.map((result) => {
+    const largest = result.regionMetrics[String(report.lineBudgets.at(-1))];
+    return `| \`${tableEscape(result.instanceId)}\` | \`${result.repo}\` | ${result.goldFiles.length} | ${result.recallAt5.toFixed(2)} | ${result.recallAt10.toFixed(2)} | ${result.reciprocalRank.toFixed(2)} | ${largest?.lineRecall.toFixed(2) ?? "n/a"} | ${result.estimatedTokens} | ${result.durationMs} |`;
+  });
+  return `# ContextPack Issue Retrieval Benchmark\n\nThis report evaluates retrieval against real issue/patch pairs. It does not execute patches or tests.\n\n## Dataset\n\n- Source: \`${report.sourceDataset}\`\n- Revision: \`${report.sourceRevision}\`\n- Valid instances: ${report.validInstances}/${report.requestedInstances}\n- Token budget: ${report.tokenBudget}\n- Line budgets: ${report.lineBudgets.join(", ")}\n\n## File Retrieval\n\n- Recall@5: ${report.aggregate.recallAt5.toFixed(3)}\n- Recall@10: ${report.aggregate.recallAt10.toFixed(3)}\n- MRR: ${report.aggregate.mrr.toFixed(3)}\n- Median tokens: ${report.aggregate.medianTokens}\n- Median duration: ${report.aggregate.medianDurationMs} ms\n\n## Line-budget Retrieval\n\n| Lines | Recall | Precision | F1 | Region hit | Region noise | Efficiency | nDCG | Useful hit | First hit |\n|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n${budgetRows.join("\n")}\n\n## Instances\n\n| Instance | Repository | Gold files | R@5 | R@10 | MRR | Recall@max lines | Tokens | Duration ms |\n|---|---|---:|---:|---:|---:|---:|---:|---:|\n${instanceRows.join("\n")}\n\n## Skipped\n\n${report.skipped.map((item) => `- \`${tableEscape(item.instanceId)}\`: ${tableEscape(item.reason)}`).join("\n") || "None."}\n\n## Limitations\n\n${report.limitations.map((item) => `- ${item}`).join("\n")}\n`;
 }

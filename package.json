@@ -17,6 +17,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "benchmark:prepare:swebench": "tsx scripts/prepare-swebench.ts",
+    "perf:smoke": "tsx scripts/performance-smoke.ts",
     "check": "npm run typecheck && npm run test && npm run build"
   },
   "engines": {
@@ -46,6 +48,7 @@
     "commander": "14.0.3",
     "fast-glob": "^3.3.3",
     "gpt-tokenizer": "^3.4.0",
+    "hyparquet": "1.26.2",
     "ignore": "^7.0.6",
     "typescript": "5.9.3"
   },

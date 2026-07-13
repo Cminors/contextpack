@@ -1,0 +1,128 @@
+import { spawnSync } from "node:child_process";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { afterEach, describe, expect, it } from "vitest";
+import { runIssueBenchmark } from "../src/evaluation/issues.js";
+import type { IssueBenchmarkInstance } from "../src/evaluation/issue-types.js";
+import { readIssueDataset } from "../src/evaluation/swebench-dataset.js";
+import { renderIssueEvaluation } from "../src/output/markdown.js";
+import { gitStatusFingerprint } from "../src/utils/git.js";
+
+const created: string[] = [];
+
+function git(root: string, args: string[]): string {
+  const result = spawnSync("git", ["-C", root, ...args], { encoding: "utf8", windowsHide: true });
+  if (result.status !== 0) throw new Error(result.stderr);
+  return result.stdout.trim();
+}
+
+afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, { recursive: true, force: true }))));
+
+async function fixture(): Promise<{ root: string; dataset: string; cache: string }> {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-issues-test-"));
+  created.push(root);
+  const source = path.join(root, "source");
+  const cache = path.join(root, "cache");
+  await fs.mkdir(path.join(source, "src"), { recursive: true });
+  git(source, ["init", "-q"]);
+  git(source, ["config", "user.email", "contextpack@example.test"]);
+  git(source, ["config", "user.name", "ContextPack Test"]);
+  await fs.writeFile(path.join(source, "package.json"), JSON.stringify({ name: "fixture" }));
+  await fs.writeFile(
+    path.join(source, "src", "timeout.ts"),
+    "export function timeoutErrorMessage() {\n  return 'timed out';\n}\n",
+  );
+  git(source, ["add", "."]);
+  git(source, ["commit", "-qm", "initial timeout implementation"]);
+  const commit = git(source, ["rev-parse", "HEAD"]);
+  await fs.mkdir(cache, { recursive: true });
+  const bare = path.join(cache, "example__fixture.git");
+  git(cache, ["clone", "--bare", source, bare]);
+  git(bare, ["remote", "set-url", "origin", "https://github.com/example/fixture.git"]);
+  const instance: IssueBenchmarkInstance = {
+    instanceId: "example__fixture-1",
+    sourceDataset: "fixture/issues",
+    sourceRevision: "fixture-v1",
+    repo: "example/fixture",
+    baseCommit: commit,
+    issueText: "Fix the timeout error message",
+    language: "javascript-typescript",
+    goldRegions: [{ path: "src/timeout.ts", startLine: 1, endLine: 3, kind: "patch-hunk" }],
+    metadata: {
+      issueUrl: null,
+      prUrl: null,
+      createdAt: null,
+      patchSha256: "0".repeat(64),
+      excludedPatchFiles: 0,
+    },
+  };
+  const dataset = path.join(root, "issues.jsonl");
+  await fs.writeFile(dataset, `${JSON.stringify(instance)}\n`);
+  return { root: source, dataset, cache };
+}
+
+describe("real issue benchmark", () => {
+  it("evaluates an existing cached base commit without changing the source workspace", async () => {
+    const data = await fixture();
+    const before = gitStatusFingerprint(data.root);
+    const progress: string[] = [];
+    const report = await runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [2, 10],
+      historyCount: 1,
+      onProgress: (message) => progress.push(message),
+    });
+    expect(report).toMatchObject({
+      version: 1,
+      sourceDataset: "fixture/issues",
+      validInstances: 1,
+      requestedInstances: 1,
+      aggregate: { recallAt5: 1, recallAt10: 1, mrr: 1 },
+    });
+    expect(report.aggregate.regionMetrics["10"]).toMatchObject({
+      lineRecall: 1,
+      usefulHitRate: 1,
+      medianFirstUsefulHit: 1,
+    });
+    expect(renderIssueEvaluation(report)).toContain("ContextPack Issue Retrieval Benchmark");
+    expect(progress).toEqual(["[1/1] example__fixture-1"]);
+    expect(gitStatusFingerprint(data.root)).toBe(before);
+  }, 30_000);
+
+  it("rejects filters and malformed JSONL before repository evaluation", async () => {
+    const data = await fixture();
+    await expect(runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [100],
+      historyCount: 1,
+      instanceId: "missing",
+    })).rejects.toMatchObject({ code: "NO_MATCHING_INSTANCES" });
+    const malformed = path.join(path.dirname(data.dataset), "malformed.jsonl");
+    await fs.writeFile(malformed, "{not-json}\n");
+    await expect(readIssueDataset(malformed)).rejects.toMatchObject({ code: "INVALID_DATASET" });
+  });
+
+  it("normalizes line budget ordering and rejects empty budgets", async () => {
+    const data = await fixture();
+    const report = await runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [10, 2, 10],
+      historyCount: 1,
+    });
+    expect(report.lineBudgets).toEqual([2, 10]);
+    await expect(runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [],
+      historyCount: 1,
+    })).rejects.toMatchObject({ code: "INVALID_LINE_BUDGETS" });
+  }, 30_000);
+});

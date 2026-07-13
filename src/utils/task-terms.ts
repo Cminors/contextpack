@@ -63,6 +63,22 @@ function cjkTerms(value: string): string[] {
   return [...terms];
 }
 
+export function textTerms(value: string): string[] {
+  const expanded = splitCamelCase(value)
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[^a-z0-9\u3400-\u9fff]+/g, " ");
+  const terms = new Set<string>();
+
+  for (const term of expanded.split(/\s+/)) {
+    if (term.length >= 2 && !ENGLISH_STOP_WORDS.has(term) && !CHINESE_STOP_WORDS.has(term)) {
+      terms.add(term);
+    }
+  }
+  for (const term of cjkTerms(expanded)) terms.add(term);
+  return [...terms].sort();
+}
+
 export function extractConventionalScope(task: string): string | null {
   const match = task.match(/^(?:feat|feature|fix|docs|chore|refactor|test)\(([^)]+)\)!?:/i);
   return match?.[1]?.normalize("NFKC").toLowerCase().trim() || null;
@@ -75,21 +91,7 @@ export function normalizeTaskTerms(task: string): string[] {
       (_match, scope: string | undefined) => scope ? `${scope} ` : "",
     )
     .replace(/\(?#\d+\)?/g, " ");
-  const expanded = splitCamelCase(cleanedTask)
-    .normalize("NFKC")
-    .toLowerCase()
-    .replace(/[^a-z0-9\u3400-\u9fff]+/g, " ");
-  const terms = new Set<string>();
-
-  for (const term of expanded.split(/\s+/)) {
-    if (term.length >= 2 && !ENGLISH_STOP_WORDS.has(term) && !CHINESE_STOP_WORDS.has(term)) {
-      terms.add(term);
-    }
-  }
-
-  for (const term of cjkTerms(expanded)) {
-    terms.add(term);
-  }
+  const terms = new Set(textTerms(cleanedTask));
 
   for (const [source, aliases] of Object.entries(TERM_ALIASES)) {
     if (terms.has(source) || cleanedTask.includes(source)) {

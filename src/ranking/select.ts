@@ -2,11 +2,13 @@ import type { ContextCandidate, ContextSelection, FileAnalysis } from "../types.
 import { containsLikelySecret } from "../utils/security.js";
 import { countTokens } from "../output/tokens.js";
 
+export const MAX_SELECTED_SNIPPETS = 16;
+
 function snippetFor(file: FileAnalysis, candidate: ContextCandidate): ContextSelection | null {
   const lines = file.content.split(/\r?\n/);
   const padding = candidate.symbol ? 2 : 0;
   const startLine = Math.max(1, candidate.startLine - padding);
-  const endLine = Math.min(lines.length, candidate.endLine + padding, startLine + 179);
+  const endLine = Math.min(lines.length, candidate.endLine + padding, startLine + 119);
   const snippet = lines.slice(startLine - 1, endLine).join("\n");
   if (!snippet.trim() || containsLikelySecret(snippet)) return null;
   const estimatedTokens = countTokens(snippet);
@@ -29,7 +31,7 @@ export function selectCandidates(candidates: ContextCandidate[], files: FileAnal
     candidate.selected = true;
     selected.push(selection);
     used += selection.estimatedTokens;
-    if (selected.length >= 20 || used >= available) break;
+    if (selected.length >= MAX_SELECTED_SNIPPETS || used >= available) break;
   }
   return selected;
 }

@@ -1,4 +1,14 @@
-import type { EvaluationCommitResult, EvaluationReport } from "../types.js";
+import type { AnalysisTimings, EvaluationCommitResult, EvaluationReport } from "../types.js";
+
+const PHASES: Array<Exclude<keyof AnalysisTimings, "totalMs">> = [
+  "discoverMs",
+  "fileAnalysisMs",
+  "gitHistoryMs",
+  "initialRankingMs",
+  "semanticEnrichmentMs",
+  "rerankingMs",
+  "selectionMs",
+];
 
 const mean = (values: number[]): number => values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length;
 
@@ -30,6 +40,15 @@ export function commitMetrics(goldFiles: string[], predictions: string[]): Pick<
 
 export function aggregateMetrics(results: EvaluationCommitResult[]): EvaluationReport["aggregate"] {
   const tests = results.flatMap((item) => item.testRecall === null ? [] : [item.testRecall]);
+  const medianPhaseDurationsMs = Object.fromEntries(
+    PHASES.map((phase) => [
+      phase,
+      median(results.flatMap((item) => item.analysisTimings ? [item.analysisTimings[phase]] : [])),
+    ]),
+  ) as Omit<AnalysisTimings, "totalMs">;
+  const medianAnalysisDurationMs = median(
+    results.map((item) => item.analysisTimings?.totalMs ?? item.durationMs),
+  );
   return {
     recallAt5: mean(results.map((item) => item.recallAt5)),
     recallAt10: mean(results.map((item) => item.recallAt10)),
@@ -38,5 +57,13 @@ export function aggregateMetrics(results: EvaluationCommitResult[]): EvaluationR
     testRecall: tests.length === 0 ? null : mean(tests),
     medianTokens: median(results.map((item) => item.estimatedTokens)),
     medianDurationMs: median(results.map((item) => item.durationMs)),
+    medianAnalysisDurationMs,
+    medianRenderDurationMs: median(results.flatMap((item) =>
+      item.renderDurationMs === undefined ? [] : [item.renderDurationMs]
+    )),
+    medianPhaseDurationsMs: {
+      ...medianPhaseDurationsMs,
+      totalMs: medianAnalysisDurationMs,
+    },
   };
 }

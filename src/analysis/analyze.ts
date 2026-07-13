@@ -1,4 +1,5 @@
-import type { AnalysisOptions, ContextManifest, SuggestedCommand } from "../types.js";
+import { performance } from "node:perf_hooks";
+import type { AnalysisOptions, AnalysisTimings, ContextManifest, SuggestedCommand } from "../types.js";
 import { extractConventionalScope, normalizeTaskTerms } from "../utils/task-terms.js";
 import { discoverRepository } from "../repository/discover.js";
 import { analyzeFiles, enrichSemanticReferences } from "./ast.js";
@@ -26,9 +27,24 @@ function suggestedCommands(packages: Awaited<ReturnType<typeof discoverRepositor
 }
 
 export async function analyzeTask(options: AnalysisOptions): Promise<ContextManifest> {
+  const totalStarted = performance.now();
+  const phaseDurations: Omit<AnalysisTimings, "totalMs"> = {
+    discoverMs: 0,
+    fileAnalysisMs: 0,
+    gitHistoryMs: 0,
+    initialRankingMs: 0,
+    semanticEnrichmentMs: 0,
+    rerankingMs: 0,
+    selectionMs: 0,
+  };
+  let phaseStarted = performance.now();
   const repository = await discoverRepository(options.root);
+  phaseDurations.discoverMs = performance.now() - phaseStarted;
+  phaseStarted = performance.now();
   const files = await analyzeFiles(repository);
+  phaseDurations.fileAnalysisMs = performance.now() - phaseStarted;
   const terms = normalizeTaskTerms(options.task);
+  phaseStarted = performance.now();
   const history = repository.snapshot.isGitRepository
     ? readGitHistory(repository.snapshot.root, options.historyCount, new Set(repository.sourceFiles))
     : {
@@ -37,15 +53,33 @@ export async function analyzeTask(options: AnalysisOptions): Promise<ContextMani
         coChange: new Map(),
         titleTermsByFile: new Map(),
       };
+  phaseDurations.gitHistoryMs = performance.now() - phaseStarted;
   const taskScope = extractConventionalScope(options.task);
+  phaseStarted = performance.now();
   const initialCandidates = rankCandidates(files, terms, history, repository.rules, taskScope);
+  phaseDurations.initialRankingMs = performance.now() - phaseStarted;
+  phaseStarted = performance.now();
   const enriched = enrichSemanticReferences(repository, files, initialCandidates.slice(0, 12).map((candidate) => candidate.path));
+  phaseDurations.semanticEnrichmentMs = performance.now() - phaseStarted;
+  phaseStarted = performance.now();
   const rankedCandidates = enriched
     ? rankCandidates(files, terms, history, repository.rules, taskScope)
     : initialCandidates;
+  phaseDurations.rerankingMs = enriched ? performance.now() - phaseStarted : 0;
+  phaseStarted = performance.now();
   const candidates = prioritizeCandidates(rankedCandidates, { limit: 20 });
   const selected = selectCandidates(candidates, files, options.budget);
   const snippetTokens = selected.reduce((sum, item) => sum + item.estimatedTokens, 0);
+  const commands = suggestedCommands(repository.packages);
+  phaseDurations.selectionMs = performance.now() - phaseStarted;
+  const roundedPhases = Object.fromEntries(
+    Object.entries(phaseDurations).map(([key, value]) => [key, Math.round(value)]),
+  ) as Omit<AnalysisTimings, "totalMs">;
+  const phaseTotal = Object.values(roundedPhases).reduce((sum, value) => sum + value, 0);
+  const timings: AnalysisTimings = {
+    ...roundedPhases,
+    totalMs: Math.max(Math.round(performance.now() - totalStarted), phaseTotal),
+  };
 
   return {
     version: 1,
@@ -60,7 +94,8 @@ export async function analyzeTask(options: AnalysisOptions): Promise<ContextMani
     candidates,
     selected,
     rules: repository.rules,
-    commands: suggestedCommands(repository.packages),
+    commands,
     warnings: repository.warnings,
+    timings,
   };
 }

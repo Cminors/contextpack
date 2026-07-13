@@ -5,6 +5,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { redactTaskTitle, runReplay } from "../src/evaluation/replay.js";
 import { gitStatusFingerprint } from "../src/utils/git.js";
+import { renderEvaluation } from "../src/output/markdown.js";
 
 const created: string[] = [];
 const git = (root: string, args: string[]): void => {
@@ -44,6 +45,9 @@ describe("historical replay", () => {
     expect(report.validCommits).toBe(1);
     expect(report.queryMode).toBe("title");
     expect(report.aggregate.recallAt5).toBe(1);
+    expect(report.results[0]?.analysisTimings?.totalMs).toBeGreaterThanOrEqual(0);
+    expect(report.aggregate.medianAnalysisDurationMs).toBeGreaterThanOrEqual(0);
+    expect(report.aggregate.medianRenderDurationMs).toBeGreaterThanOrEqual(0);
     expect(gitStatusFingerprint(root)).toBe(before);
   }, 30_000);
 
@@ -62,5 +66,21 @@ describe("historical replay", () => {
     expect(report).toMatchObject({ version: 2, queryMode: "keyword-ablated", validCommits: 1 });
     expect(report.results[0]?.query).toBe("update");
     expect(report.results[0]?.redactedIdentifiers).toEqual(expect.arrayContaining(["auth", "loginWithGithub"]));
+  }, 30_000);
+
+  it("renders analysis, rendering, and phase timing medians", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-replay-timings-"));
+    created.push(root);
+    git(root, ["init", "-q"]);
+    git(root, ["config", "user.email", "contextpack@example.test"]);
+    git(root, ["config", "user.name", "ContextPack Test"]);
+    await fs.writeFile(path.join(root, "feature.ts"), "export const feature = false;\n");
+    git(root, ["add", "."]); git(root, ["commit", "-qm", "initial feature"]);
+    await fs.writeFile(path.join(root, "feature.ts"), "export const feature = true;\n");
+    git(root, ["add", "."]); git(root, ["commit", "-qm", "add feature support"]);
+    const markdown = renderEvaluation(await runReplay(root, 1, 4000));
+    expect(markdown).toContain("Median analysis duration");
+    expect(markdown).toContain("Median render duration");
+    expect(markdown).toContain("Median phases: discover");
   }, 30_000);
 });

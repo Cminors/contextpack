@@ -183,7 +183,9 @@ export async function runReplay(
         : { query: commit.title, redactedIdentifiers: [] };
       const started = performance.now();
       const manifest = await analyzeTask({ root: base, task: queryData.query, budget, historyCount: 500 });
+      const renderStarted = performance.now();
       renderContext(manifest);
+      const renderDurationMs = Math.round(performance.now() - renderStarted);
       const durationMs = Math.round(performance.now() - started);
       const predictions = manifest.candidates.slice(0, 20).map((item) => item.path);
       results.push({
@@ -196,6 +198,8 @@ export async function runReplay(
         ...commitMetrics(goldFiles, predictions),
         estimatedTokens: manifest.budget.estimatedTokens,
         durationMs,
+        analysisTimings: manifest.timings,
+        renderDurationMs,
       });
     } catch (error) {
       skipped.push({ hash: commit.hash, title: commit.title, reason: `replay failed: ${error instanceof Error ? error.message : String(error)}` });

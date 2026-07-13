@@ -1,0 +1,1701 @@
+{
+  "version": 2,
+  "generatedAt": "2026-07-13T07:25:36.509Z",
+  "repository": {
+    "root": "<benchmark-cache>/typescript-sdk",
+    "commit": "95d28cbae98e57df1b987b656a555777de976545",
+    "branch": "main",
+    "packageManager": "pnpm",
+    "projectType": [
+      "TypeScript",
+      "Express",
+      "Fastify"
+    ],
+    "isGitRepository": true,
+    "isShallow": false
+  },
+  "queryMode": "keyword-ablated",
+  "requestedCommits": 20,
+  "validCommits": 20,
+  "results": [
+    {
+      "hash": "24be4040d454a9c5983901229068477c7a9ea796",
+      "title": "feat(server): accept Standard Schemas in inputRequired.elicit (#2369)",
+      "query": "accept Standard Schemas in elicit",
+      "redactedIdentifiers": [
+        "inputRequired",
+        "server"
+      ],
+      "goldFiles": [
+        "examples/guides/servers/input-required.examples.ts",
+        "packages/core-internal/src/shared/inputRequired.ts",
+        "packages/core-internal/test/shared/inputRequired.test.ts",
+        "packages/server/src/index.ts",
+        "packages/server/test/server/inputRequired.test.ts",
+        "packages/server/test/server/legacyInputRequiredShim.test.ts"
+      ],
+      "predictions": [
+        "test/integration/test/standardSchema.test.ts",
+        "examples/guides/servers/input-required.examples.ts",
+        "packages/server/test/server/jsonSchemaValidatorOverride.test.ts",
+        "packages/core-internal/test/shared/inputRequiredReaders.test.ts",
+        "packages/core-internal/src/shared/inputRequired.ts",
+        "examples/guides/servers/elicitation.examples.ts",
+        "packages/core/src/index.ts",
+        "packages/core-internal/src/types/types.ts",
+        "packages/core-internal/src/types/specTypeSchema.ts",
+        "packages/core-internal/src/types/schemas.ts",
+        "packages/codemod/src/migrations/v1-to-v2/transforms/mcpServerApi.ts",
+        "packages/codemod/test/v1-to-v2/transforms/mcpServerApi.test.ts",
+        "packages/core-internal/src/exports/public/index.ts",
+        "examples/elicitation/server.ts",
+        "packages/codemod/src/migrations/v1-to-v2/transforms/index.ts",
+        "test/e2e/scenarios/elicitation.test.ts",
+        "packages/core-internal/test/corpus/specCorpus.test.ts",
+        "examples/guides/advanced/wire-schemas.examples.ts",
+        "examples/elicitation/client.ts",
+        "packages/core-internal/src/shared/protocol.ts"
+      ],
+      "recallAt5": 0.3333333333333333,
+      "recallAt10": 0.3333333333333333,
+      "reciprocalRank": 0.5,
+      "noiseAt10": 0.8,
+      "testRecall": 0,
+      "estimatedTokens": 7926,
+      "durationMs": 11190
+    },
+    {
+      "hash": "61866d7a5ff4475663ceb525c88447c497c1b92a",
+      "title": "feat(server): runtime-neutral OAuth discovery serving for web-standard hosts (#2422)",
+      "query": "runtime-neutral OAuth discovery serving for web-standard hosts",
+      "redactedIdentifiers": [
+        "server"
+      ],
+      "goldFiles": [
+        "examples/guides/serving/authorization.examples.ts",
+        "packages/middleware/express/src/auth/metadataRouter.ts",
+        "packages/server/src/index.ts",
+        "packages/server/src/server/middleware/bearerAuth.ts"
+      ],
+      "predictions": [
+        "packages/middleware/express/src/auth/bearerAuth.ts",
+        "packages/middleware/express/src/auth/types.ts",
+        "packages/server/src/server/middleware/bearerAuth.ts",
+        "test/e2e/scenarios/hosting-express.test.ts",
+        "packages/server/src/index.ts",
+        "packages/server/test/server/bearerAuth.test.ts",
+        "examples/guides/serving/authorization.examples.ts",
+        "test/e2e/scenarios/hosting-fastify.test.ts",
+        "test/e2e/scenarios/hosting-hono.test.ts",
+        "test/e2e/helpers/index.ts",
+        "examples/cli-client/test/auth.test.ts",
+        "examples/cli-client/host/auth.ts",
+        "packages/core-internal/src/exports/public/index.ts",
+        "examples/guides/serving/webStandard.examples.ts",
+        "packages/codemod/src/migrations/v1-to-v2/mappings/importMap.ts",
+        "packages/client/src/client/authErrors.ts",
+        "packages/client/src/index.ts",
+        "examples/guides/serving/authorization.web.examples.ts",
+        "examples/guides/serving/express.examples.ts",
+        "packages/core-internal/src/types/types.ts"
+      ],
+      "recallAt5": 0.5,
+      "recallAt10": 0.75,
+      "reciprocalRank": 0.3333333333333333,
+      "noiseAt10": 0.7,
+      "testRecall": null,
+      "estimatedTokens": 7345,
+      "durationMs": 6832
+    },
+    {
+      "hash": "7635115d0112c3f980b45a9773a4770660af8aae",
+      "title": "feat(server): runtime-neutral requireBearerAuth for web-standard hosts (#2420)",
+      "query": "runtime-neutral for web-standard hosts",
+      "redactedIdentifiers": [
+        "requireBearerAuth",
+        "server"
+      ],
+      "goldFiles": [
+        "examples/guides/serving/authorization.examples.ts",
+        "packages/codemod/src/migrations/v1-to-v2/mappings/importMap.ts",
+        "packages/middleware/express/src/auth/bearerAuth.ts",
+        "packages/middleware/express/src/auth/types.ts",
+        "packages/middleware/express/test/auth/resourceServer.test.ts",
+        "packages/server/src/index.ts"
+      ],
+      "predictions": [
+        "test/e2e/scenarios/hosting-fastify.test.ts",
+        "test/e2e/scenarios/hosting-auth.test.ts",
+        "test/e2e/scenarios/hosting-hono.test.ts",
+        "test/e2e/helpers/index.ts",
+        "test/e2e/scenarios/hosting-express.test.ts",
+        "test/e2e/scenarios/hosting-http.test.ts",
+        "packages/server/src/server/streamableHttp.ts",
+        "examples/guides/serving/webStandard.examples.ts",
+        "examples/guides/get-started/src/index.ts",
+        "examples/guides/serving/http.examples.ts",
+        "packages/middleware/node/src/toNodeHandler.ts",
+        "packages/middleware/node/src/index.ts",
+        "packages/server/src/index.ts",
+        "examples/scoped-tools/server.ts",
+        "packages/server/src/server/streamableHttp.examples.ts",
+        "packages/core-internal/src/wire/rev2025-11-25/codec.ts",
+        "examples/guides/get-started/realHost.examples.ts",
+        "examples/guides/serving/hono.examples.ts",
+        "packages/client/src/index.ts",
+        "packages/server/src/server/createMcpHandler.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0.07692307692307693,
+      "noiseAt10": 1,
+      "testRecall": 0,
+      "estimatedTokens": 7047,
+      "durationMs": 5921
+    },
+    {
+      "hash": "f172626a8e98b2ae2f0f690e4afb4dc74dbf6011",
+      "title": "feat(packaging): ship CommonJS builds alongside ESM for v2 packages (#2405)",
+      "query": "feat(packaging): ship CommonJS builds alongside ESM for v2 packages",
+      "redactedIdentifiers": [],
+      "goldFiles": [
+        "packages/client/tsdown.config.ts",
+        "packages/codemod/tsdown.config.ts",
+        "packages/core-internal/test/packageTopologyPins.test.ts",
+        "packages/core/tsdown.config.ts",
+        "packages/middleware/express/tsdown.config.ts",
+        "packages/middleware/fastify/tsdown.config.ts",
+        "packages/middleware/hono/tsdown.config.ts",
+        "packages/middleware/node/tsdown.config.ts",
+        "packages/server-legacy/tsdown.config.ts",
+        "packages/server/tsdown.config.ts"
+      ],
+      "predictions": [
+        "packages/client/src/client/sse.ts",
+        "packages/client/src/client/streamableHttp.ts",
+        "common/eslint-config/eslint.config.mjs",
+        "packages/codemod/src/bin/batchTest.ts",
+        "examples/bearer-auth/server.ts",
+        "examples/caching/server.ts",
+        "packages/client/test/client/streamableHttp.test.ts",
+        "packages/client/test/client/sse.test.ts",
+        "packages/client/test/client/tokenProvider.test.ts",
+        "packages/middleware/node/tsdown.config.ts",
+        "packages/codemod/test/batchTest.test.ts",
+        "packages/codemod/test/v1-to-v2/packageJsonUpdater.test.ts",
+        "packages/codemod/src/migrations/v1-to-v2/index.ts",
+        "packages/client/src/index.ts",
+        "packages/codemod/src/generated/versions.ts",
+        "packages/client/vitest.setup.js",
+        "packages/codemod/src/types.ts",
+        "packages/codemod/src/runner.ts",
+        "packages/codemod/src/migrations/index.ts",
+        "examples/shared/src/index.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0.1,
+      "reciprocalRank": 0.1,
+      "noiseAt10": 0.9,
+      "testRecall": 0,
+      "estimatedTokens": 7748,
+      "durationMs": 6113
+    },
+    {
+      "hash": "6cc7b1cb66cabf23423ba0fdf06e2d1c2fcf936f",
+      "title": "feat(node): export toWebRequest(), the IncomingMessage→Request conversion inside toNodeHandler (#2390)",
+      "query": "export toWebRequest(), the IncomingMessage→Request conversion inside",
+      "redactedIdentifiers": [
+        "toNodeHandler",
+        "node"
+      ],
+      "goldFiles": [
+        "examples/elicitation/server.ts",
+        "examples/legacy-routing/server.ts",
+        "packages/middleware/node/src/index.ts",
+        "packages/middleware/node/src/toNodeHandler.ts",
+        "packages/server/src/server/createMcpHandler.ts"
+      ],
+      "predictions": [
+        "test/e2e/scenarios/hosting-fastify.test.ts",
+        "test/e2e/scenarios/handler-context.test.ts",
+        "packages/middleware/node/src/streamableHttp.ts",
+        "packages/middleware/node/src/toNodeHandler.ts",
+        "packages/server/src/server/streamableHttp.ts",
+        "packages/server/test/server/serveStdio.test.ts",
+        "examples/cli-client/test/providers.test.ts",
+        "packages/core-internal/src/exports/public/index.ts",
+        "test/e2e/helpers/index.ts",
+        "packages/core-internal/src/shared/inputRequiredEngine.ts",
+        "examples/cli-client/providers/provider.ts",
+        "packages/core-internal/src/shared/envelope.ts",
+        "packages/server/test/server/streamableHttpUnsupportedVersionLiteral.test.ts",
+        "packages/server/src/server/createMcpHandler.ts",
+        "examples/cli-client/providers/gemini.ts",
+        "packages/middleware/node/src/index.ts",
+        "packages/core-internal/src/shared/inputRequired.ts",
+        "packages/core-internal/src/types/types.ts",
+        "packages/server/src/index.ts",
+        "packages/middleware/node/src/middleware/hostHeaderValidation.ts"
+      ],
+      "recallAt5": 0.2,
+      "recallAt10": 0.2,
+      "reciprocalRank": 0.25,
+      "noiseAt10": 0.9,
+      "testRecall": null,
+      "estimatedTokens": 8068,
+      "durationMs": 6439
+    },
+    {
+      "hash": "c59dc3aa1a633d27fbbe873f1a430483cf7440f8",
+      "title": "feat(server): expose icons on registerTool/registerPrompt (McpServer) (#2353)",
+      "query": "expose icons on /()",
+      "redactedIdentifiers": [
+        "registerPrompt",
+        "registerTool",
+        "McpServer",
+        "server"
+      ],
+      "goldFiles": [
+        "examples/server/src/serverGuide.examples.ts",
+        "examples/server/src/simpleStreamableHttp.ts",
+        "packages/server/src/server/mcp.ts"
+      ],
+      "predictions": [
+        "packages/core/src/types/spec.types.2025-11-25.ts",
+        "packages/core/src/types/spec.types.2026-07-28.ts",
+        "packages/core/test/spec.types.2025-11-25.test.ts",
+        "packages/core/src/types/schemas.ts",
+        "packages/core/test/spec.types.2026-07-28.test.ts",
+        "packages/middleware/express/test/auth/resourceServer.test.ts",
+        "packages/middleware/express/src/auth/metadataRouter.ts",
+        "test/helpers/src/helpers/http.ts",
+        "test/helpers/src/index.ts",
+        "examples/server/src/honoWebStandardStreamableHttp.ts",
+        "packages/server/src/server/stdio.ts",
+        "packages/server/test/server/stdio.test.ts",
+        "packages/middleware/express/src/index.ts",
+        "packages/core/src/types/types.ts",
+        "examples/server/src/elicitationUrlExample.ts",
+        "packages/codemod/src/generated/specSchemaMap.ts",
+        "packages/core/src/types/index.ts",
+        "examples/shared/src/index.ts",
+        "examples/server/src/inMemoryEventStore.ts",
+        "examples/client/src/clientGuide.examples.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "noiseAt10": 1,
+      "testRecall": null,
+      "estimatedTokens": 6866,
+      "durationMs": 3498
+    },
+    {
+      "hash": "78fbe2736d72be4841072b359b3a2b8c6f97cd5c",
+      "title": "feat(core): reserved trace context _meta keys and propagation docs (SEP-414) (#2270)",
+      "query": "reserved trace context _meta keys and propagation docs(SEP-414)",
+      "redactedIdentifiers": [
+        "core"
+      ],
+      "goldFiles": [
+        "examples/client/src/clientGuide.examples.ts",
+        "examples/server/src/serverGuide.examples.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/core/src/types/constants.ts"
+      ],
+      "predictions": [
+        "packages/core/src/types/constants.ts",
+        "packages/core/src/types/spec.types.2026-07-28.ts",
+        "packages/core/test/spec.types.2026-07-28.test.ts",
+        "packages/client/src/client/client.ts",
+        "packages/server/src/server/server.ts",
+        "packages/server/src/server/completable.ts",
+        "packages/server/src/server/mcp.ts",
+        "packages/codemod/src/migrations/v1-to-v2/mappings/contextPropertyMap.ts",
+        "packages/codemod/scripts/generateSpecSchemaMap.ts",
+        "packages/codemod/test/v1-to-v2/transforms/contextTypes.test.ts",
+        "packages/core/test/shared/customMethods.test.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/codemod/src/migrations/v1-to-v2/transforms/contextTypes.ts",
+        "packages/codemod/src/types.ts",
+        "packages/server/test/server/mcp.compat.test.ts",
+        "packages/core/src/types/types.ts",
+        "packages/core/src/shared/protocol.ts",
+        "scripts/fetch-spec-types.ts",
+        "packages/core/src/types/schemas.ts",
+        "packages/client/src/index.ts"
+      ],
+      "recallAt5": 0.25,
+      "recallAt10": 0.25,
+      "reciprocalRank": 1,
+      "noiseAt10": 0.9,
+      "testRecall": null,
+      "estimatedTokens": 8226,
+      "durationMs": 3167
+    },
+    {
+      "hash": "49c0a711c8bf2d385f9e03b4f28ba0ff0d0db0bd",
+      "title": "feat: deprecate roots, sampling, and logging runtime APIs (SEP-2577) (#2268)",
+      "query": "deprecate roots, sampling, and logging runtime APIs(SEP-2577)",
+      "redactedIdentifiers": [],
+      "goldFiles": [
+        "packages/client/src/client/client.ts",
+        "packages/core/src/shared/protocol.ts",
+        "packages/core/src/types/schemas.ts",
+        "packages/core/src/types/types.ts",
+        "packages/server/src/server/mcp.ts",
+        "packages/server/src/server/server.ts"
+      ],
+      "predictions": [
+        "packages/core/src/types/spec.types.2026-07-28.ts",
+        "packages/core/test/spec.types.2026-07-28.test.ts",
+        "packages/server/src/server/server.ts",
+        "packages/client/src/client/client.ts",
+        "test/integration/test/client/client.test.ts",
+        "packages/core/src/types/specTypeSchema.ts",
+        "packages/core/test/types/specTypeSchema.test.ts",
+        "test/integration/test/server.test.ts",
+        "packages/client/src/index.ts",
+        "packages/codemod/src/generated/specSchemaMap.ts",
+        "packages/codemod/src/migrations/v1-to-v2/mappings/schemaToMethodMap.ts",
+        "test/integration/test/server/mcp.test.ts",
+        "examples/client/src/clientGuide.examples.ts",
+        "test/e2e/scenarios/lifecycle.test.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/server/src/index.ts",
+        "examples/server/src/serverGuide.examples.ts",
+        "packages/core/src/types/schemas.ts",
+        "packages/core/src/index.ts",
+        "packages/core/src/types/spec.types.2025-11-25.ts"
+      ],
+      "recallAt5": 0.3333333333333333,
+      "recallAt10": 0.3333333333333333,
+      "reciprocalRank": 0.3333333333333333,
+      "noiseAt10": 0.8,
+      "testRecall": null,
+      "estimatedTokens": 10432,
+      "durationMs": 3187
+    },
+    {
+      "hash": "4a5c863a21f06e3ae43db116f32f2da7df5988b4",
+      "title": "Add consumer-sourced e2e requirements and the legacy SSE matrix column (#2203)",
+      "query": "Add consumer-sourced e2e and the legacy SSE matrix column",
+      "redactedIdentifiers": [
+        "requirements"
+      ],
+      "goldFiles": [
+        "test/e2e/helpers/index.ts",
+        "test/e2e/requirements.ts",
+        "test/e2e/scenarios/client-auth.test.ts",
+        "test/e2e/scenarios/hosting-session.test.ts",
+        "test/e2e/scenarios/protocol.test.ts",
+        "test/e2e/scenarios/stdio.test.ts",
+        "test/e2e/scenarios/tools.test.ts",
+        "test/e2e/scenarios/transport-http.test.ts",
+        "test/e2e/types.ts"
+      ],
+      "predictions": [
+        "test/e2e/helpers/verifies.ts",
+        "test/e2e/helpers/index.ts",
+        "test/e2e/scenarios/hosting-http.test.ts",
+        "test/e2e/scenarios/hosting-resume.test.ts",
+        "test/e2e/scenarios/hosting-hono.test.ts",
+        "test/e2e/scenarios/hosting-fastify.test.ts",
+        "packages/core/src/types/types.ts",
+        "packages/server/src/server/mcp.ts",
+        "examples/client/src/ssePollingClient.ts",
+        "examples/client/src/streamableHttpWithSseFallbackClient.ts",
+        "packages/core/src/types/spec.types.ts",
+        "packages/core/src/types/schemas.ts",
+        "packages/core/src/types/index.ts",
+        "packages/codemod/src/migrations/v1-to-v2/transforms/importPaths.ts",
+        "packages/codemod/src/types.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/codemod/src/migrations/v1-to-v2/transforms/mockPaths.ts",
+        "examples/client/src/clientGuide.examples.ts",
+        "packages/client/src/client/client.examples.ts",
+        "packages/core/src/index.ts"
+      ],
+      "recallAt5": 0.1111111111111111,
+      "recallAt10": 0.1111111111111111,
+      "reciprocalRank": 0.5,
+      "noiseAt10": 0.9,
+      "testRecall": 0.1111111111111111,
+      "estimatedTokens": 6436,
+      "durationMs": 3039
+    },
+    {
+      "hash": "96db044fe965f0b7d5109e6d68598eaddce961c9",
+      "title": "feat(core): add isSpecType / specTypeSchemas Records for runtime validation of spec types (#1887)",
+      "query": "add isSpecType / specTypeSchemas Records for runtime validation of spec types",
+      "redactedIdentifiers": [
+        "core"
+      ],
+      "goldFiles": [
+        "packages/core/src/exports/public/index.ts",
+        "packages/core/src/types/index.ts",
+        "packages/core/src/types/schemas.ts"
+      ],
+      "predictions": [
+        "packages/core/src/util/standardSchema.ts",
+        "packages/server/src/server/server.ts",
+        "packages/core/test/validators/validators.test.ts",
+        "test/integration/test/standardSchema.test.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/server/src/index.ts",
+        "packages/core/src/validators/types.ts",
+        "packages/client/src/index.ts",
+        "packages/core/test/shared/customMethods.test.ts",
+        "packages/core/test/util/standardSchema.test.ts",
+        "packages/client/src/client/client.ts",
+        "packages/server/src/server/streamableHttp.ts",
+        "packages/core/src/index.ts",
+        "test/integration/test/client/client.test.ts",
+        "test/integration/test/server/elicitation.test.ts",
+        "packages/core/src/validators/types.examples.ts",
+        "packages/core/src/shared/protocol.ts",
+        "packages/core/src/validators/fromJsonSchema.ts",
+        "packages/core/src/validators/cfWorkerProvider.ts",
+        "packages/server/src/server/mcp.ts"
+      ],
+      "recallAt5": 0.3333333333333333,
+      "recallAt10": 0.3333333333333333,
+      "reciprocalRank": 0.2,
+      "noiseAt10": 0.9,
+      "testRecall": null,
+      "estimatedTokens": 8402,
+      "durationMs": 2938
+    },
+    {
+      "hash": "db83829c5bd5d6659c5e7b96638b11953b0e262d",
+      "title": "feat(core): custom-method support (3-arg setRequestHandler + request schema overload) (#1974)",
+      "query": "custom-method support(3-arg + schema overload)",
+      "redactedIdentifiers": [
+        "setRequestHandler",
+        "request",
+        "core"
+      ],
+      "goldFiles": [
+        "packages/client/src/client/client.ts",
+        "packages/core/src/errors/sdkErrors.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/core/src/shared/protocol.ts",
+        "packages/core/src/shared/taskManager.ts",
+        "packages/core/src/types/schemas.ts",
+        "packages/core/src/util/standardSchema.ts",
+        "packages/server/src/server/server.ts"
+      ],
+      "predictions": [
+        "packages/core/src/validators/cfWorkerProvider.examples.ts",
+        "packages/core/src/validators/ajvProvider.examples.ts",
+        "packages/server/src/server/server.ts",
+        "packages/client/src/client/auth.ts",
+        "packages/client/src/client/streamableHttp.ts",
+        "packages/client/src/client/sse.ts",
+        "test/integration/test/server.test.ts",
+        "packages/client/test/client/auth.test.ts",
+        "packages/client/test/client/streamableHttp.test.ts",
+        "test/integration/test/standardSchema.test.ts",
+        "packages/core/src/validators/cfWorkerProvider.ts",
+        "packages/client/test/client/sse.test.ts",
+        "packages/client/test/client/middleware.test.ts",
+        "examples/server/src/customProtocolVersion.ts",
+        "packages/server/src/experimental/tasks/mcpServer.ts",
+        "packages/server/src/experimental/tasks/server.ts",
+        "packages/server/src/server/mcp.ts",
+        "packages/core/src/validators/ajvProvider.ts",
+        "packages/core/src/validators/types.ts",
+        "packages/client/src/index.ts"
+      ],
+      "recallAt5": 0.125,
+      "recallAt10": 0.125,
+      "reciprocalRank": 0.3333333333333333,
+      "noiseAt10": 0.9,
+      "testRecall": null,
+      "estimatedTokens": 8084,
+      "durationMs": 3605
+    },
+    {
+      "hash": "e15a8ef3be19520d8159ae9f5b464ba3ac80a5ab",
+      "title": "feat(compat): registerTool/registerPrompt accept raw Zod shape, auto-wrap with z.object() (#1901)",
+      "query": "feat(compat): / accept raw Zod shape, auto-wrap with z object()",
+      "redactedIdentifiers": [
+        "registerPrompt",
+        "registerTool"
+      ],
+      "goldFiles": [
+        "packages/core/src/index.ts",
+        "packages/server/src/server/completable.ts",
+        "packages/server/src/server/mcp.ts"
+      ],
+      "predictions": [
+        "packages/core/src/shared/protocol.ts",
+        "packages/server/src/server/server.ts",
+        "packages/server/src/server/mcp.ts",
+        "packages/core/src/util/standardSchema.ts",
+        "packages/core/test/shared/protocol.test.ts",
+        "packages/core/src/shared/taskManager.ts",
+        "packages/core/test/util/standardSchema.zodFallback.test.ts",
+        "test/integration/test/issues/test1277.zod.v4.description.test.ts",
+        "test/integration/test/standardSchema.test.ts",
+        "packages/core/test/util/standardSchema.test.ts",
+        "packages/server/src/server/streamableHttp.ts",
+        "packages/client/src/client/client.ts",
+        "packages/core/test/shared/protocolTransportHandling.test.ts",
+        "packages/core/src/index.ts",
+        "packages/core/src/validators/fromJsonSchema.ts",
+        "packages/server/src/index.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/client/src/index.ts",
+        "examples/server/src/simpleStreamableHttp.ts",
+        "examples/shared/src/index.ts"
+      ],
+      "recallAt5": 0.3333333333333333,
+      "recallAt10": 0.3333333333333333,
+      "reciprocalRank": 0.3333333333333333,
+      "noiseAt10": 0.9,
+      "testRecall": null,
+      "estimatedTokens": 8254,
+      "durationMs": 4157
+    },
+    {
+      "hash": "7cccc2aca81f4cd961d2a0ef53e879f68a01df73",
+      "title": "feat(express): restore Resource-Server auth glue (requireBearerAuth, mcpAuthMetadataRouter) (#1907)",
+      "query": "restore Resource-Server auth glue(, mcpAuthMetadataRouter)",
+      "redactedIdentifiers": [
+        "requireBearerAuth",
+        "express"
+      ],
+      "goldFiles": [
+        "examples/server/src/elicitationUrlExample.ts",
+        "examples/server/src/simpleStreamableHttp.ts",
+        "examples/shared/src/authMiddleware.ts",
+        "examples/shared/src/authServer.ts",
+        "examples/shared/src/index.ts",
+        "packages/middleware/express/src/index.ts"
+      ],
+      "predictions": [
+        "examples/shared/src/authServer.ts",
+        "packages/client/src/client/sse.ts",
+        "examples/shared/src/index.ts",
+        "examples/shared/src/authMiddleware.ts",
+        "packages/client/test/client/crossAppAccess.test.ts",
+        "packages/client/src/client/crossAppAccess.ts",
+        "packages/server/src/server/mcp.ts",
+        "examples/server/src/elicitationUrlExample.ts",
+        "packages/client/test/client/sse.test.ts",
+        "test/conformance/src/authTestServer.ts",
+        "examples/server/src/simpleStreamableHttp.ts",
+        "packages/client/test/client/authExtensions.test.ts",
+        "examples/shared/src/auth.ts",
+        "packages/server/src/index.ts",
+        "packages/client/src/index.ts",
+        "test/helpers/src/index.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/server/src/server/mcp.examples.ts",
+        "packages/server/src/server/stdio.examples.ts",
+        "packages/core/src/shared/auth.ts"
+      ],
+      "recallAt5": 0.5,
+      "recallAt10": 0.6666666666666666,
+      "reciprocalRank": 1,
+      "noiseAt10": 0.6,
+      "testRecall": null,
+      "estimatedTokens": 7183,
+      "durationMs": 2530
+    },
+    {
+      "hash": "42cb6b2b728347d8b58a0d1940b7e63366a29ab9",
+      "title": "feat(compat): export InMemoryTransport from public API surface (#1834)",
+      "query": "feat(compat): export from public API surface",
+      "redactedIdentifiers": [
+        "InMemoryTransport"
+      ],
+      "goldFiles": [
+        "packages/core/src/exports/public/index.ts",
+        "packages/core/src/util/inMemory.ts"
+      ],
+      "predictions": [
+        "packages/core/test/types.capabilities.test.ts",
+        "packages/client/src/client/auth.ts",
+        "packages/core/src/exports/types/index.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/server/src/index.ts",
+        "packages/core/src/types/index.ts",
+        "examples/server-quickstart/src/index.ts",
+        "packages/client/test/client/auth.test.ts",
+        "packages/client/src/client/sse.ts",
+        "packages/core/test/inMemory.test.ts",
+        "packages/core/test/shared/stdio.test.ts",
+        "packages/client/src/index.ts",
+        "examples/server/src/elicitationUrlExample.ts",
+        "packages/core/test/types.test.ts",
+        "test/integration/test/server/mcp.test.ts",
+        "examples/shared/src/authServer.ts",
+        "packages/core/src/types/errors.ts",
+        "packages/core/src/types/constants.ts",
+        "packages/core/src/types/enums.ts",
+        "examples/server/src/jsonResponseStreamableHttp.ts"
+      ],
+      "recallAt5": 0.5,
+      "recallAt10": 0.5,
+      "reciprocalRank": 0.25,
+      "noiseAt10": 0.9,
+      "testRecall": null,
+      "estimatedTokens": 8264,
+      "durationMs": 2794
+    },
+    {
+      "hash": "9ed62fe7d8be34df88a71d52f1e17a6a767138fd",
+      "title": "feat(client): support custom claims in PrivateKeyJwtProvider (#1875)",
+      "query": "support custom claims in",
+      "redactedIdentifiers": [
+        "PrivateKeyJwtProvider",
+        "client"
+      ],
+      "goldFiles": [
+        "packages/client/src/client/authExtensions.ts",
+        "packages/client/test/client/authExtensions.test.ts"
+      ],
+      "predictions": [
+        "packages/client/src/client/authExtensions.ts",
+        "packages/core/src/shared/auth.ts",
+        "packages/client/test/client/authExtensions.test.ts",
+        "packages/middleware/node/src/streamableHttp.ts",
+        "examples/server/src/customProtocolVersion.ts",
+        "examples/server/src/inMemoryEventStore.ts",
+        "packages/client/test/client/auth.test.ts",
+        "packages/core/src/auth/errors.ts",
+        "packages/middleware/express/src/express.examples.ts",
+        "packages/client/test/client/middleware.test.ts",
+        "examples/client/src/simpleOAuthClientProvider.ts",
+        "packages/middleware/node/test/streamableHttp.test.ts",
+        "packages/middleware/fastify/src/fastify.ts",
+        "packages/client/src/index.ts",
+        "packages/client/src/client/authExtensions.examples.ts",
+        "packages/core/src/validators/cfWorkerProvider.examples.ts",
+        "packages/middleware/node/src/index.ts",
+        "packages/middleware/fastify/src/fastify.examples.ts",
+        "packages/core/src/validators/ajvProvider.examples.ts",
+        "packages/core/src/validators/ajvProvider.ts"
+      ],
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "reciprocalRank": 1,
+      "noiseAt10": 0.8,
+      "testRecall": 1,
+      "estimatedTokens": 7073,
+      "durationMs": 2351
+    },
+    {
+      "hash": "f73a5af4bca6e0e91142714e94462339c5d2ccfe",
+      "title": "Add _meta support to registerPrompt (#1629)",
+      "query": "Add _meta support to",
+      "redactedIdentifiers": [
+        "registerPrompt"
+      ],
+      "goldFiles": [
+        "packages/server/src/server/mcp.ts",
+        "test/integration/test/server/mcp.test.ts"
+      ],
+      "predictions": [
+        "packages/server/src/server/completable.ts",
+        "packages/core/src/types/spec.types.ts",
+        "packages/core/src/types/schemas.ts",
+        "packages/server/src/server/mcp.ts",
+        "packages/core/test/spec.types.test.ts",
+        "packages/core/src/types/constants.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/server/src/experimental/tasks/mcpServer.ts",
+        "test/integration/test/server/mcp.test.ts",
+        "packages/core/src/types/index.ts",
+        "packages/core/src/types/types.ts",
+        "test/integration/test/taskLifecycle.test.ts",
+        "examples/server/src/simpleTaskInteractive.ts",
+        "examples/client/src/simpleStreamableHttp.ts",
+        "packages/core/src/exports/types/index.ts",
+        "packages/server/test/server/completable.test.ts",
+        "test/integration/test/experimental/tasks/taskListing.test.ts",
+        "examples/server/src/customProtocolVersion.ts",
+        "packages/server/src/index.ts",
+        "packages/server/test/server/streamableHttp.test.ts"
+      ],
+      "recallAt5": 0.5,
+      "recallAt10": 1,
+      "reciprocalRank": 0.25,
+      "noiseAt10": 0.8,
+      "testRecall": 1,
+      "estimatedTokens": 7748,
+      "durationMs": 2564
+    },
+    {
+      "hash": "045c62a1e0ada756afe90dd1442534e362269dbf",
+      "title": "feat!: remove WebSocketClientTransport (#1783)",
+      "query": "remove",
+      "redactedIdentifiers": [
+        "WebSocketClientTransport"
+      ],
+      "goldFiles": [
+        "packages/client/src/client/websocket.ts",
+        "packages/client/src/index.ts",
+        "scripts/cli.ts"
+      ],
+      "predictions": [
+        "packages/core/src/shared/protocol.ts",
+        "packages/server/src/server/mcp.ts",
+        "packages/server/src/server/stdio.ts",
+        "packages/server/src/server/streamableHttp.ts",
+        "packages/core/test/shared/protocol.test.ts",
+        "packages/core/src/shared/authUtils.ts",
+        "packages/core/test/shared/authUtils.test.ts",
+        "test/integration/test/server/mcp.test.ts",
+        "packages/core/test/shared/protocolTransportHandling.test.ts",
+        "packages/core/src/index.ts",
+        "examples/server-quickstart/src/index.ts",
+        "examples/shared/src/index.ts",
+        "packages/server/test/server/streamableHttp.test.ts",
+        "packages/server/test/server/stdio.test.ts",
+        "examples/shared/src/authMiddleware.ts",
+        "packages/server/src/index.ts",
+        "packages/middleware/node/src/index.ts",
+        "scripts/sync-snippets.ts",
+        "packages/core/src/exports/public/index.ts",
+        "examples/shared/src/authServer.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "noiseAt10": 1,
+      "testRecall": null,
+      "estimatedTokens": 7324,
+      "durationMs": 4095
+    },
+    {
+      "hash": "6711ed9ae8a6a98f415aaa4f145941a562b8e191",
+      "title": "feat(client): add reconnectionScheduler to StreamableHTTPClientTransport (#1763)",
+      "query": "add reconnectionScheduler to",
+      "redactedIdentifiers": [
+        "StreamableHTTPClientTransport",
+        "client"
+      ],
+      "goldFiles": [
+        "packages/client/src/client/streamableHttp.ts",
+        "packages/client/src/index.ts",
+        "packages/client/test/client/streamableHttp.test.ts"
+      ],
+      "predictions": [
+        "packages/client/src/client/streamableHttp.ts",
+        "packages/middleware/node/src/streamableHttp.ts",
+        "packages/core/src/shared/protocol.ts",
+        "packages/core/src/shared/transport.ts",
+        "packages/client/test/client/streamableHttp.test.ts",
+        "packages/server/src/server/streamableHttp.ts",
+        "packages/core/test/shared/protocol.test.ts",
+        "test/conformance/src/everythingClient.ts",
+        "test/conformance/src/everythingServer.ts",
+        "packages/core/src/types/types.ts",
+        "examples/client/src/ssePollingClient.ts",
+        "test/integration/test/taskResumability.test.ts",
+        "examples/server/src/ssePollingExample.ts",
+        "packages/core/src/index.ts",
+        "packages/core/test/shared/protocolTransportHandling.test.ts",
+        "packages/core/src/exports/public/index.ts",
+        "packages/core/src/types/index.ts",
+        "packages/client/src/index.ts",
+        "packages/middleware/node/src/index.ts",
+        "packages/server/src/index.ts"
+      ],
+      "recallAt5": 0.6666666666666666,
+      "recallAt10": 0.6666666666666666,
+      "reciprocalRank": 1,
+      "noiseAt10": 0.8,
+      "testRecall": 1,
+      "estimatedTokens": 5864,
+      "durationMs": 2703
+    },
+    {
+      "hash": "e563e63bd2b3c2c1d1137406bef3f842c946201e",
+      "title": "feat: introduce minimal AuthProvider interface with OAuthClientProvider adapter (#1710)",
+      "query": "introduce minimal AuthProvider interface with adapter",
+      "redactedIdentifiers": [
+        "OAuthClientProvider"
+      ],
+      "goldFiles": [
+        "examples/client/src/clientGuide.examples.ts",
+        "packages/client/src/client/auth.ts",
+        "packages/client/src/client/sse.ts",
+        "packages/client/src/client/streamableHttp.ts",
+        "packages/client/test/client/sse.test.ts",
+        "packages/client/test/client/streamableHttp.test.ts"
+      ],
+      "predictions": [
+        "packages/client/src/client/authExtensions.ts",
+        "packages/core/src/shared/auth.ts",
+        "test/conformance/src/helpers/withOAuthRetry.ts",
+        "packages/client/src/client/crossAppAccess.ts",
+        "packages/client/test/client/crossAppAccess.test.ts",
+        "test/conformance/src/everythingClient.ts",
+        "examples/shared/src/auth.ts",
+        "test/conformance/src/helpers/conformanceOAuthProvider.ts",
+        "examples/client/src/elicitationUrlExample.ts",
+        "examples/shared/test/demoInMemoryOAuthProvider.test.ts",
+        "packages/client/test/client/authExtensions.test.ts",
+        "packages/core/src/shared/transport.ts",
+        "examples/client/src/simpleOAuthClient.ts",
+        "examples/client/src/clientGuide.examples.ts",
+        "examples/shared/src/index.ts",
+        "packages/client/src/client/authExtensions.examples.ts",
+        "packages/client/src/index.ts",
+        "packages/client/src/client/auth.ts",
+        "packages/client/src/client/auth.examples.ts",
+        "packages/core/src/index.ts"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0.07142857142857142,
+      "noiseAt10": 1,
+      "testRecall": 0,
+      "estimatedTokens": 5563,
+      "durationMs": 2981
+    },
+    {
+      "hash": "0784be1a67fb3cc2aba0182d88151264f4ea73c8",
+      "title": "feat: support Standard Schema for tool/prompt schemas (#1689)",
+      "query": "support Standard for tool/prompt schemas",
+      "redactedIdentifiers": [
+        "schema"
+      ],
+      "goldFiles": [
+        "packages/client/src/experimental/tasks/client.ts",
+        "packages/core/src/index.ts",
+        "packages/core/src/util/schema.ts",
+        "packages/server/src/experimental/tasks/interfaces.ts",
+        "packages/server/src/experimental/tasks/mcpServer.ts",
+        "packages/server/src/experimental/tasks/server.ts",
+        "packages/server/src/server/completable.ts",
+        "packages/server/src/server/mcp.ts"
+      ],
+      "predictions": [
+        "packages/core/src/types/types.ts",
+        "packages/server/src/server/mcp.ts",
+        "packages/core/test/validators/validators.test.ts",
+        "packages/core/src/types/spec.types.ts",
+        "packages/client/src/client/client.ts",
+        "packages/server/test/server/streamableHttp.test.ts",
+        "packages/server/src/server/server.ts",
+        "packages/core/test/spec.types.test.ts",
+        "test/integration/test/title.test.ts",
+        "test/integration/test/stateManagementStreamableHttp.test.ts",
+        "examples/client/src/simpleStreamableHttp.ts",
+        "packages/core/src/validators/types.ts",
+        "packages/server/src/experimental/tasks/mcpServer.ts",
+        "packages/core/test/shared/protocol.test.ts",
+        "packages/core/src/validators/cfWorkerProvider.ts",
+        "packages/core/src/validators/ajvProvider.ts",
+        "examples/server/src/simpleStreamableHttp.ts",
+        "packages/core/src/index.ts",
+        "packages/core/src/validators/types.examples.ts",
+        "packages/core/src/shared/protocol.ts"
+      ],
+      "recallAt5": 0.125,
+      "recallAt10": 0.125,
+      "reciprocalRank": 0.5,
+      "noiseAt10": 0.9,
+      "testRecall": null,
+      "estimatedTokens": 6824,
+      "durationMs": 2774
+    }
+  ],
+  "skipped": [
+    {
+      "hash": "95d28cbae98e57df1b987b656a555777de976545",
+      "title": "Version Packages (beta) (#2471)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "9b41b5685ded29c0afc194bbd91bb1902bee6f84",
+      "title": "fix(client): initialize requests never carry a session id; capture only from the initialize response (#2469)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "44797d77792953d0ce70b68922bb6bb69e697c32",
+      "title": "fix(core): restore the v1 content default for tools/call results on the legacy era (#2456)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "3834921074b55bb0bdb673a416d3bc3317bbfbc6",
+      "title": "fix: convert elicitation Standard Schemas via an explicit wire-grammar walk (#2454)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "cc70c5e6a9f9b1c15dcba0bdd019a479b81375de",
+      "title": "fix(client): preserve pre-set transport handlers across the version-negotiation probe window (#2455)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "0ab5d1471d6c7375878316df2930fca77eee1d2a",
+      "title": "fix(server): trim OWS from standard MCP headers (#2453)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "7e697354de95111ca2c70a12ac9f5d3ec96b56c3",
+      "title": "fix(server): return Invalid Params for malformed resource URIs (#2451)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "e2aeac2085f967c1cb9579880d6de48cffe4ad54",
+      "title": "chore(deps): bump denoland/setup-deno from 2.0.4 to 2.0.5 (#2443)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "78fabea44557bd49f5a050b92e57ccd22dab14ad",
+      "title": "Use protected HTTP wiring in examples and guides (#2445)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "561c6d83456ef98d6c713bbda9837e64337f22c9",
+      "title": "fix(server): validate Content-Type by parsed media type instead of substring match (#2441)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "7015d2129bc91e8cf8f143e2cca3ee2ba92808d3",
+      "title": "examples: web-standard twin of the bearer-auth story (#2424)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "e8de519d3129f46b7528d2999b7641f55be1f091",
+      "title": "fix: keep validator providers off root declarations (#2425)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "d2f1bed893cdeebdeace721255f6b0c2c275fa07",
+      "title": "Fix import ordering in client auth (#2442)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "ce2f65db0e019506f4d2526466ec8cc7106de98e",
+      "title": "fix(core): make instanceof on SDK error classes work across bundled copies (#2384)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "e6cc5dc633bf40811935d078c9c056b67da4de9b",
+      "title": "chore(deps): bump actions/checkout from 6 to 7 (#2338)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "1b90c96d11fd17016d2977cae9dd661de3fb84df",
+      "title": "fix(packaging): expose Ajv from CJS validator subpaths (#2431)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "ddba550fa91cd5226d994ddf63f1147fb707131d",
+      "title": "docs: point readers (and their LLMs) at the markdown renditions (#2427)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "43c13c5fd509072304f1f26231e9abb3cfb7947a",
+      "title": "docs: fix sidebar overflow at mid-width viewports and add a favicon (#2426)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "79dc162efcb4e1f7b820bfb6068906483cf71ec7",
+      "title": "Read codemod target versions from workspace manifests at build time (#2419)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "ddf6cc1d73575271e45120b9f3e5c9ea2139729d",
+      "title": "docs(servers): document resources/subscribe serving; exercise subscriptions in the resources example (#2413)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "35f6856a17a04da8d4e763856352ba99c1d151eb",
+      "title": "Version Packages (beta) (#2416)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "3c7ddafa05d8f17fb52168bf4638f09251c3d0ff",
+      "title": "test(conformance): bump referee to 0.2.0-alpha.9; arm SEP-2575 diagnostic fixtures; fix post-dispatch -32021 HTTP status (#2399)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "1ea960b5bbf1d2081d61575467690b8f38f96c1f",
+      "title": "chore(examples): bump better-auth to ^1.6.2 (#2415)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "eacf2e5dbeb1fa65492750c15fdc55cafdf28686",
+      "title": "Add --protocol-version flag to cli-client example (#2406)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "448ba0ff54b10a63260bc5684d459e4cea9df8d2",
+      "title": "chore: drop duplicate CommonJS changeset (#2414)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "ef120b2be0c3c3d80468c3d4a9f79be30bb0c0a3",
+      "title": "chore: add missing changesets for CommonJS builds and codemod iterations (#2412)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "d000de8232c0d727f252ceddccc22cadc149879d",
+      "title": "Update README.md (#2411)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "1772473b7603781ca855f2595d885fe52b79bcef",
+      "title": "codemod iterations 5 (#2398)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "ebca273a3c43f413af64dd1a22d39d3fa9375ac0",
+      "title": "docs: generate llms.txt, llms-full.txt, and markdown page renditions (#2407)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "2f4ad132fefa9fe4d9fcfd559d1c9d168628671d",
+      "title": "chore(deps): bump changesets/action from 1.7.0 to 1.9.0 (#2260)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "2dcf10bea530bb72aa18aba6a91b670785e9b8bc",
+      "title": "Version Packages (beta) (#2404)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "5ad6cd114b61e151f1bdeffd0cf00e7ece65decd",
+      "title": "chore: prune consumed alpha changesets to unblock the release workflow (#2403)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "a4002596b914c675d17ac22471d1287976dbb52a",
+      "title": "chore: enter beta prerelease mode (#2402)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "e7137a7031e0659b1deb2b8e5af511cf13eed667",
+      "title": "Version Packages (alpha) (#2375)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "c0a5680f0c96db2f9b81551af840cafa6a0223f9",
+      "title": "docs: name the current site in both version banners and add a beta callout to the landing page (#2401)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "3c02ffb5d9bb4da59028c70cc58987303b310074",
+      "title": "chore: add missing changeset for @modelcontextprotocol/core (#2400)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "b153505428ae0eee9b6f6c9e0d750ba5f1fb3944",
+      "title": "docs: rebuild the v2 documentation around a task-based page tree (#2397)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "708d5455d946d59f6f5482118b3a44e7285ae632",
+      "title": "docs: turn the version banners into working cross-site links (#2396)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "732abe0ac45c6e03eb4e0825768aaa96319d7989",
+      "title": "docs: replace the typedoc site with VitePress (v2 + v1 reface) (#2395)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "801111ea152c1ba08f6dda0b27d712759aeb46bf",
+      "title": "fix(packaging): inline the fast-uri URIComponent type; drop stale typesVersions (#2394)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "14160f724b9641eadfa06a5db10620116b83d78a",
+      "title": "docs(migration): close v1-to-v2 guide gaps found while migrating sample dependents (#2392)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "e4e8b22dff6c48b9a46fd960c9171aed44a996a8",
+      "title": "feat(codemod): manifest handling overhaul and fixes from migrating sample dependents (#2393)",
+      "reason": "outside the 1-15 source-file feature scope"
+    },
+    {
+      "hash": "199a28e9e27168cafa47f665aeb4e506c027500b",
+      "title": "docs: correctness and coverage pass for the 2026-07-28 revision (#2389)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "36055d5bbd1d078922aa025acea6880e61a20577",
+      "title": "codemod iterations (#2386)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "49aeb8eb38c08730787bfaec0341d293e71f8b56",
+      "title": "docs(server,examples): document extension capabilities with a runnable example (#2387)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "f0bf785239af67f0cfce24575fec9c1193deaff1",
+      "title": "Serve input_required handlers on 2025-era connections via a legacy fulfilment shim (#2381)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "7c42d476cd0b055eaf7e760cf39fd69e58d2a682",
+      "title": "docs(migration): align four passages with the implementation (#2388)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "326ee89bd3929096b18d3a252dcaa1a420c79d89",
+      "title": "docs(migration): dual-role instanceof caveat in the Errors section (#2385)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "b96a94c6b13575af7f0e20a9844643877549ae20",
+      "title": "docs(migration): close guide gaps surfaced by real v1-to-v2 migrations (#2382)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "9f8ba6127989c371cccf0dbb72ef0cbf4726f9b0",
+      "title": "fix(codemod): keep request() result schemas the call still needs (#2383)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "ba27d201e1ea700cfbe9b51ad8c413f097eae9ba",
+      "title": "feat(examples): add a reference host/server pair — cli-client + todos-server (#2380)",
+      "reason": "outside the 1-15 source-file feature scope"
+    },
+    {
+      "hash": "1823aae891837ebb5e3db885ec635f9efefd5771",
+      "title": "Implement MCP 2026-07-28 (#2286)",
+      "reason": "outside the 1-15 source-file feature scope"
+    },
+    {
+      "hash": "e4227d135ce954f105681221263293ba21081e42",
+      "title": "Version Packages (alpha) (#1845)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "0fb8406d83a3578a12a605e1b43c352d565071b1",
+      "title": "v2: codemod iterations, canonical zod schema exports from `sdk-shared` (#2354)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "7ea6fde1b6d7c606868fdc7d0b900d36a60dfe80",
+      "title": "test(client): cover refresh retry after invalid token 401 (#2367)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "ee732d64b66440dcb455c6a179ef99eea9824358",
+      "title": "chore: switch to module ESNext + moduleResolution bundler (#2095)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "6312f2a3ec8104d2e8d324b06a24d4929446ddc2",
+      "title": "fix(middleware): stop bundling workspace type graphs into .d.ts (avoids dts-gen OOM) (#2339)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "5e0249f57fdc1d7b7d69cd6140952a8e4e7ae695",
+      "title": "test(integration): stop the cloudflare workers test from rewriting workspace dist mid-suite (#2307)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "e84c3e9ad040eb09299b1f99dd8bdd14251ae790",
+      "title": "fix(server,client): non-SEP draft spec conformance (eager list handlers, pagination docs, path-sanitization note) (#2269)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "1110a0c9043f5d120a6091211d82f138f6a76ae0",
+      "title": "test(integration): fix cloudflare workers test leaking workerd processes (#2296)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "f2a3320677e114cfd60b75f240344f77e9005e3c",
+      "title": "test(conformance): bump the conformance pin to 0.2.0-alpha.3 (#2289)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "e8c7180109b417eef5cc22b7e9d821ab1c119a69",
+      "title": "fix(server): bound resumability version gates to supported versions, pin the unsupported-version rejection format (#2280)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "278d7253093a9bf92bd296f5816bd5e62e7f8178",
+      "title": "test(conformance): pin the conformance suite to 0.2.0-alpha.2 and reconcile the expected-failures baseline (#2279)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "0657c3bea9218f67494850562c0c449548c972c1",
+      "title": "fix(test-conformance): stop leaking the conformance server and hanging on stale ports (#2276)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "542d5c95860c03d0c1a689f579b925250e25de6c",
+      "title": "v2: SdkError tests + codemod (#2137)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "f563440cfdb829270b4a18c991090112619a9ab1",
+      "title": "codemod iterations round 1 (#2274)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "1b53a415ea2c33aa11ac413fc9c2d68ccffde784",
+      "title": "Port of #2239 (v1.x) to v2 (#2275)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "8d55531dabd5aa2de8864d691520cd6c6fe77541",
+      "title": "feat(core): per-revision spec reference types and the 2026-07-28 wire contract surface (#2252)",
+      "reason": "outside the 1-15 source-file feature scope"
+    },
+    {
+      "hash": "ab552c30d5499b5e0aaa1ab47ee2481028910c3d",
+      "title": "codemod improvements (#2156)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "db28156a23032290b3ce3bae00a17544c4807b8f",
+      "title": "fix(types): restore task wire types removed with the task feature (#2248)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "c8d7401b46f34b6c49b7cfb7b321714d0d4048f6",
+      "title": "[SEP-2663] refactor!: remove 2025-11 experimental tasks (#2128)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "600ba75f34de7a0ca78d777dd3de83ee71631a53",
+      "title": "test(e2e): spec-version lifecycle infrastructure for the 2026-07-28 release (#2226)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "86276ed073d3cb1d4ac22fcf67b95ecd068b829e",
+      "title": "feat(server): retain the negotiated protocol version and expose getNegotiatedProtocolVersion() (#2230)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "71dcc704116c0b6db906bdf89bdfc6ab41032d63",
+      "title": "test(conformance): pin conformance 0.2.0-alpha.1 and baseline the draft-spec suites (#2227)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "c54abdb1726fd2f0066b560975100ab0d2262526",
+      "title": "test(e2e): host the sse matrix column on the shipped legacy SSEServerTransport (#2229)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "e03bca90c1f925f80843dc27fb4eb2421408a0c1",
+      "title": "v2 backcompat: server legacy package (#2206)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "83a54a454d1cb7f2ea475f24c388422b13384b2f",
+      "title": "Update README.md (#2225)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "16d13abf78b5dba5de73dfa284325b13d4219bb2",
+      "title": "feat(client,server): bundle default validators, expose customisation via subpaths (#2088)",
+      "reason": "outside the 1-15 source-file feature scope"
+    },
+    {
+      "hash": "1998a186eeb8aa3728c1e82420e381e0f9b80a83",
+      "title": "Port the end-to-end test suite to v2 (#2179)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "5fc42e9be115a8865cca42541bb50183dc2e8b93",
+      "title": "fix README.md badges and blockquote icon (#2022)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "48251fe2cb24fb9b2a12ef3cffb5f5bd196a7ea4",
+      "title": "feat: add v2 codemod draft (#1950)",
+      "reason": "outside the 1-15 source-file feature scope"
+    },
+    {
+      "hash": "4f226c1e35200616d62f1d7e46a2daa33d91172a",
+      "title": "v2 backwards compat: SdkError status code (#2049)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "22595b96855b34f00adcc6c1e7932ad68ea5139d",
+      "title": "`v2` backwards compat: specTypeSchema exported - synchronous StandardSchemaV1 (#2047)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "2c0c481cb9dbfd15c8613f765c940a5f5bace94d",
+      "title": "fix: add | undefined to transport option callbacks for exactOptionalPropertyTypes (#1855)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "4fbcfcd176b6b189970263c4625eb6e60db043d2",
+      "title": "refactor(specTypeSchema): drop `as unknown as` casts; add allowlist drift guard (#1993)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "9fc9070b7b8e18227127aaee9869f8809a87fdb1",
+      "title": "refactor(client,server): move stdio transports to ./stdio subpath export (#1871)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "55b1f06cd4569e334f3435b7971f0446f1ef9be9",
+      "title": "refactor(core): _wrapHandler hook so subclasses don't redeclare setRequestHandler (#1976)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "2a7611d46b0d4f4e7bd4147c7a3ad3da00e57e52",
+      "title": "fix(packages): add types/typesVersions for legacy moduleResolution: node (#1898)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "5433f405972ab943c4d68b0eacf6d79baf132824",
+      "title": "fix(node): make hono an optional peer dependency (#1896)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "434b2f11ecec452f3dca0199f68afccd8b119dd4",
+      "title": "fix(core): move @cfworker/json-schema out of main barrel into /validators/cf-worker subpath (#1897)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "b256546750277faeb7c886792aae5ed26e6904d5",
+      "title": "fix(core): fall back to z.toJSONSchema for zod schemas without ~standard.jsonSchema (#1895)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "7d7e62ccc876b1a144e456a47dae9949b9f68c36",
+      "title": "Update `README.md` and `docs/faq.md` to link full quickstart guides (#1554)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "bdfd7f0154e2afd4fd6d2e95e6aadd924c3775f2",
+      "title": "fix: retrieve stored result from tasks/result for failed tasks (#1930)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "b8886e77f6cb3bf037dd329b79f63c978fca9032",
+      "title": "chore: update spec.types.ts from upstream (#1888)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "6bec24a14cb7e3dbe9f5e04aeb893cd0d6e8cb83",
+      "title": "fix: validate clientMetadataUrl at construction time (fail-fast) (#1653)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "595652cecac3af3367d2448bc051dcb41003deaa",
+      "title": "chore(ci): switch publish to OIDC trusted publishing (#1838)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "b65eb0939f181b5ff5adcda946addd5539d0fea2",
+      "title": "ci: only match open PRs in spec-sync existence check (#1886)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "d4f802ef3977c2d4ec147eb5549fab95dd9b6cd3",
+      "title": "docs: seed initial review rules for automated code review (#1867)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "169366828cc33d0310c62678d6e016ce16f105fe",
+      "title": "ci: skip lefthook on spec-sync bot push (#1866)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "1eb80c4d085c0299284e88681db34fdf2faa7a0c",
+      "title": "`v2`: add guard methods (#1842)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "7ba58dac512ca34a699243458fb95b882362d69b",
+      "title": "`v2`: cf workers fix (#1843)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "df4b6cc88d6f24fc857519cf506a7a039f532637",
+      "title": "fix: prevent stack overflow in transport close with re-entrancy guard (#1788)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "653c5d000c5e7724e92748c86aeb743486135ba5",
+      "title": "Rewrite `docs/server.md` as a code-heavy, prose-light how-to guide (#1552)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "1eb31236e707c4f4ab9234d87db21ab3f34bf0bc",
+      "title": "fix(client): preserve custom Accept headers in StreamableHTTPClientTransport (#1655)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "866c08d3640c5213f80c3b4220e24c42acfc2db8",
+      "title": "fix(core): allow additional JSON Schema properties in elicitInput requestedSchema (#1768)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "00215619426d7e3e60e486cc656a4f1ca7c3c9b7",
+      "title": "Version Packages (alpha) (#1841)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "424cbaeee13b7fe18d38048295135395b9ad81bb",
+      "title": "v2 tsdown fix (#1840)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "53fb84bd04e9587e11593e3c5f2a6b7fc50cb91d",
+      "title": "fix(ci): split release.yml into version + publish jobs (#1836)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "54fa96e7b565c91b98047d2c5a63174f8321b63e",
+      "title": "Version Packages (alpha) (#1420)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "38d6cd23b6ca2c31cf4304f53ef0344096a54ede",
+      "title": "chore(fastify): remove stray packageManager field from subpackage (#1833)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "babaa5065d535021b5ebaa7af33b421e7a57eb8f",
+      "title": "chore(ci): remove dead publish job from main.yml (#1829)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "689148dc7235f53244869ed64b2ecc9ec4ef70f1",
+      "title": "fix(server): propagate negotiated protocol version to transport (#1660)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "0fabc277423033baf99932bf92d1deed0fc4e5b8",
+      "title": "chore: enter alpha prerelease mode (#1823)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "81e4b2a412ab52ada436061502dd711a67555519",
+      "title": "Adds Fastify Middleware for v2 (#1536)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "5f32a90f0d3d98b3508f1454c1a9a285db2d08dc",
+      "title": "fix(core): make fromJsonSchema() use runtime-aware default validator … (#1825)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "2fd7f5ff265efc1059ee2bc404260179abcd6234",
+      "title": "`v2`: Web standards Request object in ctx (#1822)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "9bc9abc68bf2b097b15c76a9673d44fb3ff31d03",
+      "title": "Fix: Handle error responses in Streamable HTTP SSE streams (#1390)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "fcde4882276cb0a7d199e47f00120fe13f7f5d47",
+      "title": "chore: drop zod from peerDependencies (kept as direct dependency) (#1824)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "89fb0947b487b37f9bfcc2a2486dcd33d3922f8e",
+      "title": "fix(core): consolidate per-request cleanup in _requestWithSchema (#1790)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "8822c963157a53cc243bbd178651986705306496",
+      "title": "fix(examples): return 404 for unknown session IDs, 400 for missing (#1770)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "d6a02c85c0514658c27615398a3003aadce80fb0",
+      "title": "fix(core): ensure standardSchemaToJsonSchema emits type:object (#1796)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "a39a9eb485240679815e45aacc38d2241a37b577",
+      "title": "test: add compile-time key-parity assertions for spec type checks (#1652)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "d99f3ee5274bb17bb0eb02c85381200feb4b43e6",
+      "title": "fix: continue OAuth metadata discovery on 5xx responses (#1632)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "4aec5f790624b1931cf62c006ae02b09d7562d2f",
+      "title": "Private key jwt scopes (#1443)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "9efecc27ff513778d64069688208943faacdbec9",
+      "title": "ci: format fetch-spec-types output with prettier (#1782)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "d0505c190e76266b7883638baac279d3ccf068b5",
+      "title": "chore(v2): pnpm audit fix (#1789)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "48aba0d3c3b2ee04c442934095b663d19e07a3b3",
+      "title": "fix(core): add explicit | undefined to Transport interface optional properties (#1766)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "9d924b1550b7d8edf8dbd28b426cad3cef51a362",
+      "title": "docs: note type vs interface for structuredContent (#1784)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "9d083923d5047b4a02c23b2538f3938c2e2f8ecf",
+      "title": "SEP-2207: Refresh token guidance (#1523)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "527643966e42a91711c50a0a6609f941f1dfe3e2",
+      "title": "fix(stdio): always set windowsHide on Windows, not just in Electron (#1772)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "e86b1835ccf213c3799ac19f4111d01816912333",
+      "title": "[v2] Minor task-related refactors (#1758)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "cc9c9d19a10bae0218c97adad92f294ef726d29f",
+      "title": "chore(deps): bump pnpm/action-setup from 4.3.0 to 5.0.0 (#1794)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "7595bd09ba3a5d8a1bb344cf2aac117ca89d65fe",
+      "title": "chore(deps): bump actions/deploy-pages from 4 to 5 (#1792)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "1eb8a529462857b29cd856849dbd135d22b8f3c8",
+      "title": "chore(deps): bump actions/upload-pages-artifact from 3 to 4 (#1793)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "d3543c760dc0c2d58e930395f62884af41a19a4d",
+      "title": "chore(deps): bump actions/configure-pages from 5 to 6 (#1791)",
+      "reason": "mechanical, release, or dependency commit"
+    },
+    {
+      "hash": "42072eebab965a7173e3d91bc648a7d6b73cf8bc",
+      "title": "Enable Dependabot for GitHub Actions (#1436)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "905b1e5c1af185d56c55720a1a84ede9ebb83b1b",
+      "title": "test(core): add unit tests for normalizeHeaders and createFetchWithInit (#1374)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "cce3ac7512726fdf8b641ecc25437d86185a1bd0",
+      "title": "`v2`: pin workflow versions to commit SHAs (#1781)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "64897f78ce78f736b027dfecd1b4326c8c6678c7",
+      "title": "fix(stdio): skip non-JSON lines in ReadBuffer (#1762)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "a2e503733f6f3eea3a79a80bdc1b3cdd743f8bb3",
+      "title": "fix: abort in-flight request handlers on connection close (#1735)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "5516c1ba66221e42b5ac7efad8db331238cc08ab",
+      "title": "chore: add instructions docs (#1778)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "01954e621afe525cc3c1bbe8d781e44734cf81c2",
+      "title": "fix: convert remaining capability throws to SdkError (#1761)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "379392d04460ee2cbeecae374901fae21e525031",
+      "title": "fix: add missing size field to ResourceSchema (#1574)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "40174d2dfff12eb56ef21e40e210b3f651ee9bc3",
+      "title": "`v2`: Add left-hook pre-push (#1003)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "78bae7426d4ca38216c0571b5aa7806f58ab81e4",
+      "title": "fix(server): call onerror callback for all transport errors (#1433)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "0ed723748babde6900d2011f437809ad49771eae",
+      "title": "`v2`: limit public exports (#1680)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "f1ade75b67a2b46b06316fa4e5caa1d277537cc7",
+      "title": "fix: handle EPIPE errors in StdioServerTransport to prevent process crash (#1568)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "462c3fc47dffac908d2ba27784d47ff010fa065e",
+      "title": "`v2` - RFC Extract Tasks out of protocol.ts into TaskManager (#1673)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "7d9c72eee59150befdf95376194d9ca20f226009",
+      "title": "ci: remove claude-code-review workflow (#1754)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "13a0d345c0b88bf73264c41a793bf0ad44cfa620",
+      "title": "Don't swallow fetch TypeError as CORS in non-browser environments (#1595)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "f9fda807d3485d2bf9bf9c2184e94530ce62c064",
+      "title": "ci: skip claude.yml when comment is '@claude review' (#1737)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "677511b5a7b68bb60bd7783ff3ff6e5dc9110eef",
+      "title": "Allow servers / clients to advertise extensions in the capability object (#1630)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "9aed95a79be1c52f84cbfd3470c2871351679e83",
+      "title": "feat: add auth-test-server for OAuth conformance testing (#1384)",
+      "reason": "all changed source files were newly added"
+    },
+    {
+      "hash": "a7c7896a5689158b63130a9c9d72c53ced6dd152",
+      "title": "Remove prefix on over-the-wire `ProtocolError`s (#1727)",
+      "reason": "outside the feature-addition task scope"
+    },
+    {
+      "hash": "72fe68b266c02becda48814ab2545ea900e9da11",
+      "title": "Restore negotiated protocol version on reconnection transport (#1591)",
+      "reason": "mechanical, release, or dependency commit"
+    }
+  ],
+  "aggregate": {
+    "recallAt5": 0.29055555555555557,
+    "recallAt10": 0.3413888888888889,
+    "mrr": 0.4015842490842491,
+    "noiseAt10": 0.8700000000000001,
+    "testRecall": 0.3888888888888889,
+    "medianTokens": 7546.5,
+    "medianDurationMs": 3177
+  },
+  "limitations": [
+    "Changed files are an imperfect proxy for the ideal context set.",
+    "Commit titles can underspecify the original feature task.",
+    "Keyword ablation removes exact gold path and declaration hints but does not create a natural-language paraphrase.",
+    "Retrieval recall does not measure whether a Coding Agent completes the task successfully."
+  ]
+}
