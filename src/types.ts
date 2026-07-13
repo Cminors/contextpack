@@ -175,6 +175,8 @@ export interface DiscoveredRepository {
 export interface EvaluationCommitResult {
   hash: string;
   title: string;
+  query: string;
+  redactedIdentifiers: string[];
   goldFiles: string[];
   predictions: string[];
   recallAt5: number;
@@ -186,6 +188,8 @@ export interface EvaluationCommitResult {
   durationMs: number;
 }
 
+export type EvaluationQueryMode = "title" | "keyword-ablated";
+
 export interface EvaluationSkip {
   hash: string;
   title: string;
@@ -193,9 +197,10 @@ export interface EvaluationSkip {
 }
 
 export interface EvaluationReport {
-  version: 1;
+  version: 2;
   generatedAt: string;
   repository: RepositorySnapshot;
+  queryMode: EvaluationQueryMode;
   requestedCommits: number;
   validCommits: number;
   results: EvaluationCommitResult[];

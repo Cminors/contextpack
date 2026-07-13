@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { runReplay } from "../src/evaluation/replay.js";
+import { redactTaskTitle, runReplay } from "../src/evaluation/replay.js";
 import { gitStatusFingerprint } from "../src/utils/git.js";
 
 const created: string[] = [];
@@ -15,6 +15,19 @@ const git = (root: string, args: string[]): void => {
 afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, { recursive: true, force: true }))));
 
 describe("historical replay", () => {
+  it("removes exact gold paths and declarations without deleting broader task semantics", () => {
+    expect(
+      redactTaskTitle(
+        "feat(server): add GitHub login through loginWithGithub",
+        ["packages/server/src/auth.ts"],
+        ["loginWithGithub"],
+      ),
+    ).toEqual({
+      query: "add GitHub login through",
+      redactedIdentifiers: ["loginWithGithub", "server"],
+    });
+  });
+
   it("uses a detached worktree and preserves the current workspace", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-replay-"));
     created.push(root);
@@ -29,7 +42,25 @@ describe("historical replay", () => {
     const before = gitStatusFingerprint(root);
     const report = await runReplay(root, 1, 4000);
     expect(report.validCommits).toBe(1);
+    expect(report.queryMode).toBe("title");
     expect(report.aggregate.recallAt5).toBe(1);
     expect(gitStatusFingerprint(root)).toBe(before);
+  }, 30_000);
+
+  it("runs a keyword-ablated replay and records the query audit", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-replay-redacted-"));
+    created.push(root);
+    git(root, ["init", "-q"]);
+    git(root, ["config", "user.email", "contextpack@example.test"]);
+    git(root, ["config", "user.name", "ContextPack Test"]);
+    await fs.writeFile(path.join(root, "package.json"), JSON.stringify({ name: "fixture" }));
+    await fs.writeFile(path.join(root, "auth.ts"), "export function loginWithGithub() { return false; }\n");
+    git(root, ["add", "."]); git(root, ["commit", "-qm", "initial auth module"]);
+    await fs.writeFile(path.join(root, "auth.ts"), "export function loginWithGithub() { return true; }\n");
+    git(root, ["add", "."]); git(root, ["commit", "-qm", "feat(auth): update loginWithGithub"]);
+    const report = await runReplay(root, 1, 4000, "keyword-ablated");
+    expect(report).toMatchObject({ version: 2, queryMode: "keyword-ablated", validCommits: 1 });
+    expect(report.results[0]?.query).toBe("update");
+    expect(report.results[0]?.redactedIdentifiers).toEqual(expect.arrayContaining(["auth", "loginWithGithub"]));
   }, 30_000);
 });

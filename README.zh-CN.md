@@ -109,10 +109,11 @@ contextpack explain loginWithGithub --task "增加 GitHub OAuth"
 ### 使用历史提交评测检索效果
 
 ```bash
-contextpack eval --commits 20 --budget 12000
+contextpack eval --commits 20 --budget 12000 --query-mode title
+contextpack eval --commits 20 --budget 12000 --query-mode keyword-ablated
 ```
 
-历史回放会在独立的临时 Git worktree 中分析提交的父版本，不会切换或修改当前工作区。
+历史回放会在独立的临时 Git worktree 中分析提交的父版本。`title` 保留原始提交查询；`keyword-ablated` 会删除来自真实改动文件的完整路径、文件名、声明名和匹配的 Conventional Commit scope，同时保留更宽泛的需求语义。报告会记录原始标题、实际查询和删除的提示词，并且不会切换或修改当前工作区。
 
 ## 排名原理
 
@@ -139,6 +140,8 @@ ContextPack 使用六类确定性信号：
 | `modelcontextprotocol/typescript-sdk` | 635 | 20 | 0.414 | 0.605 | 9,002 | 2,029 ms |
 
 中型仓库结果已达到 MRR 目标（`>= 0.60`），但尚未达到 Recall@10 目标（`>= 0.70`）。详细方法、原始报告、限制和被否决的实验见 [Benchmark 文档](benchmarks/README.md)。
+
+Benchmark V2 暴露了明显的关键词捷径：在相同的 20 条 MCP SDK 提交上，标题模式达到 Recall@10 `0.414` / MRR `0.605`，关键词消融模式只有 `0.233` / `0.260`，测试召回也从 `0.472` 降至 `0.139`。这说明在作出更强产品承诺前，结构化检索仍需明显改进。
 
 ## 当前支持范围
 
@@ -179,7 +182,7 @@ npm run check
 npm run test:coverage
 ```
 
-当前本地质量门禁：33 项测试通过、行覆盖率超过 90%、生产依赖漏洞为 0。GitHub CI 会在 Node.js 20 和 22 上验证项目。
+当前本地质量门禁：35 项测试通过、行覆盖率超过 90%、生产依赖漏洞为 0。GitHub CI 会在 Node.js 20 和 22 上验证项目。
 
 ## 许可证
 

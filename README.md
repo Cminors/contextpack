@@ -109,10 +109,11 @@ contextpack explain loginWithGithub --task "add GitHub OAuth login"
 ### Evaluate retrieval on repository history
 
 ```bash
-contextpack eval --commits 20 --budget 12000
+contextpack eval --commits 20 --budget 12000 --query-mode title
+contextpack eval --commits 20 --budget 12000 --query-mode keyword-ablated
 ```
 
-Historical replay runs against parent revisions in detached temporary worktrees. It never checks out or modifies the active worktree.
+Historical replay runs against parent revisions in detached temporary worktrees. `title` preserves the original commit query; `keyword-ablated` removes exact gold paths, filenames, declarations, and matching Conventional Commit scopes while preserving broader requirement language. Every report records the original title, actual query, and removed hints. Evaluation never checks out or modifies the active worktree.
 
 ## How Ranking Works
 
@@ -139,6 +140,8 @@ Historical replay measures a retrieval proxy, not coding-agent success.
 | `modelcontextprotocol/typescript-sdk` | 635 | 20 | 0.414 | 0.605 | 9,002 | 2,029 ms |
 
 The medium-repository result passes the MRR target (`>= 0.60`) but remains below the Recall@10 target (`>= 0.70`). See the [method, raw reports, limitations, and rejected experiments](benchmarks/README.md).
+
+Benchmark V2 exposes a keyword shortcut: on the same 20 MCP SDK commits, title mode reached Recall@10 `0.414` / MRR `0.605`, while keyword-ablated mode reached only `0.233` / `0.260`. Test recall fell from `0.472` to `0.139`. Structural retrieval must improve before stronger product claims are justified.
 
 ## Supported Scope
 
@@ -179,7 +182,7 @@ npm run check
 npm run test:coverage
 ```
 
-Current local quality gate: 33 tests passing, 90%+ line coverage, and no production dependency vulnerabilities. GitHub CI verifies Node.js 20 and 22.
+Current local quality gate: 35 tests passing, 90%+ line coverage, and no production dependency vulnerabilities. GitHub CI verifies Node.js 20 and 22.
 
 ## License
 

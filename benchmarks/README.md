@@ -10,7 +10,9 @@ For each repository, `contextpack eval` scans local non-merge history and keeps 
 - 1-15 JavaScript or TypeScript files changed;
 - release, dependency, formatting, and lockfile commits are excluded;
 - newly added files that do not exist in the parent revision are excluded from the reference set;
-- the commit title is used as the task and the parent revision is analyzed in a detached temporary worktree.
+- the parent revision is analyzed in a detached temporary worktree;
+- `title` mode uses the original commit title as the task;
+- `keyword-ablated` mode removes exact gold paths, filenames, declarations, and a matching Conventional Commit scope before retrieval. Gold data is used only to remove leaked hints, never to generate predictions.
 
 The changed files are an imperfect reference set. Recall is therefore a retrieval proxy, not an agent-success metric.
 
@@ -30,6 +32,17 @@ The changed files are an imperfect reference set. Recall is therefore a retrieva
 | `modelcontextprotocol/typescript-sdk` | 635 | 20 | 0.292 | 0.414 | 0.605 | 0.825 | 0.472 | 9,002 | 2,029 ms |
 
 `p-map` only contained 12 commits that satisfied the feature-addition filter, so it does not meet the desired 20-valid-commit sample size. The MCP TypeScript SDK supplies the meaningful medium-repository result.
+
+## Benchmark V2 Keyword-Ablation Result
+
+The same 20 MCP SDK feature commits were replayed in both query modes with the same 12,000-token budget and ranking implementation:
+
+| Query mode | Commits | Recall@5 | Recall@10 | MRR | Noise@10 | Test recall | Median tokens |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `title` | 20 | 0.292 | 0.414 | 0.605 | 0.825 | 0.472 | 9,002 |
+| `keyword-ablated` | 20 | 0.156 | 0.233 | 0.260 | 0.895 | 0.139 | 9,095 |
+
+Eighteen of the 20 titles contained at least one removable answer hint; 30 hints were removed in total. Exact package, path, or declaration hints materially inflate the original historical-replay score. Keyword ablation preserves broader requirement language and records every removed hint for audit, but it does not synthesize an issue-style paraphrase.
 
 ## Baseline Comparison
 
@@ -66,7 +79,7 @@ The following experiments were implemented and tested, then removed because they
 - bidirectional same-stem test promotion;
 - frequency-normalized Git title terms;
 - plain-text exported-symbol reference expansion;
-- rare-term peak scoring.
+- rare-term peak scoring;
 - unconditional repository-wide TypeScript Program expansion: the fixed smoke set kept the same retrieval metrics while median analysis time initially increased from 3.45s to 13.98s; uniform semantic boosting also reduced Recall@10.
 
 Keeping these negative results prevents repeating changes that look reasonable in isolation but reduce multi-file recall.
@@ -79,15 +92,17 @@ The medium-repository result passes the MRR gate but does not pass the Recall@10
 - Token size and analysis latency pass their goals.
 - Recall and test recall remain the limiting metrics.
 
-The first bounded TypeScript Program path is now enabled only for repositories with a root `tsconfig`. The next retrieval work should validate it on a medium repository with a representative root configuration before expanding it to config-less monorepos. Adding a UI, more languages, or an embedded LLM is not justified by these results.
+The first bounded TypeScript Program path is enabled only for repositories with a root `tsconfig`. Benchmark V2 now makes keyword-agnostic localization the next retrieval priority: graph or reranking changes must improve the ablated track without regressing title mode. A future external issue/feature dataset is still required before measuring Coding Agent success. Adding a UI, more languages, or an embedded LLM is not justified by these results.
 
 ## Reproduce
 
 ```powershell
-node dist/cli.js eval --commits 20 --budget 12000 --output benchmarks/results/<name>
+node dist/cli.js eval --commits 20 --budget 12000 --query-mode title --output benchmarks/results/<name>-title
+node dist/cli.js eval --commits 20 --budget 12000 --query-mode keyword-ablated --output benchmarks/results/<name>-ablated
 ```
 
 Run the command from the root of the repository being evaluated. Raw final reports are stored in:
 
 - `benchmarks/results/p-map-final/`
 - `benchmarks/results/typescript-sdk-final/`
+- `benchmarks/results/typescript-sdk-v2-ablated-final/`

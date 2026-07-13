@@ -5,6 +5,7 @@ import { runReplay } from "./evaluation/replay.js";
 import { renderContext, renderEvaluation } from "./output/markdown.js";
 import { writeArtifacts } from "./output/write.js";
 import { toContextPackError } from "./errors.js";
+import type { EvaluationQueryMode } from "./types.js";
 
 const program = new Command();
 
@@ -18,6 +19,11 @@ function budget(value: string): number {
   const result = integer(value);
   if (result < 4000 || result > 32000) throw new InvalidArgumentError("must be between 4000 and 32000");
   return result;
+}
+
+function evaluationQueryMode(value: string): EvaluationQueryMode {
+  if (value === "title" || value === "keyword-ablated") return value;
+  throw new InvalidArgumentError("must be title or keyword-ablated");
 }
 
 function slug(value: string): string {
@@ -59,12 +65,14 @@ program.command("explain")
 program.command("eval")
   .option("--commits <count>", "valid commits to replay", integer, 20)
   .option("--budget <tokens>", "context budget", budget, 12000)
+  .option("--query-mode <mode>", "title or keyword-ablated", evaluationQueryMode, "title")
   .option("--output <directory>", "output directory")
-  .action(async (options: { commits: number; budget: number; output?: string }) => {
-    const report = await runReplay(process.cwd(), options.commits, options.budget);
-    const output = path.resolve(options.output ?? path.join(report.repository.root, ".contextpack", "evals", "latest"));
+  .action(async (options: { commits: number; budget: number; queryMode: EvaluationQueryMode; output?: string }) => {
+    const report = await runReplay(process.cwd(), options.commits, options.budget, options.queryMode);
+    const defaultName = options.queryMode === "title" ? "latest" : options.queryMode;
+    const output = path.resolve(options.output ?? path.join(report.repository.root, ".contextpack", "evals", defaultName));
     await writeArtifacts(output, { "report.md": renderEvaluation(report), "results.json": `${JSON.stringify(report, null, 2)}\n` });
-    process.stdout.write(`Evaluation: ${output}\nRecall@10 ${report.aggregate.recallAt10.toFixed(3)}; MRR ${report.aggregate.mrr.toFixed(3)}.\n`);
+    process.stdout.write(`Evaluation (${report.queryMode}): ${output}\nRecall@10 ${report.aggregate.recallAt10.toFixed(3)}; MRR ${report.aggregate.mrr.toFixed(3)}.\n`);
   });
 
 program.parseAsync().catch((error: unknown) => {
