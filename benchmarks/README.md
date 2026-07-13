@@ -81,6 +81,7 @@ The following experiments were implemented and tested, then removed because they
 - plain-text exported-symbol reference expansion;
 - rare-term peak scoring;
 - unconditional repository-wide TypeScript Program expansion: the fixed smoke set kept the same retrieval metrics while median analysis time initially increased from 3.45s to 13.98s; uniform semantic boosting also reduced Recall@10.
+- task-seeded Personalized PageRank over imports, TypeScript references, and Git co-change edges: on the fixed five-commit smoke set, keyword-ablated Recall@10 / MRR improved from `0.153 / 0.166` to `0.193 / 0.212`, but title mode regressed from `0.467 / 0.587` to `0.433 / 0.556`; reducing graph weight from `0.08` to `0.04` did not recover the title track, so the graph signal was removed.
 
 Keeping these negative results prevents repeating changes that look reasonable in isolation but reduce multi-file recall.
 

@@ -141,7 +141,7 @@ Historical replay measures a retrieval proxy, not coding-agent success.
 
 The medium-repository result passes the MRR target (`>= 0.60`) but remains below the Recall@10 target (`>= 0.70`). See the [method, raw reports, limitations, and rejected experiments](benchmarks/README.md).
 
-Benchmark V2 exposes a keyword shortcut: on the same 20 MCP SDK commits, title mode reached Recall@10 `0.414` / MRR `0.605`, while keyword-ablated mode reached only `0.233` / `0.260`. Test recall fell from `0.472` to `0.139`. Structural retrieval must improve before stronger product claims are justified.
+Benchmark V2 exposes a keyword shortcut: on the same 20 MCP SDK commits, title mode reached Recall@10 `0.414` / MRR `0.605`, while keyword-ablated mode reached only `0.233` / `0.260`. Test recall fell from `0.472` to `0.139`. Structural retrieval must improve before stronger product claims are justified. A task-seeded Personalized PageRank prototype improved the fixed five-commit ablated smoke track but regressed title mode, so it was removed; the exact comparison is recorded in the benchmark's rejected experiments.
 
 ## Supported Scope
 
