@@ -375,9 +375,9 @@ Current key results:
 |---|---:|---:|---:|---|
 | MCP TypeScript SDK, title mode | 20 | 0.439 | 0.635 | medium-repository file retrieval |
 | MCP TypeScript SDK, keyword ablation | 20 | 0.341 | 0.402 | retrieval after answer hints are removed |
-| SWE-bench Axios issues | 6 | 0.617 | 0.177 | real-issue file-level smoke test |
+| SWE-bench Axios issues | 6 | 0.617 | 0.205 | real-issue file and region smoke test |
 
-The Axios smoke run achieved `0.000` line recall at 100, 250, and 500 emitted lines. The current version can sometimes find the right file but does not yet locate the right region inside that file reliably. This is why the project remains a source preview and makes no promotional claim about agent success.
+Query-aware region localization raises Axios line recall from `0.000` at every budget to `0.167`, `0.355`, and `0.411` at 100, 250, and 500 emitted lines. Useful-hit rate reaches `0.667` at 500 lines, but this is still a six-task smoke result with high region noise—not evidence of general agent success.
 
 See the [Benchmark document](benchmarks/README.md) for methodology, raw results, limitations, and rejected experiments.
 
@@ -416,7 +416,7 @@ Do not upload private source code, tokens, `.env` files, or other credentials.
 
 ## Project status
 
-ContextPack is an unpublished experimental source preview. The core CLI, package structure, automated tests, performance smoke test, and real-issue evaluation are in place. npm publishing, a formal release, zero-knowledge installation, and reliable within-file localization are not finished.
+ContextPack is an unpublished experimental source preview. The core CLI, package structure, automated tests, performance smoke test, real-issue evaluation, and a first query-aware region localizer are in place. npm publishing, a formal release, zero-knowledge installation, full 43-task validation, and broadly reliable within-file localization are not finished.
 
 The current goal is to let a small group of testers use the project safely and report understandable feedback—not to promote it broadly.
 
@@ -429,7 +429,7 @@ npm run test:coverage
 npm run perf:smoke
 ```
 
-Current quality gate: 60 tests passing, more than 88% line coverage, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22.
+Current quality gate: 68 tests passing, more than 88% line coverage, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22.
 
 ## License
 

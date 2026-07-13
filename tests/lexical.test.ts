@@ -54,6 +54,23 @@ describe("source content retrieval", () => {
     expect(matches.has(unrelated.path)).toBe(false);
   });
 
+  it("keeps explanation evidence compact while retaining more evidence for localization", () => {
+    const target = sourceFile(
+      "src/handler.ts",
+      [
+        "// validate the request",
+        "// reconcile orphaned sessions",
+        "// rotate expired credentials",
+        "// reject malformed payloads",
+        "// emit structured error details",
+      ].join("\n"),
+    );
+    const terms = normalizeTaskTerms("validate reconcile orphaned sessions rotate expired credentials reject malformed payloads structured error details");
+    const match = scoreContentMatches([target], terms).get(target.path);
+    expect(match?.evidence).toHaveLength(4);
+    expect(match?.localizationEvidence.length).toBeGreaterThan(match?.evidence.length ?? 0);
+  });
+
   it("keeps cached query documents isolated between different tasks", () => {
     const target = sourceFile(
       "src/session.ts",

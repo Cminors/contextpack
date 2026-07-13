@@ -10,6 +10,7 @@ import type {
 } from "../types.js";
 import { coChangeStrength } from "../analysis/git-history.js";
 import { scoreContentMatches } from "./lexical.js";
+import { locateContentRegion } from "./regions.js";
 
 export const SCORE_WEIGHTS = {
   lexical: 0.28,
@@ -325,11 +326,17 @@ export function rankCandidates(
       else reasons.push(`content match ${details}`);
     }
     const chosenSymbol = bestSymbol(file, terms, weights);
+    const symbolRelevance = chosenSymbol ? weightedMatch(terms, chosenSymbol.name, weights) : 0;
+    const distinctEvidenceTerms = new Set(relevance.content?.evidence.map((item) => item.term) ?? []).size;
+    const contentRegion = relevance.content
+      && (distinctEvidenceTerms >= 2 || symbolRelevance === 0)
+      ? locateContentRegion(file, relevance.content.localizationEvidence)
+      : null;
     return {
       path: file.path,
-      symbol: chosenSymbol,
-      startLine: chosenSymbol?.startLine ?? 1,
-      endLine: chosenSymbol?.endLine ?? Math.min(file.lineCount, 120),
+      symbol: contentRegion ? contentRegion.symbol : chosenSymbol,
+      startLine: contentRegion?.startLine ?? chosenSymbol?.startLine ?? 1,
+      endLine: contentRegion?.endLine ?? chosenSymbol?.endLine ?? Math.min(file.lineCount, 120),
       score: Number(score.toFixed(6)),
       breakdown,
       selected: false,

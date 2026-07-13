@@ -27,6 +27,17 @@ describe("utility contracts", () => {
     expect(extractConventionalScope("add OAuth")).toBeNull();
   });
 
+  it("removes issue-template comments, links, and URLs before extracting terms", () => {
+    const terms = normalizeTaskTerms([
+      "TimeoutErrorMessage does not work",
+      "<!-- Please read https://example.com/docs before submitting an issue -->",
+      "Expected custom timeout message",
+      "![screenshot](https://example.com/image.png)",
+    ].join("\n"));
+    expect(terms).toEqual(expect.arrayContaining(["timeout", "error", "message", "custom"]));
+    expect(terms).not.toEqual(expect.arrayContaining(["please", "read", "submitting", "https", "example"]));
+  });
+
   it("handles repository-relative paths", () => {
     const root = path.resolve("project");
     expect(toPosixPath("src\\auth.ts")).toBe("src/auth.ts");

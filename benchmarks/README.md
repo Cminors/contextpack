@@ -94,7 +94,22 @@ The first checked-in smoke baseline covers all six Axios tasks:
 
 All six tasks completed without skips. File ranking found at least some gold files, but no emitted snippet overlapped a gold hunk. For example, `axios__axios-4738` ranked the correct file fifth while selecting lines 9-13; the patch hunk is at lines 420-428. This is direct evidence that the current one-symbol-per-file snippet policy loses useful within-file location even when file retrieval succeeds. The next model change should target line localization and must improve this fixed track without regressing the historical title and keyword-ablated tracks.
 
-This six-task run is a pipeline and diagnostic baseline, not a claim about the full 43-task benchmark. Raw results are stored in `benchmarks/results/swebench-multilingual-axios-p02/`.
+This six-task run is the pre-localization pipeline baseline, not a claim about the full 43-task benchmark. Raw results are stored in `benchmarks/results/swebench-multilingual-axios-p02/`.
+
+## P0.3 Query-aware Region Localization
+
+P0.3 keeps file ranking and region localization as separate decisions. The content index now retains bounded repeated occurrences for matched terms, while explanation evidence remains capped at four entries. Within each ranked file, the localizer anchors on the strongest retrieval term, scores nearby multi-term clusters for density and field quality, then emits a deterministic region of at most 32 lines. HTML issue-template comments, Markdown links, and bare URLs are removed before task-term extraction so boilerplate does not become a seed.
+
+The same six Axios tasks, dataset revision, repository commits, Git history window, token budget, and line budgets produced:
+
+| Implementation | File R@5 | File R@10 | MRR | Line recall @100 | @250 | @500 | Useful hit @500 | Median tokens | Median analysis |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| P0.2 symbol-first regions | 0.500 | 0.617 | 0.177 | 0.000 | 0.000 | 0.000 | 0.000 | 1,716.5 | 5,152 ms |
+| P0.3 query-aware regions | 0.533 | 0.617 | 0.205 | 0.167 | 0.355 | 0.411 | 0.667 | 3,503 | 4,190.5 ms |
+
+All six tasks still complete without skips. File Recall@10 is unchanged, MRR improves, and every declared line budget now has a non-zero useful hit. On `axios__axios-4738`, the selected `lib/adapters/http.js` region moves from lines 9-13 to lines 397-428, covering the gold hunk at 420-428; its first useful line is emitted at rank 83 under the 100-line budget.
+
+This is evidence that the localization mechanism works on the fixed smoke track, not that within-file retrieval is solved generally. Two of the six tasks still have no useful region at 500 lines, and region noise remains high. A first full 43-task attempt exceeded a 30-minute local execution limit while processing the Babel repository and produced no aggregate artifact; full-set runtime and cancellation therefore remain a separate evaluation-infrastructure task. Raw six-task results are stored in `benchmarks/results/swebench-multilingual-axios-p03/`.
 
 ## Baseline Comparison
 
@@ -142,14 +157,14 @@ Keeping these negative results prevents repeating changes that look reasonable i
 
 ## Decision
 
-The V0.2 content scorer is retained as the default retrieval path.
+The V0.2 content scorer and P0.3 query-aware region localizer are retained as the default retrieval path.
 
 - Keyword-ablated Recall@10, MRR, and test recall exceed their predeclared gates by `0.058`, `0.122`, and `0.200` respectively.
 - Title Recall@10 and MRR improve rather than regress; Noise@10 falls on both tracks.
 - Final median token use is lower than V0.1 on both tracks.
-- The final title latency sample exceeds the provisional performance gate despite a faster preceding full run, so latency stability remains an explicit follow-up.
+- The P0.3 Axios track produces non-zero line recall at 100/250/500 lines without reducing file Recall@10.
 
-A future external issue/feature dataset is still required before measuring Coding Agent success. The next evidence milestone is a fixed JS/TS issue and line-level benchmark; adding a UI, more languages, or an embedded LLM is not justified by these retrieval results alone.
+The external track still measures retrieval rather than Coding Agent success. The next evidence milestone is the complete fixed 43-task JS/TS run, followed by multi-region selection and CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
 
 ## Reproduce
 
@@ -157,7 +172,7 @@ A future external issue/feature dataset is still required before measuring Codin
 node dist/cli.js eval --commits 20 --budget 12000 --query-mode title --output benchmarks/results/<name>-title
 node dist/cli.js eval --commits 20 --budget 12000 --query-mode keyword-ablated --output benchmarks/results/<name>-ablated
 npm run benchmark:prepare:swebench
-node dist/cli.js eval-issues --repo axios/axios --history 50 --budget 12000 --line-budgets 100,250,500 --output benchmarks/results/swebench-multilingual-axios-p02
+node dist/cli.js eval-issues --repo axios/axios --history 50 --budget 12000 --line-budgets 100,250,500 --output benchmarks/results/swebench-multilingual-axios-p03
 ```
 
 Run the command from the root of the repository being evaluated. Raw final reports are stored in:
@@ -168,3 +183,4 @@ Run the command from the root of the repository being evaluated. Raw final repor
 - `benchmarks/results/typescript-sdk-v02-title-final/`
 - `benchmarks/results/typescript-sdk-v02-ablated-final/`
 - `benchmarks/results/swebench-multilingual-axios-p02/`
+- `benchmarks/results/swebench-multilingual-axios-p03/`

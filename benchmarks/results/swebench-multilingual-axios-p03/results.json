@@ -1,0 +1,1156 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T13:57:38.499Z",
+  "sourceDataset": "SWE-bench/SWE-bench_Multilingual",
+  "sourceRevision": "2b7aced941b4873e9cad3e76abbae93f481d1beb",
+  "requestedInstances": 6,
+  "validInstances": 6,
+  "tokenBudget": 12000,
+  "lineBudgets": [
+    100,
+    250,
+    500
+  ],
+  "results": [
+    {
+      "instanceId": "axios__axios-4731",
+      "repo": "axios/axios",
+      "baseCommit": "c30252f685e8f4326722de84923fcbc8cf557f06",
+      "goldRegions": [
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 279,
+          "endLine": 284,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 6,
+          "endLine": 37
+        },
+        {
+          "path": "karma.conf.js",
+          "startLine": 61,
+          "endLine": 90
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 189,
+          "endLine": 220
+        },
+        {
+          "path": "lib/helpers/validator.js",
+          "startLine": 13,
+          "endLine": 44
+        },
+        {
+          "path": "test/specs/__helpers.js",
+          "startLine": 102,
+          "endLine": 124
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 134,
+          "endLine": 165
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 9,
+          "endLine": 40
+        },
+        {
+          "path": "lib/axios.js",
+          "startLine": 8,
+          "endLine": 39
+        },
+        {
+          "path": "test/specs/adapter.spec.js",
+          "startLine": 1,
+          "endLine": 28
+        },
+        {
+          "path": "test/specs/defaults.spec.js",
+          "startLine": 1,
+          "endLine": 26
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 302,
+          "endLine": 314
+        },
+        {
+          "path": "lib/core/Axios.js",
+          "startLine": 3,
+          "endLine": 34
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 125,
+          "endLine": 156
+        },
+        {
+          "path": "test/typescript/axios.ts",
+          "startLine": 243,
+          "endLine": 274
+        },
+        {
+          "path": "lib/helpers/isURLSameOrigin.js",
+          "startLine": 3,
+          "endLine": 34
+        },
+        {
+          "path": "lib/helpers/parseHeaders.js",
+          "startLine": 1,
+          "endLine": 16
+        }
+      ],
+      "goldFiles": [
+        "lib/adapters/http.js"
+      ],
+      "predictions": [
+        "lib/defaults/index.js",
+        "karma.conf.js",
+        "lib/adapters/http.js",
+        "lib/helpers/validator.js",
+        "test/specs/__helpers.js",
+        "index.d.ts",
+        "lib/utils.js",
+        "lib/axios.js",
+        "test/specs/adapter.spec.js",
+        "test/specs/defaults.spec.js",
+        "test/unit/adapters/http.js",
+        "lib/core/Axios.js",
+        "lib/adapters/xhr.js",
+        "test/typescript/axios.ts",
+        "lib/helpers/isURLSameOrigin.js",
+        "lib/helpers/parseHeaders.js",
+        "lib/cancel/CanceledError.js",
+        "test/specs/core/mergeConfig.spec.js",
+        "lib/helpers/isAxiosError.js",
+        "lib/helpers/toFormData.js"
+      ],
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "reciprocalRank": 0.3333333333333333,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 456,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3327,
+      "durationMs": 4510
+    },
+    {
+      "instanceId": "axios__axios-4738",
+      "repo": "axios/axios",
+      "baseCommit": "9bb016f95e6de871a44f3276fd06562704a0abb0",
+      "goldRegions": [
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 420,
+          "endLine": 428,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "test/specs/instance.spec.js",
+          "startLine": 1,
+          "endLine": 27
+        },
+        {
+          "path": "lib/axios.js",
+          "startLine": 8,
+          "endLine": 39
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 397,
+          "endLine": 428
+        },
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 16,
+          "endLine": 47
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 270,
+          "endLine": 289
+        },
+        {
+          "path": "test/specs/__helpers.js",
+          "startLine": 3,
+          "endLine": 38
+        },
+        {
+          "path": "lib/core/AxiosError.js",
+          "startLine": 69,
+          "endLine": 98
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 125,
+          "endLine": 148
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 120,
+          "endLine": 151
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 72,
+          "endLine": 103
+        },
+        {
+          "path": "test/typescript/axios.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "karma.conf.js",
+          "startLine": 54,
+          "endLine": 85
+        },
+        {
+          "path": "test/specs/adapter.spec.js",
+          "startLine": 53,
+          "endLine": 84
+        },
+        {
+          "path": "test/specs/core/AxiosError.spec.js",
+          "startLine": 1,
+          "endLine": 30
+        },
+        {
+          "path": "lib/core/Axios.js",
+          "startLine": 1,
+          "endLine": 31
+        },
+        {
+          "path": "lib/helpers/validator.js",
+          "startLine": 1,
+          "endLine": 23
+        }
+      ],
+      "goldFiles": [
+        "lib/adapters/http.js"
+      ],
+      "predictions": [
+        "test/specs/instance.spec.js",
+        "lib/axios.js",
+        "lib/adapters/http.js",
+        "lib/defaults/index.js",
+        "lib/utils.js",
+        "test/specs/__helpers.js",
+        "lib/core/AxiosError.js",
+        "index.d.ts",
+        "lib/adapters/xhr.js",
+        "test/unit/adapters/http.js",
+        "test/typescript/axios.ts",
+        "karma.conf.js",
+        "test/specs/adapter.spec.js",
+        "test/specs/core/AxiosError.spec.js",
+        "lib/core/Axios.js",
+        "lib/helpers/validator.js",
+        "lib/helpers/fromDataURI.js",
+        "lib/helpers/formDataToJSON.js",
+        "lib/helpers/toFormData.js",
+        "lib/core/dispatchRequest.js"
+      ],
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "reciprocalRank": 0.3333333333333333,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 9,
+          "linePrecision": 0.09,
+          "lineRecall": 1,
+          "lineF1": 0.16513761467889906,
+          "hitRegionRate": 1,
+          "noiseRegionRate": 0.75,
+          "contextEfficiency": 0.09,
+          "ndcg": 0.32753725410042633,
+          "firstUsefulHit": 83
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 9,
+          "linePrecision": 0.036,
+          "lineRecall": 1,
+          "lineF1": 0.06949806949806948,
+          "hitRegionRate": 1,
+          "noiseRegionRate": 0.8888888888888888,
+          "contextEfficiency": 0.036,
+          "ndcg": 0.32753725410042633,
+          "firstUsefulHit": 83
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 477,
+          "coveredGoldLines": 9,
+          "linePrecision": 0.018867924528301886,
+          "lineRecall": 1,
+          "lineF1": 0.037037037037037035,
+          "hitRegionRate": 1,
+          "noiseRegionRate": 0.9375,
+          "contextEfficiency": 0.018867924528301886,
+          "ndcg": 0.32753725410042633,
+          "firstUsefulHit": 83
+        }
+      },
+      "estimatedTokens": 3472,
+      "durationMs": 3162
+    },
+    {
+      "instanceId": "axios__axios-5085",
+      "repo": "axios/axios",
+      "baseCommit": "85740c3e7a1fa48346dfcbd4497f463ccb1c1b05",
+      "goldRegions": [
+        {
+          "path": "index.d.ts",
+          "startLine": 39,
+          "endLine": 45,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/core/AxiosHeaders.js",
+          "startLine": 15,
+          "endLine": 21,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/core/AxiosHeaders.js",
+          "startLine": 102,
+          "endLine": 114,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/core/AxiosHeaders.js",
+          "startLine": 222,
+          "endLine": 234,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "lib/helpers/parseHeaders.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 27,
+          "endLine": 58
+        },
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 73,
+          "endLine": 108
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 78,
+          "endLine": 109
+        },
+        {
+          "path": "lib/helpers/validator.js",
+          "startLine": 1,
+          "endLine": 23
+        },
+        {
+          "path": "lib/core/Axios.js",
+          "startLine": 10,
+          "endLine": 41
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 152,
+          "endLine": 187
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 67,
+          "endLine": 98
+        },
+        {
+          "path": "lib/core/AxiosHeaders.js",
+          "startLine": 79,
+          "endLine": 110
+        },
+        {
+          "path": "karma.conf.cjs",
+          "startLine": 133,
+          "endLine": 164
+        },
+        {
+          "path": "lib/core/transformData.js",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "lib/helpers/formDataToJSON.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "test/specs/defaults.spec.js",
+          "startLine": 1,
+          "endLine": 34
+        },
+        {
+          "path": "lib/core/buildFullPath.js",
+          "startLine": 1,
+          "endLine": 22
+        },
+        {
+          "path": "lib/adapters/index.js",
+          "startLine": 6,
+          "endLine": 34
+        },
+        {
+          "path": "lib/helpers/cookies.js",
+          "startLine": 1,
+          "endLine": 35
+        }
+      ],
+      "goldFiles": [
+        "index.d.ts",
+        "lib/core/AxiosHeaders.js"
+      ],
+      "predictions": [
+        "lib/helpers/parseHeaders.js",
+        "lib/helpers/toFormData.js",
+        "lib/defaults/index.js",
+        "lib/adapters/http.js",
+        "lib/helpers/validator.js",
+        "lib/core/Axios.js",
+        "lib/adapters/xhr.js",
+        "lib/utils.js",
+        "lib/core/AxiosHeaders.js",
+        "karma.conf.cjs",
+        "lib/core/transformData.js",
+        "lib/helpers/formDataToJSON.js",
+        "test/specs/defaults.spec.js",
+        "lib/core/buildFullPath.js",
+        "lib/adapters/index.js",
+        "lib/helpers/cookies.js",
+        "lib/helpers/fromDataURI.js",
+        "lib/helpers/AxiosURLSearchParams.js",
+        "test/specs/xsrf.spec.js",
+        "lib/core/AxiosError.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0.5,
+      "reciprocalRank": 0.1111111111111111,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 9,
+          "linePrecision": 0.018,
+          "lineRecall": 0.225,
+          "lineF1": 0.03333333333333333,
+          "hitRegionRate": 0.25,
+          "noiseRegionRate": 0.9375,
+          "contextEfficiency": 0.018,
+          "ndcg": 0.09957050128039971,
+          "firstUsefulHit": 279
+        }
+      },
+      "estimatedTokens": 3536,
+      "durationMs": 3156
+    },
+    {
+      "instanceId": "axios__axios-5316",
+      "repo": "axios/axios",
+      "baseCommit": "65e8d1e28ce829f47a837e45129730e541950d3c",
+      "goldRegions": [
+        {
+          "path": ".eslintrc.cjs",
+          "startLine": 1,
+          "endLine": 12,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 19,
+          "endLine": 24,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 243,
+          "endLine": 251,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 262,
+          "endLine": 268,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/env/classes/FormData.js",
+          "startLine": 1,
+          "endLine": 2,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 2,
+          "endLine": 8,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 59,
+          "endLine": 75,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 99,
+          "endLine": 105,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 117,
+          "endLine": 123,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 512,
+          "endLine": 518,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 596,
+          "endLine": 601,
+          "kind": "patch-hunk"
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 673,
+          "endLine": 677,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 2,
+          "endLine": 33
+        },
+        {
+          "path": "lib/core/AxiosError.js",
+          "startLine": 1,
+          "endLine": 31
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 296,
+          "endLine": 325
+        },
+        {
+          "path": "lib/axios.js",
+          "startLine": 13,
+          "endLine": 44
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 233,
+          "endLine": 264
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 432,
+          "endLine": 456
+        },
+        {
+          "path": "lib/core/Axios.js",
+          "startLine": 150,
+          "endLine": 181
+        },
+        {
+          "path": "karma.conf.cjs",
+          "startLine": 56,
+          "endLine": 87
+        },
+        {
+          "path": "lib/core/dispatchRequest.js",
+          "startLine": 11,
+          "endLine": 42
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 47,
+          "endLine": 78
+        },
+        {
+          "path": "lib/adapters/adapters.js",
+          "startLine": 1,
+          "endLine": 24
+        },
+        {
+          "path": "index.d.cts",
+          "startLine": 355,
+          "endLine": 384
+        },
+        {
+          "path": "test/module/test.js",
+          "startLine": 68,
+          "endLine": 99
+        },
+        {
+          "path": "index.js",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "test/module/typings/esm/index.ts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "startLine": 88,
+          "endLine": 119
+        }
+      ],
+      "goldFiles": [
+        ".eslintrc.cjs",
+        "lib/adapters/http.js",
+        "lib/env/classes/FormData.js",
+        "lib/helpers/toFormData.js",
+        "lib/utils.js"
+      ],
+      "predictions": [
+        "lib/defaults/index.js",
+        "lib/core/AxiosError.js",
+        "index.d.ts",
+        "lib/axios.js",
+        "lib/adapters/http.js",
+        "test/unit/adapters/http.js",
+        "lib/core/Axios.js",
+        "karma.conf.cjs",
+        "lib/core/dispatchRequest.js",
+        "lib/adapters/xhr.js",
+        "lib/adapters/adapters.js",
+        "index.d.cts",
+        "test/module/test.js",
+        "index.js",
+        "test/module/typings/esm/index.ts",
+        "lib/helpers/toFormData.js",
+        "gulpfile.js",
+        "lib/helpers/fromDataURI.js",
+        "lib/cancel/CancelToken.js",
+        "lib/helpers/isURLSameOrigin.js"
+      ],
+      "recallAt5": 0.2,
+      "recallAt10": 0.2,
+      "reciprocalRank": 0.2,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 12,
+          "linePrecision": 0.048,
+          "lineRecall": 0.13043478260869565,
+          "lineF1": 0.07017543859649122,
+          "hitRegionRate": 0.16666666666666666,
+          "noiseRegionRate": 0.8888888888888888,
+          "contextEfficiency": 0.048,
+          "ndcg": 0.08474882099437606,
+          "firstUsefulHit": 136
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 492,
+          "coveredGoldLines": 22,
+          "linePrecision": 0.044715447154471545,
+          "lineRecall": 0.2391304347826087,
+          "lineF1": 0.07534246575342465,
+          "hitRegionRate": 0.3333333333333333,
+          "noiseRegionRate": 0.875,
+          "contextEfficiency": 0.044715447154471545,
+          "ndcg": 0.1416458592723452,
+          "firstUsefulHit": 136
+        }
+      },
+      "estimatedTokens": 3534,
+      "durationMs": 4768
+    },
+    {
+      "instanceId": "axios__axios-5892",
+      "repo": "axios/axios",
+      "baseCommit": "ae003913a39f3bdf9bbbd8f71a1ed681fd044d8b",
+      "goldRegions": [
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 471,
+          "endLine": 477,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "test/specs/defaults.spec.js",
+          "startLine": 61,
+          "endLine": 96
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 78,
+          "endLine": 109
+        },
+        {
+          "path": "test/specs/headers.spec.js",
+          "startLine": 1,
+          "endLine": 31
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 458,
+          "endLine": 489
+        },
+        {
+          "path": "karma.conf.cjs",
+          "startLine": 119,
+          "endLine": 150
+        },
+        {
+          "path": "index.d.cts",
+          "startLine": 1,
+          "endLine": 32
+        },
+        {
+          "path": "lib/defaults/index.js",
+          "startLine": 18,
+          "endLine": 49
+        },
+        {
+          "path": "lib/helpers/HttpStatusCode.js",
+          "startLine": 45,
+          "endLine": 72
+        },
+        {
+          "path": "lib/adapters/adapters.js",
+          "startLine": 1,
+          "endLine": 24
+        },
+        {
+          "path": "test/specs/instance.spec.js",
+          "startLine": 33,
+          "endLine": 68
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 175,
+          "endLine": 206
+        },
+        {
+          "path": "lib/utils.js",
+          "startLine": 266,
+          "endLine": 297
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 457,
+          "endLine": 488
+        },
+        {
+          "path": "lib/core/dispatchRequest.js",
+          "startLine": 47,
+          "endLine": 82
+        },
+        {
+          "path": "lib/core/AxiosError.js",
+          "startLine": 1,
+          "endLine": 22
+        },
+        {
+          "path": "test/unit/utils/utils.js",
+          "startLine": 50,
+          "endLine": 67
+        }
+      ],
+      "goldFiles": [
+        "lib/adapters/http.js"
+      ],
+      "predictions": [
+        "test/specs/defaults.spec.js",
+        "index.d.ts",
+        "test/specs/headers.spec.js",
+        "lib/adapters/http.js",
+        "karma.conf.cjs",
+        "index.d.cts",
+        "lib/defaults/index.js",
+        "lib/helpers/HttpStatusCode.js",
+        "lib/adapters/adapters.js",
+        "test/specs/instance.spec.js",
+        "lib/adapters/xhr.js",
+        "lib/utils.js",
+        "test/unit/adapters/http.js",
+        "lib/core/dispatchRequest.js",
+        "lib/core/AxiosError.js",
+        "test/unit/utils/utils.js",
+        "test/unit/regression/bugs.js",
+        "lib/axios.js",
+        "lib/helpers/buildURL.js",
+        "lib/core/Axios.js"
+      ],
+      "recallAt5": 1,
+      "recallAt10": 1,
+      "reciprocalRank": 0.25,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 7,
+          "linePrecision": 0.028,
+          "lineRecall": 1,
+          "lineF1": 0.054474708171206226,
+          "hitRegionRate": 1,
+          "noiseRegionRate": 0.875,
+          "contextEfficiency": 0.028,
+          "ndcg": 0.2800751145586051,
+          "firstUsefulHit": 113
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 487,
+          "coveredGoldLines": 7,
+          "linePrecision": 0.014373716632443531,
+          "lineRecall": 1,
+          "lineF1": 0.028340080971659916,
+          "hitRegionRate": 1,
+          "noiseRegionRate": 0.9375,
+          "contextEfficiency": 0.014373716632443531,
+          "ndcg": 0.2800751145586051,
+          "firstUsefulHit": 113
+        }
+      },
+      "estimatedTokens": 3359,
+      "durationMs": 3871
+    },
+    {
+      "instanceId": "axios__axios-6539",
+      "repo": "axios/axios",
+      "baseCommit": "c6cce43cd94489f655f4488c5a50ecaf781c94f2",
+      "goldRegions": [
+        {
+          "path": "lib/helpers/isAbsoluteURL.js",
+          "startLine": 8,
+          "endLine": 15,
+          "kind": "patch-hunk"
+        }
+      ],
+      "predictedRegions": [
+        {
+          "path": "index.js",
+          "startLine": 1,
+          "endLine": 29
+        },
+        {
+          "path": "index.d.ts",
+          "startLine": 172,
+          "endLine": 200
+        },
+        {
+          "path": "lib/axios.js",
+          "startLine": 15,
+          "endLine": 46
+        },
+        {
+          "path": "examples/server.js",
+          "startLine": 66,
+          "endLine": 97
+        },
+        {
+          "path": "lib/adapters/adapters.js",
+          "startLine": 43,
+          "endLine": 74
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "startLine": 219,
+          "endLine": 250
+        },
+        {
+          "path": "index.d.cts",
+          "startLine": 81,
+          "endLine": 114
+        },
+        {
+          "path": "karma.conf.cjs",
+          "startLine": 98,
+          "endLine": 129
+        },
+        {
+          "path": "gulpfile.js",
+          "startLine": 60,
+          "endLine": 91
+        },
+        {
+          "path": "bin/RepoBot.js",
+          "startLine": 45,
+          "endLine": 80
+        },
+        {
+          "path": "test/unit/adapters/http.js",
+          "startLine": 307,
+          "endLine": 338
+        },
+        {
+          "path": "test/unit/adapters/fetch.js",
+          "startLine": 18,
+          "endLine": 49
+        },
+        {
+          "path": "lib/adapters/fetch.js",
+          "startLine": 28,
+          "endLine": 59
+        },
+        {
+          "path": "lib/adapters/xhr.js",
+          "startLine": 1,
+          "endLine": 30
+        },
+        {
+          "path": "test/module/typings/esm/index.ts",
+          "startLine": 8,
+          "endLine": 39
+        },
+        {
+          "path": "lib/core/buildFullPath.js",
+          "startLine": 1,
+          "endLine": 22
+        }
+      ],
+      "goldFiles": [
+        "lib/helpers/isAbsoluteURL.js"
+      ],
+      "predictions": [
+        "index.js",
+        "index.d.ts",
+        "lib/axios.js",
+        "examples/server.js",
+        "lib/adapters/adapters.js",
+        "lib/adapters/http.js",
+        "index.d.cts",
+        "karma.conf.cjs",
+        "gulpfile.js",
+        "bin/RepoBot.js",
+        "test/unit/adapters/http.js",
+        "test/unit/adapters/fetch.js",
+        "lib/adapters/fetch.js",
+        "lib/adapters/xhr.js",
+        "test/module/typings/esm/index.ts",
+        "lib/core/buildFullPath.js",
+        "lib/core/AxiosError.js",
+        "lib/core/dispatchRequest.js",
+        "lib/defaults/index.js",
+        "lib/helpers/HttpStatusCode.js"
+      ],
+      "recallAt5": 0,
+      "recallAt10": 0,
+      "reciprocalRank": 0,
+      "regionMetrics": {
+        "100": {
+          "budgetLines": 100,
+          "emittedLines": 100,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "250": {
+          "budgetLines": 250,
+          "emittedLines": 250,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        },
+        "500": {
+          "budgetLines": 500,
+          "emittedLines": 500,
+          "coveredGoldLines": 0,
+          "linePrecision": 0,
+          "lineRecall": 0,
+          "lineF1": 0,
+          "hitRegionRate": 0,
+          "noiseRegionRate": 1,
+          "contextEfficiency": 0,
+          "ndcg": 0,
+          "firstUsefulHit": null
+        }
+      },
+      "estimatedTokens": 3597,
+      "durationMs": 8013
+    }
+  ],
+  "skipped": [],
+  "aggregate": {
+    "recallAt5": 0.5333333333333333,
+    "recallAt10": 0.6166666666666667,
+    "mrr": 0.2046296296296296,
+    "medianTokens": 3503,
+    "medianDurationMs": 4190.5,
+    "regionMetrics": {
+      "100": {
+        "budgetLines": 100,
+        "medianEmittedLines": 100,
+        "linePrecision": 0.015,
+        "lineRecall": 0.16666666666666666,
+        "lineF1": 0.027522935779816512,
+        "hitRegionRate": 0.16666666666666666,
+        "noiseRegionRate": 0.9583333333333334,
+        "contextEfficiency": 0.015,
+        "ndcg": 0.05458954235007105,
+        "usefulHitRate": 0.16666666666666666,
+        "medianFirstUsefulHit": 83
+      },
+      "250": {
+        "budgetLines": 250,
+        "medianEmittedLines": 250,
+        "linePrecision": 0.018666666666666665,
+        "lineRecall": 0.3550724637681159,
+        "lineF1": 0.032358036044294484,
+        "hitRegionRate": 0.36111111111111116,
+        "noiseRegionRate": 0.9421296296296297,
+        "contextEfficiency": 0.018666666666666665,
+        "ndcg": 0.11539353160890126,
+        "usefulHitRate": 0.5,
+        "medianFirstUsefulHit": 113
+      },
+      "500": {
+        "budgetLines": 500,
+        "medianEmittedLines": 489.5,
+        "linePrecision": 0.015992848052536163,
+        "lineRecall": 0.4106884057971015,
+        "lineF1": 0.029008819515909154,
+        "hitRegionRate": 0.4305555555555555,
+        "noiseRegionRate": 0.9479166666666666,
+        "contextEfficiency": 0.015992848052536163,
+        "ndcg": 0.1414714548686294,
+        "usefulHitRate": 0.6666666666666666,
+        "medianFirstUsefulHit": 124.5
+      }
+    }
+  },
+  "limitations": [
+    "Gold regions are old-side unified-diff hunks, not human-authored context annotations.",
+    "Insertion-only hunks are represented by a one-line anchor in the base checkout.",
+    "Only existing JavaScript and TypeScript patch files are scored; new and unsupported files are excluded.",
+    "Retrieval quality does not measure whether an agent can produce a correct patch or pass tests."
+  ]
+}

@@ -49,11 +49,13 @@ export interface ContentEvidence {
   term: string;
   field: LexicalContentField;
   line: number;
+  relevance?: number;
 }
 
 export interface ContentMatch {
   score: number;
   evidence: ContentEvidence[];
+  localizationEvidence: ContentEvidence[];
 }
 
 function contentTerms(
@@ -96,7 +98,8 @@ export function extractLexicalDocument(
 ): LexicalDocument {
   const limited = content.slice(0, LEXICAL_LIMITS.maxCharacters);
   const termWeights: Record<string, number> = {};
-  const bestOccurrences: Record<string, LexicalOccurrence> = {};
+  const occurrences: LexicalOccurrence[] = [];
+  const occurrenceKeys = new Set<string>();
   const counts = new Map<string, number>();
   let length = 0;
 
@@ -114,13 +117,10 @@ export function extractLexicalDocument(
       if (count === 0 && counts.size >= LEXICAL_LIMITS.maxDistinctTerms) continue;
       counts.set(term, count + 1);
       termWeights[term] = (termWeights[term] ?? 0) + CONTENT_FIELD_WEIGHTS[field];
-      const current = bestOccurrences[term];
-      if (
-        !current
-        || CONTENT_FIELD_WEIGHTS[field] > CONTENT_FIELD_WEIGHTS[current.field]
-        || (CONTENT_FIELD_WEIGHTS[field] === CONTENT_FIELD_WEIGHTS[current.field] && line < current.line)
-      ) {
-        bestOccurrences[term] = { term, field, line };
+      const occurrenceKey = `${term}\0${field}\0${line}`;
+      if (!occurrenceKeys.has(occurrenceKey)) {
+        occurrenceKeys.add(occurrenceKey);
+        occurrences.push({ term, field, line });
       }
       length += 1;
       if (length >= LEXICAL_LIMITS.maxOccurrences) break;
@@ -154,7 +154,7 @@ export function extractLexicalDocument(
   return {
     length: queryTerms ? Math.max(1, limited.length) : length,
     termWeights,
-    occurrences: Object.values(bestOccurrences),
+    occurrences,
   };
 }
 
@@ -224,12 +224,28 @@ export function scoreContentMatches(files: FileAnalysis[], terms: string[]): Map
       }
     }
     const score = Math.min(1, contributions.reduce((sum, item) => sum + item.value, 0) / denominator);
+    const contributionByTerm = new Map(contributions.map((item) => [item.term, item.value]));
+    const localizationEvidence = document.occurrences
+      .filter((item) => matchedTerms.has(item.term))
+      .sort((left, right) =>
+        (contributionByTerm.get(right.term) ?? 0) - (contributionByTerm.get(left.term) ?? 0)
+        || CONTENT_FIELD_WEIGHTS[right.field] - CONTENT_FIELD_WEIGHTS[left.field]
+        || left.line - right.line
+        || left.term.localeCompare(right.term),
+      )
+      .slice(0, 256)
+      .map(({ term, field, line }) => ({
+        term,
+        field,
+        line,
+        relevance: contributionByTerm.get(term) ?? 0,
+      }));
     const evidence = contributions
       .map((item) => bestOccurrence.get(item.term))
       .filter((item): item is LexicalOccurrence => item !== undefined)
       .slice(0, 4)
       .map(({ term, field, line }) => ({ term, field, line }));
-    matches.set(file.path, { score, evidence });
+    matches.set(file.path, { score, evidence, localizationEvidence });
   }
 
   return matches;

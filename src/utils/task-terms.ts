@@ -86,6 +86,9 @@ export function extractConventionalScope(task: string): string | null {
 
 export function normalizeTaskTerms(task: string): string[] {
   const cleanedTask = task
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/!?\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/https?:\/\/\S+/gi, " ")
     .replace(
       /^(?:feat|feature|fix|docs|chore|refactor|test)(?:\(([^)]*)\))?!?:\s*/i,
       (_match, scope: string | undefined) => scope ? `${scope} ` : "",

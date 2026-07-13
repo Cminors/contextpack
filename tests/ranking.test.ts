@@ -184,6 +184,32 @@ describe("candidate ranking", () => {
     expect(ranked[0]?.reasons.join(" ")).toContain("line 2");
   });
 
+  it("localizes a content-matched file near the matching lines instead of an unrelated symbol", () => {
+    const lines = Array.from({ length: 450 }, (_, index) => `// filler line ${index + 1}`);
+    lines[8] = "export function unrelatedHelper() { return true; }";
+    lines[419] = "// Handle request timeout after the socket connects.";
+    lines[424] = "throw new Error('timeout of ' + timeout + 'ms exceeded');";
+    const target = {
+      ...file("lib/adapters/http.js"),
+      language: "javascript" as const,
+      content: lines.join("\n"),
+      lineCount: lines.length,
+      symbols: [{
+        name: "unrelatedHelper",
+        kind: "function" as const,
+        startLine: 9,
+        endLine: 13,
+        exported: true,
+        text: "",
+      }],
+    };
+
+    const ranked = rankCandidates([target], ["timeout", "exceeded", "message"], emptyGitHistory(), []);
+    expect(ranked[0]?.path).toBe(target.path);
+    expect(ranked[0]?.startLine).toBeLessThanOrEqual(420);
+    expect(ranked[0]?.endLine).toBeGreaterThanOrEqual(425);
+  });
+
   it("keeps exact path relevance ahead of a content-only match", () => {
     const exact = file("src/malformed-payload.ts");
     const contentOnly = {
