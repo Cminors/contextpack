@@ -330,6 +330,8 @@ This does not remove the source directory or any `.contextpack/` results already
 
 `manifest.json` provides machine-readable candidates, score breakdowns, relationships, budgets, warnings, and timing data. It is primarily useful for diagnostics and integrations.
 
+Maintainer issue evaluations also emit `audit.md` and `audit.json`, which separate top-10 file-ranking misses from cases where the correct file was found but the emitted region missed the patch hunk.
+
 ## Privacy and safety
 
 - Analysis runs locally.
@@ -376,11 +378,11 @@ Current key results:
 | MCP TypeScript SDK, title mode | 20 | 0.439 | 0.635 | medium-repository file retrieval |
 | MCP TypeScript SDK, keyword ablation | 20 | 0.341 | 0.402 | retrieval after answer hints are removed |
 | SWE-bench Axios issues | 6 | 0.617 | 0.205 | real-issue file and region smoke test |
-| SWE-bench JS/TS fixed set | 38 valid / 43 attempted | 0.325 | 0.086 | seven-repository P0.4 baseline |
+| SWE-bench JS/TS fixed set | 43 valid / 43 attempted | 0.299 | 0.079 | seven-repository P0.5 zero-skip baseline |
 
 Query-aware region localization raises Axios line recall from `0.000` at every budget to `0.167`, `0.355`, and `0.411` at 100, 250, and 500 emitted lines. Useful-hit rate reaches `0.667` at 500 lines, but this is still a six-task smoke result with high region noise—not evidence of general agent success.
 
-The resumable P0.4 runner attempted all 43 fixed JS/TS instances and produced 38 valid results after retrying transient failures. Five instances remain skipped: three Babel analyses exceeded the retry timeout, one Three.js fetch reached the Git timeout, and one Vue fetch ended with a TLS error. On the 38 valid instances, line recall is `0.000`, `0.070`, and `0.079` at 100, 250, and 500 lines. These figures expose a substantial multi-repository localization gap; they are not directly comparable to the Axios-only smoke subset.
+The resumable runner now completes all 43 fixed JS/TS instances without skips. On the zero-skip baseline, line recall is `0.000`, `0.062`, and `0.070` at 100, 250, and 500 lines. The failure-stage audit finds 26 top-10 file-ranking misses, 11 cases where a gold file is retrieved but no useful region is emitted, and 6 tasks with both a file and useful-region hit. These figures expose substantial cross-repository file-ranking and localization gaps; they are not directly comparable to the Axios-only smoke subset.
 
 See the [Benchmark document](benchmarks/README.md) for methodology, raw results, limitations, and rejected experiments.
 
@@ -426,7 +428,7 @@ Do not upload private source code, tokens, `.env` files, or other credentials.
 
 ## Project status
 
-ContextPack is an unpublished experimental source preview. The core CLI, package structure, automated tests, performance smoke test, resumable real-issue evaluation, a 38-valid/43-attempted external baseline, and a first query-aware region localizer are in place. npm publishing, a formal release, zero-knowledge installation, a zero-skip 43-task validation, and broadly reliable within-file localization are not finished.
+ContextPack is an unpublished experimental source preview. The core CLI, package structure, automated tests, performance smoke test, resumable real-issue evaluation, a zero-skip 43-task external baseline, a failure-stage audit, and a first query-aware region localizer are in place. npm publishing, a formal release, zero-knowledge installation, score-level diagnosis of the remaining ranking misses, and broadly reliable within-file localization are not finished.
 
 The current goal is to let a small group of testers use the project safely and report understandable feedback—not to promote it broadly.
 
@@ -439,7 +441,7 @@ npm run test:coverage
 npm run perf:smoke
 ```
 
-Current quality gate: 68 tests passing, more than 88% line coverage, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22.
+Current quality gate: 72 tests passing, more than 88% line coverage, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22.
 
 ## License
 

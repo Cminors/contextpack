@@ -133,6 +133,31 @@ Three Babel analyses remained above the shortened 30-second retry limit, one Thr
 
 A task-level failure split makes the next retrieval bottleneck explicit. At least one gold file appears in the top ten predictions for 16 of 38 valid tasks. Six of those tasks also have a useful region within the 500-line budget, while ten retrieve a gold file but miss every gold region. The remaining 22 tasks have no gold-file hit in the top ten. Multi-region selection can address the ten localization failures, but it cannot repair the larger upstream file-ranking group by itself.
 
+## P0.5 Zero-skip Baseline And Failure-stage Audit
+
+P0.5 resumed the same checkpoint with the declared 600-second analysis and 300-second Git limits. All five previously skipped instances completed: the three Babel analyses took 321,918 ms, 129,096 ms, and 152,348 ms, while the cached Three.js and Vue retries recovered from their earlier network failures. The fixed set now has a zero-skip 43/43 report:
+
+| Attempted | Valid | Skipped | File R@5 | File R@10 | MRR | Median tokens | Median analysis |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 43 | 43 | 0 | 0.117 | 0.299 | 0.079 | 3,786 | 5,390 ms |
+
+| Line budget | Recall | Precision | F1 | Useful hit | Median first hit |
+|---:|---:|---:|---:|---:|---:|
+| 100 | 0.000 | 0.000 | 0.000 | 0.000 | n/a |
+| 250 | 0.062 | 0.004 | 0.008 | 0.116 | 147 |
+| 500 | 0.070 | 0.003 | 0.006 | 0.140 | 153 |
+
+`eval-issues` now writes a deterministic `audit.json` and `audit.md` next to the benchmark report. The audit classifies the observed failure stage without guessing at an unrecorded scoring cause:
+
+| Failure stage | Tasks |
+|---|---:|
+| Gold file in top 10 and useful region at 500 lines | 6 |
+| Gold file in top 10 but no useful region | 11 |
+| Gold file ranked 11-20 | 4 |
+| Gold file outside the recorded top 20 | 22 |
+
+The complete baseline therefore contains 26 top-10 file-ranking misses (60.5%) and 11 downstream localization misses. The four rank-11-20 cases are bounded reranking candidates; the 22 outside-top-20 cases require deeper retrieval diagnostics. The audit identifies where the observable pipeline failed, not why a score was low. Raw results and both audit formats are stored in `benchmarks/results/swebench-multilingual-full-p05/`.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
@@ -186,7 +211,7 @@ The V0.2 content scorer and P0.3 query-aware region localizer are retained as th
 - Final median token use is lower than V0.1 on both tracks.
 - The P0.3 Axios track produces non-zero line recall at 100/250/500 lines without reducing file Recall@10.
 
-The external track still measures retrieval rather than Coding Agent success. The next evidence milestone is to resolve the five skipped instances and establish a stable all-43 report. Retrieval work should then audit the 22 file-ranking misses before testing multi-region selection on the ten file-hit/region-miss tasks, followed by CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
+The external track still measures retrieval rather than Coding Agent success. The zero-skip report and failure-stage audit are now established. The next retrieval experiment should persist score evidence for gold files and diagnose the 22 outside-top-20 misses before changing ranking weights. Multi-region selection can then target the 11 file-hit/region-miss tasks, followed by CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
 
 ## Reproduce
 
@@ -208,3 +233,5 @@ Run the command from the root of the repository being evaluated. Raw final repor
 - `benchmarks/results/typescript-sdk-v02-ablated-final/`
 - `benchmarks/results/swebench-multilingual-axios-p02/`
 - `benchmarks/results/swebench-multilingual-axios-p03/`
+- `benchmarks/results/swebench-multilingual-full-p04/`
+- `benchmarks/results/swebench-multilingual-full-p05/`

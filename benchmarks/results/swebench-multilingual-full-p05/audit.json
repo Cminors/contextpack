@@ -1,0 +1,1153 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-14T01:00:51.800Z",
+  "sourceDataset": "SWE-bench/SWE-bench_Multilingual",
+  "sourceRevision": "2b7aced941b4873e9cad3e76abbae93f481d1beb",
+  "validInstances": 43,
+  "maximumLineBudget": 500,
+  "counts": {
+    "fileHitRegionHit": 6,
+    "fileHitRegionMiss": 11,
+    "fileMissRank11To20": 4,
+    "fileMissOutsideTop20": 22,
+    "fileRankingMisses": 26,
+    "regionLocalizationMisses": 11
+  },
+  "byRepository": [
+    {
+      "repo": "axios/axios",
+      "counts": {
+        "fileHitRegionHit": 4,
+        "fileHitRegionMiss": 1,
+        "fileMissRank11To20": 0,
+        "fileMissOutsideTop20": 1
+      }
+    },
+    {
+      "repo": "babel/babel",
+      "counts": {
+        "fileHitRegionHit": 0,
+        "fileHitRegionMiss": 0,
+        "fileMissRank11To20": 0,
+        "fileMissOutsideTop20": 5
+      }
+    },
+    {
+      "repo": "facebook/docusaurus",
+      "counts": {
+        "fileHitRegionHit": 0,
+        "fileHitRegionMiss": 1,
+        "fileMissRank11To20": 0,
+        "fileMissOutsideTop20": 4
+      }
+    },
+    {
+      "repo": "immutable-js/immutable-js",
+      "counts": {
+        "fileHitRegionHit": 0,
+        "fileHitRegionMiss": 1,
+        "fileMissRank11To20": 1,
+        "fileMissOutsideTop20": 0
+      }
+    },
+    {
+      "repo": "mrdoob/three.js",
+      "counts": {
+        "fileHitRegionHit": 0,
+        "fileHitRegionMiss": 0,
+        "fileMissRank11To20": 0,
+        "fileMissOutsideTop20": 3
+      }
+    },
+    {
+      "repo": "preactjs/preact",
+      "counts": {
+        "fileHitRegionHit": 2,
+        "fileHitRegionMiss": 7,
+        "fileMissRank11To20": 2,
+        "fileMissOutsideTop20": 6
+      }
+    },
+    {
+      "repo": "vuejs/core",
+      "counts": {
+        "fileHitRegionHit": 0,
+        "fileHitRegionMiss": 1,
+        "fileMissRank11To20": 1,
+        "fileMissOutsideTop20": 3
+      }
+    }
+  ],
+  "entries": [
+    {
+      "instanceId": "axios__axios-4731",
+      "repo": "axios/axios",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "lib/adapters/http.js",
+          "rank": 3
+        }
+      ],
+      "topPredictions": [
+        "lib/defaults/index.js",
+        "karma.conf.js",
+        "lib/adapters/http.js",
+        "lib/helpers/validator.js",
+        "test/specs/__helpers.js",
+        "index.d.ts",
+        "lib/utils.js",
+        "lib/axios.js",
+        "test/specs/adapter.spec.js",
+        "test/specs/defaults.spec.js"
+      ]
+    },
+    {
+      "instanceId": "axios__axios-4738",
+      "repo": "axios/axios",
+      "category": "file-hit-region-hit",
+      "goldFiles": [
+        {
+          "path": "lib/adapters/http.js",
+          "rank": 5
+        }
+      ],
+      "topPredictions": [
+        "test/specs/__helpers.js",
+        "karma.conf.js",
+        "test/specs/adapter.spec.js",
+        "lib/helpers/validator.js",
+        "lib/adapters/http.js",
+        "test/specs/instance.spec.js",
+        "lib/defaults/index.js",
+        "lib/core/AxiosError.js",
+        "lib/utils.js",
+        "lib/axios.js"
+      ]
+    },
+    {
+      "instanceId": "axios__axios-5085",
+      "repo": "axios/axios",
+      "category": "file-hit-region-hit",
+      "goldFiles": [
+        {
+          "path": "index.d.ts",
+          "rank": null
+        },
+        {
+          "path": "lib/core/AxiosHeaders.js",
+          "rank": 9
+        }
+      ],
+      "topPredictions": [
+        "lib/helpers/parseHeaders.js",
+        "lib/helpers/toFormData.js",
+        "lib/defaults/index.js",
+        "lib/adapters/http.js",
+        "lib/helpers/validator.js",
+        "lib/core/Axios.js",
+        "lib/adapters/xhr.js",
+        "lib/utils.js",
+        "lib/core/AxiosHeaders.js",
+        "karma.conf.cjs"
+      ]
+    },
+    {
+      "instanceId": "axios__axios-5316",
+      "repo": "axios/axios",
+      "category": "file-hit-region-hit",
+      "goldFiles": [
+        {
+          "path": ".eslintrc.cjs",
+          "rank": null
+        },
+        {
+          "path": "lib/adapters/http.js",
+          "rank": 5
+        },
+        {
+          "path": "lib/env/classes/FormData.js",
+          "rank": null
+        },
+        {
+          "path": "lib/helpers/toFormData.js",
+          "rank": 16
+        },
+        {
+          "path": "lib/utils.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "lib/defaults/index.js",
+        "lib/core/AxiosError.js",
+        "index.d.ts",
+        "lib/axios.js",
+        "lib/adapters/http.js",
+        "test/unit/adapters/http.js",
+        "lib/core/Axios.js",
+        "karma.conf.cjs",
+        "lib/core/dispatchRequest.js",
+        "lib/adapters/xhr.js"
+      ]
+    },
+    {
+      "instanceId": "axios__axios-5892",
+      "repo": "axios/axios",
+      "category": "file-hit-region-hit",
+      "goldFiles": [
+        {
+          "path": "lib/adapters/http.js",
+          "rank": 4
+        }
+      ],
+      "topPredictions": [
+        "test/specs/defaults.spec.js",
+        "index.d.ts",
+        "test/specs/headers.spec.js",
+        "lib/adapters/http.js",
+        "karma.conf.cjs",
+        "index.d.cts",
+        "lib/defaults/index.js",
+        "lib/helpers/HttpStatusCode.js",
+        "lib/adapters/adapters.js",
+        "test/specs/instance.spec.js"
+      ]
+    },
+    {
+      "instanceId": "axios__axios-6539",
+      "repo": "axios/axios",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "lib/helpers/isAbsoluteURL.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "index.js",
+        "index.d.ts",
+        "lib/axios.js",
+        "examples/server.js",
+        "lib/adapters/adapters.js",
+        "lib/adapters/http.js",
+        "index.d.cts",
+        "karma.conf.cjs",
+        "gulpfile.js",
+        "bin/RepoBot.js"
+      ]
+    },
+    {
+      "instanceId": "babel__babel-13928",
+      "repo": "babel/babel",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/babel-parser/src/parser/expression.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "scripts/parser-tests/typescript/error-codes.js",
+        "packages/babel-plugin-transform-react-jsx-self/src/index.js",
+        "packages/babel-plugin-syntax-typescript/src/index.js",
+        "packages/babel-parser/test/fixtures/experimental/class-static-block/await-binding-in-static-block/input.js",
+        "packages/babel-helper-plugin-utils/src/index.js",
+        "packages/babel-plugin-proposal-dynamic-import/src/index.js",
+        "packages/babel-plugin-transform-arrow-functions/src/index.js",
+        "packages/babel-preset-typescript/src/index.js",
+        "packages/babel-parser/typings/babel-parser.d.ts",
+        "packages/babel-core/src/config/files/types.ts"
+      ]
+    },
+    {
+      "instanceId": "babel__babel-14532",
+      "repo": "babel/babel",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/babel-generator/src/node/parentheses.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/babel-plugin-external-helpers/src/index.ts",
+        "packages/babel-core/src/index.ts",
+        "packages/babel-parser/typings/babel-parser.d.ts",
+        "packages/babel-parser/src/parser/index.js",
+        "packages/babel-parser/src/options.js",
+        "packages/babel-plugin-syntax-flow/src/index.ts",
+        "packages/babel-helper-plugin-utils/src/index.ts",
+        "packages/babel-core/src/transformation/file/merge-map.ts",
+        "packages/babel-core/src/config/files/import-meta-resolve.ts",
+        "packages/babel-core/src/transformation/file/generate.ts"
+      ]
+    },
+    {
+      "instanceId": "babel__babel-15445",
+      "repo": "babel/babel",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/babel-generator/src/source-map.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "babel-worker.cjs",
+        "babel.config.js",
+        "benchmark/babel-core/real-case-preset-env-flow/babel-parser-expression.mjs",
+        "benchmark/babel-generator/many-empty-statements/bench.mjs",
+        "benchmark/babel-generator/many-identifiers/1-length.mjs",
+        "benchmark/babel-generator/many-identifiers/25-length.mjs",
+        "benchmark/babel-generator/real-case/jquery.mjs",
+        "benchmark/babel-helper-compilation-targets/getTargets.mjs",
+        "benchmark/babel-helper-validator-identifier/identifier.bench.mjs",
+        "benchmark/babel-helper-validator-identifier/isIdentifierChar.bench.mjs"
+      ]
+    },
+    {
+      "instanceId": "babel__babel-15649",
+      "repo": "babel/babel",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/babel-traverse/src/scope/lib/renamer.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/babel-core/src/index.ts",
+        "packages/babel-plugin-transform-class-static-block/src/index.ts",
+        "packages/babel-helper-replace-supers/src/index.ts",
+        "packages/babel-parser/typings/babel-parser.source.d.ts",
+        "packages/babel-core/test/parse.js",
+        "packages/babel-plugin-transform-modules-commonjs/test/copied-nodes.js",
+        "packages/babel-core/src/transformation/file/merge-map.ts",
+        "packages/babel-traverse/test/path/virtual-validators.js",
+        "packages/babel-parser/src/options.ts",
+        "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src/util.ts"
+      ]
+    },
+    {
+      "instanceId": "babel__babel-16130",
+      "repo": "babel/babel",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/babel-helpers/src/index.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/babel-core/cjs-proxy.cjs",
+        "packages/babel-parser/src/util/scope.ts",
+        "packages/babel-helpers/test/fixtures/behavior/get-with-falsy-receiver/exec.js",
+        "packages/babel-helpers/test/fixtures/behavior/get-without-receiver/exec.js",
+        "packages/babel-parser/src/util/scopeflags.ts",
+        "packages/babel-preset-env/src/index.ts",
+        "packages/babel-preset-env/src/shipped-proposals.ts",
+        "packages/babel-parser/src/plugins/typescript/scope.ts",
+        "packages/babel-core/src/config/helpers/config-api.ts",
+        "packages/babel-parser/src/parse-error/strict-mode-errors.ts"
+      ]
+    },
+    {
+      "instanceId": "facebook__docusaurus-10130",
+      "repo": "facebook/docusaurus",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/docusaurus/src/server/brokenLinks.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/docusaurus-logger/src/__tests__/index.test.ts",
+        "packages/docusaurus-logger/src/index.ts",
+        "packages/docusaurus-cssnano-preset/src/remove-overridden-custom-properties/index.ts",
+        "packages/create-docusaurus/bin/index.js",
+        "examples/classic/src/components/HomepageFeatures/index.js",
+        "packages/create-docusaurus/templates/classic/src/components/HomepageFeatures/index.js",
+        "packages/create-docusaurus/src/index.ts",
+        "__tests__/validate-package-json.test.ts",
+        "admin/scripts/resizeImage.js",
+        "admin/scripts/generateExamples.js"
+      ]
+    },
+    {
+      "instanceId": "facebook__docusaurus-10309",
+      "repo": "facebook/docusaurus",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/client/docsClientUtils.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/create-docusaurus/bin/index.js",
+        "packages/docusaurus-logger/src/__tests__/index.test.ts",
+        "packages/create-docusaurus/src/index.ts",
+        "__tests__/validate-package-json.test.ts",
+        "admin/scripts/resizeImage.js",
+        "admin/scripts/generateExamples.js",
+        "packages/docusaurus-mdx-loader/src/remark/resolveMarkdownLinks/index.ts",
+        "packages/docusaurus-logger/src/index.ts",
+        "packages/docusaurus-mdx-loader/src/loader.ts",
+        "argos/tests/screenshot.spec.ts"
+      ]
+    },
+    {
+      "instanceId": "facebook__docusaurus-8927",
+      "repo": "facebook/docusaurus",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/docusaurus-utils/src/markdownLinks.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/docusaurus-mdx-loader/src/remark/transformImage/__tests__/index.test.ts",
+        "packages/docusaurus-mdx-loader/src/remark/transformImage/index.ts",
+        "packages/create-docusaurus/bin/index.js",
+        "packages/docusaurus-logger/src/__tests__/index.test.ts",
+        "packages/docusaurus-mdx-loader/src/loader.ts",
+        "__tests__/validate-package-json.test.ts",
+        "admin/scripts/generateExamples.js",
+        "admin/scripts/resizeImage.js",
+        "packages/create-docusaurus/src/index.ts",
+        "packages/docusaurus-mdx-loader/src/remark/transformLinks/__tests__/index.test.ts"
+      ]
+    },
+    {
+      "instanceId": "facebook__docusaurus-9183",
+      "repo": "facebook/docusaurus",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "packages/docusaurus-theme-classic/src/options.ts",
+          "rank": 4
+        },
+        {
+          "path": "packages/docusaurus-theme-classic/src/theme/CodeBlock/Content/String.tsx",
+          "rank": null
+        },
+        {
+          "path": "website/docusaurus.config.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/docusaurus-plugin-content-docs/src/__tests__/options.test.ts",
+        "packages/docusaurus-theme-classic/src/index.ts",
+        "packages/docusaurus-plugin-content-docs/src/versions/files.ts",
+        "packages/docusaurus-theme-classic/src/options.ts",
+        "packages/docusaurus-plugin-content-docs/src/plugin-content-docs.d.ts",
+        "packages/docusaurus-mdx-loader/src/loader.ts",
+        "packages/docusaurus-types/src/config.d.ts",
+        "admin/scripts/generateExamples.js",
+        "packages/create-docusaurus/bin/index.js",
+        "packages/docusaurus-theme-classic/src/__tests__/options.test.ts"
+      ]
+    },
+    {
+      "instanceId": "facebook__docusaurus-9897",
+      "repo": "facebook/docusaurus",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/docusaurus-utils/src/markdownUtils.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/docusaurus-plugin-content-blog/src/plugin-content-blog.d.ts",
+        "packages/docusaurus-plugin-content-docs/src/plugin-content-docs.d.ts",
+        "packages/create-docusaurus/bin/index.js",
+        "packages/docusaurus-logger/src/__tests__/index.test.ts",
+        "packages/create-docusaurus/src/index.ts",
+        "__tests__/validate-package-json.test.ts",
+        "admin/scripts/generateExamples.js",
+        "packages/docusaurus-plugin-content-docs/src/docs.ts",
+        "packages/docusaurus-plugin-content-docs/src/__tests__/docs.test.ts",
+        "packages/docusaurus-plugin-content-blog/src/__tests__/index.test.ts"
+      ]
+    },
+    {
+      "instanceId": "immutable-js__immutable-js-2005",
+      "repo": "immutable-js/immutable-js",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "src/CollectionImpl.js",
+          "rank": 7
+        }
+      ],
+      "topPredictions": [
+        "__tests__/issues.ts",
+        "__tests__/OrderedSet.ts",
+        "__tests__/Set.ts",
+        "src/Hash.js",
+        "__tests__/MultiRequire.js",
+        "src/is.js",
+        "src/CollectionImpl.js",
+        "src/OrderedMap.js",
+        "type-definitions/flow-tests/record.js",
+        "src/OrderedSet.js"
+      ]
+    },
+    {
+      "instanceId": "immutable-js__immutable-js-2006",
+      "repo": "immutable-js/immutable-js",
+      "category": "file-miss-rank-11-20",
+      "goldFiles": [
+        {
+          "path": "src/Operations.js",
+          "rank": 19
+        }
+      ],
+      "topPredictions": [
+        "__tests__/List.ts",
+        "__tests__/Range.ts",
+        "__tests__/updateIn.ts",
+        "src/Record.js",
+        "src/Stack.js",
+        "src/Range.js",
+        "src/TrieUtils.js",
+        "src/CollectionImpl.js",
+        "src/Hash.js",
+        "src/Set.js"
+      ]
+    },
+    {
+      "instanceId": "mrdoob__three.js-25687",
+      "repo": "mrdoob/three.js",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "src/core/Object3D.js",
+          "rank": null
+        },
+        {
+          "path": "src/loaders/ObjectLoader.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "docs/page.js",
+        "docs/prettify/prettify.js",
+        "examples/jsm/cameras/CinematicCamera.js",
+        "examples/jsm/controls/OrbitControls.js",
+        "examples/jsm/exporters/ColladaExporter.js",
+        "editor/js/libs/app.js",
+        "editor/js/libs/codemirror/addon/tern.js",
+        "editor/js/libs/tern-threejs/threejs.js",
+        "examples/jsm/controls/TrackballControls.js",
+        "manual/examples/resources/editor.js"
+      ]
+    },
+    {
+      "instanceId": "mrdoob__three.js-26589",
+      "repo": "mrdoob/three.js",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "src/objects/Line.js",
+          "rank": null
+        },
+        {
+          "path": "src/objects/Mesh.js",
+          "rank": null
+        },
+        {
+          "path": "src/objects/Points.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "examples/jsm/animation/CCDIKSolver.js",
+        "examples/jsm/animation/MMDPhysics.js",
+        "examples/jsm/animation/MMDAnimationHelper.js",
+        "examples/jsm/exporters/GLTFExporter.js",
+        "editor/js/libs/acorn/acorn.js",
+        "editor/js/libs/acorn/walk.js",
+        "editor/js/libs/codemirror/addon/tern.js",
+        "editor/js/libs/codemirror/codemirror.js",
+        "editor/js/libs/tern-threejs/threejs.js",
+        "editor/js/libs/ternjs/tern.js"
+      ]
+    },
+    {
+      "instanceId": "mrdoob__three.js-27395",
+      "repo": "mrdoob/three.js",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "src/math/Sphere.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "src/animation/PropertyBinding.js",
+        "test/e2e/puppeteer.js",
+        "examples/jsm/webxr/XRControllerModelFactory.js",
+        "manual/examples/resources/lessons-helper.js",
+        "examples/jsm/libs/motion-controllers.module.js",
+        "examples/jsm/libs/rhino3dm/rhino3dm.module.js",
+        "examples/jsm/libs/rhino3dm/rhino3dm.js",
+        "manual/resources/threejs-lesson-utils.js",
+        "src/objects/BatchedMesh.js",
+        "test/unit/src/math/Sphere.tests.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-2757",
+      "repo": "preactjs/preact",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "src/diff/index.js",
+          "rank": 9
+        }
+      ],
+      "topPredictions": [
+        "compat/test/browser/render.test.js",
+        "src/component.js",
+        "test/browser/render.test.js",
+        "compat/src/render.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "src/internal.d.ts",
+        "compat/src/portals.js",
+        "src/diff/index.js",
+        "src/diff/children.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-2896",
+      "repo": "preactjs/preact",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "src/diff/children.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "compat/test/ts/memo.tsx",
+        "src/render.js",
+        "benches/scripts/bench.js",
+        "hooks/src/index.d.ts",
+        "benches/scripts/prepare.js",
+        "demo/reorder.js",
+        "debug/src/component-stack.js",
+        "benches/scripts/deopts.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-2927",
+      "repo": "preactjs/preact",
+      "category": "file-miss-rank-11-20",
+      "goldFiles": [
+        {
+          "path": "src/diff/props.js",
+          "rank": 12
+        }
+      ],
+      "topPredictions": [
+        "compat/test/browser/render.test.js",
+        "compat/src/render.js",
+        "src/internal.d.ts",
+        "debug/src/debug.js",
+        "src/diff/children.js",
+        "test/browser/render.test.js",
+        "src/diff/index.js",
+        "compat/src/forwardRef.js",
+        "src/index.d.ts",
+        "src/render.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-3010",
+      "repo": "preactjs/preact",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "src/diff/children.js",
+          "rank": 9
+        },
+        {
+          "path": "src/index.d.ts",
+          "rank": 4
+        }
+      ],
+      "topPredictions": [
+        "compat/test/browser/render.test.js",
+        "hooks/src/index.d.ts",
+        "compat/src/render.js",
+        "src/index.d.ts",
+        "debug/src/debug.js",
+        "src/diff/index.js",
+        "test/browser/render.test.js",
+        "hooks/src/index.js",
+        "src/diff/children.js",
+        "src/render.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-3062",
+      "repo": "preactjs/preact",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "src/diff/props.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "hooks/src/index.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "src/component.js",
+        "compat/src/portals.js",
+        "compat/test/browser/render.test.js",
+        "hooks/src/index.d.ts",
+        "karma.conf.js",
+        "src/diff/index.js",
+        "compat/src/render.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-3345",
+      "repo": "preactjs/preact",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "hooks/src/index.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "babel.config.js",
+        "benches/package.json",
+        "benches/proxy-packages/preact-local-proxy/index.js",
+        "benches/proxy-packages/preact-local-proxy/package.json",
+        "benches/proxy-packages/preact-master-proxy/index.js",
+        "benches/proxy-packages/preact-master-proxy/package.json",
+        "benches/proxy-packages/preact-v8-proxy/index.js",
+        "benches/scripts/analyze.js",
+        "benches/scripts/bench.js",
+        "benches/scripts/deopts.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-3454",
+      "repo": "preactjs/preact",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "src/diff/props.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "compat/src/index.js",
+        "debug/src/debug.js",
+        "hooks/src/index.js",
+        "hooks/test/browser/combinations.test.js",
+        "compat/src/render.js",
+        "hooks/src/index.d.ts",
+        "benches/scripts/analyze.js",
+        "compat/src/portals.js",
+        "debug/src/component-stack.js",
+        "jsx-runtime/src/index.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-3562",
+      "repo": "preactjs/preact",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "compat/src/render.js",
+          "rank": 10
+        }
+      ],
+      "topPredictions": [
+        "hooks/test/browser/useLayoutEffect.test.js",
+        "hooks/test/browser/useEffect.test.js",
+        "compat/src/suspense.js",
+        "compat/src/index.js",
+        "debug/src/debug.js",
+        "src/component.js",
+        "src/diff/index.js",
+        "src/internal.d.ts",
+        "test/browser/lifecycles/componentDidCatch.test.js",
+        "compat/src/render.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-3567",
+      "repo": "preactjs/preact",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "hooks/src/index.js",
+          "rank": 8
+        },
+        {
+          "path": "hooks/src/internal.d.ts",
+          "rank": 12
+        }
+      ],
+      "topPredictions": [
+        "compat/src/suspense.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "src/component.js",
+        "test/browser/lifecycles/componentDidCatch.test.js",
+        "src/diff/index.js",
+        "src/internal.d.ts",
+        "hooks/src/index.js",
+        "compat/test/browser/render.test.js",
+        "compat/src/render.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-3689",
+      "repo": "preactjs/preact",
+      "category": "file-hit-region-hit",
+      "goldFiles": [
+        {
+          "path": "hooks/src/index.d.ts",
+          "rank": 12
+        },
+        {
+          "path": "hooks/src/index.js",
+          "rank": 6
+        },
+        {
+          "path": "hooks/src/internal.d.ts",
+          "rank": 20
+        }
+      ],
+      "topPredictions": [
+        "debug/src/debug.js",
+        "src/internal.d.ts",
+        "src/diff/catch-error.js",
+        "compat/src/suspense.js",
+        "src/index.d.ts",
+        "hooks/src/index.js",
+        "test/browser/lifecycles/componentDidCatch.test.js",
+        "hooks/test/browser/componentDidCatch.test.js",
+        "compat/src/suspense-list.js",
+        "src/diff/index.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-3739",
+      "repo": "preactjs/preact",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "hooks/src/index.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "debug/src/debug.js",
+        "benches/scripts/bench.js",
+        "debug/test/browser/serializeVNode.test.js",
+        "compat/src/index.js",
+        "debug/test/browser/debug.test.js",
+        "debug/src/check-props.js",
+        "benches/scripts/analyze.js",
+        "demo/context.js",
+        "compat/src/index.d.ts",
+        "compat/scheduler.mjs"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-3763",
+      "repo": "preactjs/preact",
+      "category": "file-hit-region-hit",
+      "goldFiles": [
+        {
+          "path": "src/diff/index.js",
+          "rank": 7
+        }
+      ],
+      "topPredictions": [
+        "debug/src/debug.js",
+        "debug/test/browser/debug.test.js",
+        "src/component.js",
+        "src/internal.d.ts",
+        "hooks/src/index.d.ts",
+        "hooks/src/index.js",
+        "src/diff/index.js",
+        "compat/src/render.js",
+        "test/browser/lifecycles/componentDidUpdate.test.js",
+        "benches/scripts/analyze.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-4152",
+      "repo": "preactjs/preact",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "src/diff/children.js",
+          "rank": 10
+        }
+      ],
+      "topPredictions": [
+        "debug/src/debug.js",
+        "src/component.js",
+        "hooks/src/index.js",
+        "compat/src/suspense-list.js",
+        "test/_util/helpers.js",
+        "debug/test/browser/debug.test.js",
+        "compat/src/index.js",
+        "compat/src/render.js",
+        "test/browser/getDomSibling.test.js",
+        "src/diff/children.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-4182",
+      "repo": "preactjs/preact",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "src/diff/index.js",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "demo/list.jsx",
+        "demo/logger.jsx",
+        "demo/people/index.tsx",
+        "demo/index.jsx",
+        "compat/src/index.js",
+        "demo/todo.jsx",
+        "demo/stateOrderBug.jsx",
+        "demo/spiral.jsx",
+        "demo/reorder.jsx",
+        "debug/src/debug.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-4245",
+      "repo": "preactjs/preact",
+      "category": "file-miss-rank-11-20",
+      "goldFiles": [
+        {
+          "path": "hooks/src/index.js",
+          "rank": 12
+        }
+      ],
+      "topPredictions": [
+        "benches/scripts/analyze.js",
+        "benches/scripts/index.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "benches/scripts/bench.js",
+        "compat/test/browser/useSyncExternalStore.test.js",
+        "benches/scripts/deopts.js",
+        "debug/test/browser/debug.test.js",
+        "compat/test/ts/suspense.tsx",
+        "compat/test/browser/hooks.test.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-4316",
+      "repo": "preactjs/preact",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "src/diff/props.js",
+          "rank": 3
+        }
+      ],
+      "topPredictions": [
+        "compat/test/browser/events.test.js",
+        "src/component.js",
+        "src/diff/props.js",
+        "debug/src/debug.js",
+        "src/diff/index.js",
+        "compat/test/browser/render.test.js",
+        "src/diff/children.js",
+        "compat/src/render.js",
+        "src/index.d.ts",
+        "compat/src/suspense-list.js"
+      ]
+    },
+    {
+      "instanceId": "preactjs__preact-4436",
+      "repo": "preactjs/preact",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "src/diff/index.js",
+          "rank": 6
+        },
+        {
+          "path": "src/internal.d.ts",
+          "rank": 18
+        }
+      ],
+      "topPredictions": [
+        "src/component.js",
+        "hooks/src/index.js",
+        "hooks/test/browser/combinations.test.js",
+        "debug/src/debug.js",
+        "compat/src/index.js",
+        "src/diff/index.js",
+        "hooks/src/index.d.ts",
+        "compat/test/browser/render.test.js",
+        "src/diff/props.js",
+        "src/render.js"
+      ]
+    },
+    {
+      "instanceId": "vuejs__core-11589",
+      "repo": "vuejs/core",
+      "category": "file-hit-region-miss",
+      "goldFiles": [
+        {
+          "path": "packages/reactivity/src/effect.ts",
+          "rank": 9
+        },
+        {
+          "path": "packages/runtime-core/src/apiWatch.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/compiler-core/src/errors.ts",
+        "packages-private/dts-test/defineComponent.test-d.tsx",
+        "packages-private/dts-test/watch.test-d.ts",
+        "packages-private/template-explorer/src/index.ts",
+        "packages/compiler-ssr/src/transforms/ssrTransformComponent.ts",
+        "packages/compiler-core/src/utils.ts",
+        "packages/compiler-core/src/transforms/vIf.ts",
+        "packages/compiler-core/src/transforms/vFor.ts",
+        "packages/reactivity/src/effect.ts",
+        "packages/reactivity/src/dep.ts"
+      ]
+    },
+    {
+      "instanceId": "vuejs__core-11739",
+      "repo": "vuejs/core",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/compiler-sfc/src/script/utils.ts",
+          "rank": null
+        },
+        {
+          "path": "packages/compiler-sfc/src/style/cssVars.ts",
+          "rank": null
+        },
+        {
+          "path": "packages/runtime-core/src/hydration.ts",
+          "rank": null
+        },
+        {
+          "path": "packages/shared/src/escapeHtml.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/compiler-core/__tests__/parse.spec.ts",
+        "packages/compiler-core/__tests__/scopeId.spec.ts",
+        "packages-private/dts-test/component.test-d.ts",
+        "packages-private/dts-test/appUse.test-d.ts",
+        "packages-private/dts-test/componentTypeExtensions.test-d.tsx",
+        "packages-private/template-explorer/src/options.ts",
+        "packages/compiler-core/__tests__/codegen.spec.ts",
+        "packages-private/template-explorer/src/index.ts",
+        "packages/compiler-dom/src/errors.ts",
+        "packages/compiler-dom/src/transforms/stringifyStatic.ts"
+      ]
+    },
+    {
+      "instanceId": "vuejs__core-11870",
+      "repo": "vuejs/core",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/runtime-core/src/helpers/renderList.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/runtime-dom/src/index.ts",
+        "packages/reactivity/__tests__/computed.spec.ts",
+        "packages/reactivity/__tests__/reactive.spec.ts",
+        "packages/reactivity/src/ref.ts",
+        "packages/runtime-core/src/compat/global.ts",
+        "packages/reactivity/src/reactive.ts",
+        "packages/runtime-core/src/index.ts",
+        "packages/runtime-core/src/apiSetupHelpers.ts",
+        "packages/compiler-core/src/options.ts",
+        "packages/runtime-core/__tests__/apiWatch.spec.ts"
+      ]
+    },
+    {
+      "instanceId": "vuejs__core-11899",
+      "repo": "vuejs/core",
+      "category": "file-miss-outside-top-20",
+      "goldFiles": [
+        {
+          "path": "packages/compiler-sfc/src/style/pluginScoped.ts",
+          "rank": null
+        }
+      ],
+      "topPredictions": [
+        "packages/compiler-dom/src/transforms/stringifyStatic.ts",
+        "packages/compiler-core/__tests__/parse.spec.ts",
+        "packages/compiler-sfc/src/compileScript.ts",
+        "packages-private/dts-test/ref.test-d.ts",
+        "packages-private/template-explorer/src/index.ts",
+        "packages/compiler-core/__tests__/transform.spec.ts",
+        "packages/compiler-core/__tests__/transforms/cacheStatic.spec.ts",
+        "packages-private/dts-test/tsx.test-d.tsx",
+        "packages/compiler-core/src/transforms/transformExpression.ts",
+        "packages/runtime-dom/src/index.ts"
+      ]
+    },
+    {
+      "instanceId": "vuejs__core-11915",
+      "repo": "vuejs/core",
+      "category": "file-miss-rank-11-20",
+      "goldFiles": [
+        {
+          "path": "packages/compiler-core/src/tokenizer.ts",
+          "rank": 13
+        }
+      ],
+      "topPredictions": [
+        "packages/runtime-core/src/apiSetupHelpers.ts",
+        "packages/reactivity/src/reactive.ts",
+        "packages/compiler-core/src/options.ts",
+        "packages/runtime-core/src/hmr.ts",
+        "packages/reactivity/src/ref.ts",
+        "packages/reactivity/src/effect.ts",
+        "packages/runtime-core/src/component.ts",
+        "packages/reactivity/__tests__/computed.spec.ts",
+        "packages/compiler-core/src/errors.ts",
+        "packages/reactivity/src/computed.ts"
+      ]
+    }
+  ],
+  "limitations": [
+    "The audit identifies the pipeline stage where retrieval failed; it does not prove the underlying scoring cause.",
+    "Gold-file ranks are limited to the 20 prediction paths stored by the issue benchmark.",
+    "A useful region means overlap with an old-side patch hunk at the largest configured line budget."
+  ]
+}
