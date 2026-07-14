@@ -156,11 +156,9 @@ program.command("eval-issues")
       "audit.md": renderIssueAudit(audit),
       "audit.json": `${JSON.stringify(audit, null, 2)}\n`,
     };
-    if (report.results.some((result) => result.candidateDiagnostics)) {
-      const diagnostics = diagnoseIssueRanking(report);
-      files["diagnostics.md"] = renderIssueDiagnostics(diagnostics);
-      files["diagnostics.json"] = `${JSON.stringify(diagnostics, null, 2)}\n`;
-    }
+    const diagnostics = diagnoseIssueRanking(report);
+    files["diagnostics.md"] = renderIssueDiagnostics(diagnostics);
+    files["diagnostics.json"] = `${JSON.stringify(diagnostics, null, 2)}\n`;
     await writeArtifacts(output, files);
     process.stdout.write(
       `Issue evaluation: ${output}\n`

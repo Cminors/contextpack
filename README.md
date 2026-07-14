@@ -447,7 +447,7 @@ npm run test:coverage
 npm run perf:smoke
 ```
 
-Current quality gate: 75 tests passing, more than 88% line coverage, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22.
+Current quality gate: 77 tests passing, more than 88% line coverage, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22.
 
 ## License
 

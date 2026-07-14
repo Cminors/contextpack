@@ -1,11 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { diagnoseIssueRanking } from "../src/evaluation/issue-diagnostics.js";
+import { auditIssueFailures } from "../src/evaluation/issue-audit.js";
+import { selectIssueDiagnosticInstances } from "../src/evaluation/issue-diagnostic-subset.js";
+import {
+  collectIssueCandidateDiagnostics,
+  diagnoseIssueRanking,
+} from "../src/evaluation/issue-diagnostics.js";
 import type {
   IssueBenchmarkReport,
+  IssueBenchmarkInstance,
   IssueCandidateDiagnostic,
   IssueEvaluationResult,
 } from "../src/evaluation/issue-types.js";
 import { renderIssueDiagnostics } from "../src/output/markdown.js";
+import type { ContextCandidate } from "../src/types.js";
 
 const breakdown = (
   lexical: number,
@@ -18,6 +25,21 @@ const breakdown = (
   test: 0,
   rule: 0,
 });
+
+function contextCandidate(path: string, score: number, lexical = score): ContextCandidate {
+  return {
+    path,
+    symbol: null,
+    startLine: 1,
+    endLine: 2,
+    score,
+    breakdown: breakdown(lexical),
+    selected: false,
+    reasons: [`score ${score}`],
+    relationships: [],
+    estimatedTokens: 10,
+  };
+}
 
 function result(
   instanceId: string,
@@ -78,6 +100,66 @@ function report(results: IssueEvaluationResult[]): IssueBenchmarkReport {
 }
 
 describe("issue ranking diagnostics", () => {
+  it("collects score-only rank and invalid candidate states without changing retrieval order", () => {
+    const candidates = Array.from(
+      { length: 25 },
+      (_, index) => contextCandidate(`src/candidate-${index + 1}.ts`, 0.9 - index * 0.01),
+    );
+    candidates[20] = contextCandidate("src/policy-displaced.ts", 0.95);
+    candidates[21] = contextCandidate("src/non-finite.ts", Number.NaN, Number.NaN);
+    const originalPaths = candidates.map((candidate) => candidate.path);
+
+    const diagnostics = collectIssueCandidateDiagnostics(candidates, [
+      "src/policy-displaced.ts",
+      "src/non-finite.ts",
+      "src/missing.ts",
+    ]);
+
+    expect(diagnostics.topCandidates.map((candidate) => candidate.path)).toEqual(originalPaths.slice(0, 10));
+    expect(diagnostics.goldCandidates).toEqual([
+      expect.objectContaining({
+        path: "src/policy-displaced.ts", finalRank: 21, scoreRank: 1, scoreState: "finite",
+      }),
+      expect.objectContaining({
+        path: "src/non-finite.ts", finalRank: 22, scoreState: "non-finite",
+        score: null, breakdown: null, nonFiniteSignals: ["lexical"],
+      }),
+      expect.objectContaining({
+        path: "src/missing.ts", finalRank: null, scoreRank: null, scoreState: "missing",
+      }),
+    ]);
+    expect(candidates.map((candidate) => candidate.path)).toEqual(originalPaths);
+  });
+
+  it("rejects a diagnostic subset selected from a different dataset revision", () => {
+    const sourceReport = report([
+      result("subset", {
+        path: "src/gold.ts", finalRank: null, scoreRank: null, scoreState: "missing",
+        score: null, breakdown: null, nonFiniteSignals: [], reasons: [],
+      }),
+    ]);
+    const audit = auditIssueFailures(sourceReport);
+    const instance: IssueBenchmarkInstance = {
+      instanceId: "subset",
+      sourceDataset: sourceReport.sourceDataset,
+      sourceRevision: "different-revision",
+      repo: "example/repo",
+      baseCommit: "a".repeat(40),
+      issueText: "fixture issue",
+      language: "javascript-typescript",
+      goldRegions: [{ path: "src/gold.ts", startLine: 1, endLine: 2, kind: "patch-hunk" }],
+      metadata: {
+        issueUrl: null, prUrl: null, createdAt: null, patchSha256: "b".repeat(64), excludedPatchFiles: 0,
+      },
+    };
+
+    expect(() => selectIssueDiagnosticInstances(audit, [instance])).toThrow("Diagnostic source mismatch");
+    expect(selectIssueDiagnosticInstances(audit, [{
+      ...instance,
+      sourceRevision: sourceReport.sourceRevision,
+    }])).toEqual([expect.objectContaining({ instanceId: "subset" })]);
+  });
+
   it("classifies observable ranking conditions without claiming causality", () => {
     const diagnostics = diagnoseIssueRanking(report([
       result("missing", { path: "src/missing.ts", finalRank: null, scoreRank: null, scoreState: "missing", score: null, breakdown: null, nonFiniteSignals: [], reasons: [] }),

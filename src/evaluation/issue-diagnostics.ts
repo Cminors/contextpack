@@ -1,9 +1,10 @@
-import type { ScoreBreakdown } from "../types.js";
+import type { ContextCandidate, ScoreBreakdown } from "../types.js";
 import { SCORE_WEIGHTS } from "../ranking/score.js";
 import { auditIssueFailures } from "./issue-audit.js";
 import type {
   IssueBenchmarkReport,
   IssueCandidateDiagnostic,
+  IssueCandidateDiagnostics,
   IssueEvaluationResult,
 } from "./issue-types.js";
 
@@ -47,6 +48,59 @@ const emptyCounts = (): RankingEvidenceCounts => ({
   "no-direct-query-signal": 0,
   "direct-signal-below-cutoff": 0,
 });
+
+function compareCandidatesByScore(left: ContextCandidate, right: ContextCandidate): number {
+  const leftIsFinite = Number.isFinite(left.score);
+  const rightIsFinite = Number.isFinite(right.score);
+  if (leftIsFinite !== rightIsFinite) return leftIsFinite ? -1 : 1;
+  if (leftIsFinite && left.score !== right.score) return right.score - left.score;
+  return left.path.localeCompare(right.path);
+}
+
+export function collectIssueCandidateDiagnostics(
+  candidates: readonly ContextCandidate[],
+  goldFiles: readonly string[],
+): IssueCandidateDiagnostics {
+  const candidateByPath = new Map(candidates.map((candidate) => [candidate.path, candidate]));
+  const finalRankByPath = new Map(candidates.map((candidate, index) => [candidate.path, index + 1]));
+  const scoreRankByPath = new Map(
+    [...candidates]
+      .sort(compareCandidatesByScore)
+      .map((candidate, index) => [candidate.path, index + 1]),
+  );
+  const diagnosticFor = (filePath: string): IssueCandidateDiagnostic => {
+    const candidate = candidateByPath.get(filePath);
+    if (!candidate) {
+      return {
+        path: filePath,
+        finalRank: null,
+        scoreRank: null,
+        scoreState: "missing",
+        score: null,
+        breakdown: null,
+        nonFiniteSignals: [],
+        reasons: [],
+      };
+    }
+    const signalKeys = Object.keys(candidate.breakdown) as Array<keyof ScoreBreakdown>;
+    const nonFiniteSignals = signalKeys.filter((signal) => !Number.isFinite(candidate.breakdown[signal]));
+    const finite = Number.isFinite(candidate.score) && nonFiniteSignals.length === 0;
+    return {
+      path: filePath,
+      finalRank: finalRankByPath.get(filePath) ?? null,
+      scoreRank: scoreRankByPath.get(filePath) ?? null,
+      scoreState: finite ? "finite" : "non-finite",
+      score: finite ? candidate.score : null,
+      breakdown: finite ? candidate.breakdown : null,
+      nonFiniteSignals,
+      reasons: candidate.reasons,
+    };
+  };
+  return {
+    topCandidates: candidates.slice(0, 10).map((candidate) => diagnosticFor(candidate.path)),
+    goldCandidates: goldFiles.map(diagnosticFor),
+  };
+}
 
 function bestGoldCandidate(candidates: IssueCandidateDiagnostic[]): IssueCandidateDiagnostic {
   return [...candidates].sort((left, right) =>
