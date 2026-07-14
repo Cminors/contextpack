@@ -158,6 +158,22 @@ P0.5 resumed the same checkpoint with the declared 600-second analysis and 300-s
 
 The complete baseline therefore contains 26 top-10 file-ranking misses (60.5%) and 11 downstream localization misses. The four rank-11-20 cases are bounded reranking candidates; the 22 outside-top-20 cases require deeper retrieval diagnostics. The audit identifies where the observable pipeline failed, not why a score was low. Raw results and both audit formats are stored in `benchmarks/results/swebench-multilingual-full-p05/`.
 
+## P0.6 Gold-file Score Diagnostics
+
+P0.6 retains post-retrieval candidate evidence for gold files: final prediction rank, score-only rank, total score, score components, and explanation reasons. Labels remain isolated from retrieval and are joined only after the candidate list has been produced. A reproducible preparation script selects exactly the 22 P0.5 tasks whose gold files were outside the recorded top 20; all 22 completed without skips and remained top-10 misses.
+
+The first diagnostic run exposed non-finite lexical scores in two tasks whose query terms included `constructor`. Lexical term weights used a normal object, so prototype-property names could read inherited values instead of numeric counts. A null-prototype term-weight record and regression test repair the arithmetic boundary. After rerunning the two affected tasks, every recorded candidate score is finite; `babel__babel-15445` moves from rank 753 to 351 and `preactjs__preact-3345` from 149 to 53, but neither reaches the top 20.
+
+| Observed evidence for the best gold candidate | Tasks |
+|---|---:|
+| Candidate absent from the discovered set | 0 |
+| Non-finite score after the repair | 0 |
+| Score-ranked top 20 but displaced by prediction policy | 0 |
+| No direct lexical or symbol signal | 0 |
+| Direct signal present but below the top-10 cutoff | 22 |
+
+Lexical evidence is the dominant weighted component for 20 tasks and dependency evidence for two. Gold-file final ranks fall into these bands: eight at 21-50, six at 51-100, seven at 101-500, and one above 500. The median score gap to the tenth candidate is `0.196` (range `0.104`-`0.333`). Thirteen gold files reach the `0.9` lexical content ceiling, while 20 of 22 tasks have at least one top-10 candidate at that ceiling. This is evidence of weak lexical discrimination on this fixed miss set, not proof that one generic stop-word rule will improve retrieval. Raw results and diagnostics are stored in `benchmarks/results/swebench-multilingual-p06-ranking-diagnostics/`.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
@@ -211,7 +227,7 @@ The V0.2 content scorer and P0.3 query-aware region localizer are retained as th
 - Final median token use is lower than V0.1 on both tracks.
 - The P0.3 Axios track produces non-zero line recall at 100/250/500 lines without reducing file Recall@10.
 
-The external track still measures retrieval rather than Coding Agent success. The zero-skip report and failure-stage audit are now established. The next retrieval experiment should persist score evidence for gold files and diagnose the 22 outside-top-20 misses before changing ranking weights. Multi-region selection can then target the 11 file-hit/region-miss tasks, followed by CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
+The external track still measures retrieval rather than Coding Agent success. The zero-skip report, failure-stage audit, and gold-file score diagnostics are now established. The next retrieval experiment should improve term discrimination or reduce lexical score saturation on the fixed 22-miss set, then prove an uplift on the full 43-task baseline without regressing the historical title and keyword-ablated tracks. Multi-region selection can then target the 11 file-hit/region-miss tasks, followed by CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
 
 ## Reproduce
 
@@ -219,9 +235,11 @@ The external track still measures retrieval rather than Coding Agent success. Th
 node dist/cli.js eval --commits 20 --budget 12000 --query-mode title --output benchmarks/results/<name>-title
 node dist/cli.js eval --commits 20 --budget 12000 --query-mode keyword-ablated --output benchmarks/results/<name>-ablated
 npm run benchmark:prepare:swebench
+npm run benchmark:prepare:diagnostics
 node dist/cli.js eval-issues --repo axios/axios --history 50 --budget 12000 --line-budgets 100,250,500 --output benchmarks/results/swebench-multilingual-axios-p03
 node dist/cli.js eval-issues --history 100 --budget 12000 --line-budgets 100,250,500 --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/swebench-multilingual-full-43
 node dist/cli.js eval-issues --history 100 --budget 12000 --line-budgets 100,250,500 --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/swebench-multilingual-full-43 --resume
+node dist/cli.js eval-issues --dataset .benchmarks/datasets/swe-bench-multilingual-p06-ranking-misses.jsonl --history 100 --budget 12000 --line-budgets 100,250,500 --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/p06-ranking-diagnostics
 ```
 
 Run the command from the root of the repository being evaluated. Raw final reports are stored in:
@@ -235,3 +253,4 @@ Run the command from the root of the repository being evaluated. Raw final repor
 - `benchmarks/results/swebench-multilingual-axios-p03/`
 - `benchmarks/results/swebench-multilingual-full-p04/`
 - `benchmarks/results/swebench-multilingual-full-p05/`
+- `benchmarks/results/swebench-multilingual-p06-ranking-diagnostics/`

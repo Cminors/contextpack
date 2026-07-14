@@ -1,0 +1,1280 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-14T02:42:19.096Z",
+  "sourceDataset": "SWE-bench/SWE-bench_Multilingual",
+  "sourceRevision": "2b7aced941b4873e9cad3e76abbae93f481d1beb",
+  "eligibleMisses": 22,
+  "diagnosedMisses": 22,
+  "missingEvidence": [],
+  "counts": {
+    "candidate-not-found": 0,
+    "non-finite-score": 0,
+    "prediction-policy-displacement": 0,
+    "no-direct-query-signal": 0,
+    "direct-signal-below-cutoff": 22
+  },
+  "entries": [
+    {
+      "instanceId": "axios__axios-6539",
+      "repo": "axios/axios",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "lib/helpers/isAbsoluteURL.js",
+          "finalRank": 90,
+          "scoreRank": 90,
+          "score": 0.275613,
+          "breakdown": {
+            "lexical": 0.7489214726243079,
+            "symbol": 0.013249174899665461,
+            "dependency": 0.35,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.75; content match \"absolute\" in comment at line 3, \"considered\" in comment at line 11, \"or\" in comment at line 11, \"relative\" in comment at line 11",
+            "dependency signal 0.35",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "lib/helpers/isAbsoluteURL.js",
+        "finalRank": 90,
+        "scoreRank": 90,
+        "score": 0.275613,
+        "breakdown": {
+          "lexical": 0.7489214726243079,
+          "symbol": 0.013249174899665461,
+          "dependency": 0.35,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.75; content match \"absolute\" in comment at line 3, \"considered\" in comment at line 11, \"or\" in comment at line 11, \"relative\" in comment at line 11",
+          "dependency signal 0.35",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.582,
+      "scoreGapToTenth": 0.306387,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "babel__babel-13928",
+      "repo": "babel/babel",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/babel-parser/src/parser/expression.js",
+          "finalRank": 175,
+          "scoreRank": 175,
+          "score": 0.180133,
+          "breakdown": {
+            "lexical": 0.16030071934212564,
+            "symbol": 0.037556747666572014,
+            "dependency": 0.7,
+            "git": 0.00657424630424753,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "dependency signal 0.70",
+            "lexical signal 0.16; content match \"configuration\" in comment at line 1340, \"so\" in comment at line 207, \"when\" in comment at line 202, \"are\" in comment at line 153",
+            "symbol signal 0.04"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/babel-parser/src/parser/expression.js",
+        "finalRank": 175,
+        "scoreRank": 175,
+        "score": 0.180133,
+        "breakdown": {
+          "lexical": 0.16030071934212564,
+          "symbol": 0.037556747666572014,
+          "dependency": 0.7,
+          "git": 0.00657424630424753,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "dependency signal 0.70",
+          "lexical signal 0.16; content match \"configuration\" in comment at line 1340, \"so\" in comment at line 207, \"when\" in comment at line 202, \"are\" in comment at line 153",
+          "symbol signal 0.04"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.378239,
+      "scoreGapToTenth": 0.198106,
+      "dominantSignal": "dependency"
+    },
+    {
+      "instanceId": "babel__babel-14532",
+      "repo": "babel/babel",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/babel-generator/src/node/parentheses.ts",
+          "finalRank": 1891,
+          "scoreRank": 1891,
+          "score": 0.098298,
+          "breakdown": {
+            "lexical": 0.3384713711917846,
+            "symbol": 0.016027302452890788,
+            "dependency": 0,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.34; content match \"let\" in comment at line 221, \"node\" in identifier at line 79, \"context\" in comment at line 384, \"array\" in identifier at line 2",
+            "symbol signal 0.02"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/babel-generator/src/node/parentheses.ts",
+        "finalRank": 1891,
+        "scoreRank": 1891,
+        "score": 0.098298,
+        "breakdown": {
+          "lexical": 0.3384713711917846,
+          "symbol": 0.016027302452890788,
+          "dependency": 0,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.34; content match \"let\" in comment at line 221, \"node\" in identifier at line 79, \"context\" in comment at line 384, \"array\" in identifier at line 2",
+          "symbol signal 0.02"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.43082,
+      "scoreGapToTenth": 0.332522,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "babel__babel-15445",
+      "repo": "babel/babel",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/babel-generator/src/source-map.ts",
+          "finalRank": 351,
+          "scoreRank": 351,
+          "scoreState": "finite",
+          "score": 0.254757,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.010326335086954717,
+            "dependency": 0,
+            "git": 0.00323244974534106,
+            "test": 0,
+            "rule": 0
+          },
+          "nonFiniteSignals": [],
+          "reasons": [
+            "lexical signal 0.90; content match \"we\" in comment at line 35, \"line\" in comment at line 31, \"mapping\" in comment at line 95, \"source\" in comment at line 35",
+            "symbol signal 0.01",
+            "git signal 0.00"
+          ]
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/babel-generator/src/source-map.ts",
+        "finalRank": 351,
+        "scoreRank": 351,
+        "scoreState": "finite",
+        "score": 0.254757,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.010326335086954717,
+          "dependency": 0,
+          "git": 0.00323244974534106,
+          "test": 0,
+          "rule": 0
+        },
+        "nonFiniteSignals": [],
+        "reasons": [
+          "lexical signal 0.90; content match \"we\" in comment at line 35, \"line\" in comment at line 31, \"mapping\" in comment at line 95, \"source\" in comment at line 35",
+          "symbol signal 0.01",
+          "git signal 0.00"
+        ]
+      },
+      "tenthCandidateScore": 0.433369,
+      "scoreGapToTenth": 0.178612,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "babel__babel-15649",
+      "repo": "babel/babel",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/babel-traverse/src/scope/lib/renamer.ts",
+          "finalRank": 48,
+          "scoreRank": 48,
+          "score": 0.284451,
+          "breakdown": {
+            "lexical": 0.5581547388813998,
+            "symbol": 0.009851021013295174,
+            "dependency": 0.7,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.56; content match \"identifier\" in comment at line 87, \"scope\" in comment at line 107, \"is\" in comment at line 84, \"path\" in identifier at line 4",
+            "dependency signal 0.70",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/babel-traverse/src/scope/lib/renamer.ts",
+        "finalRank": 48,
+        "scoreRank": 48,
+        "score": 0.284451,
+        "breakdown": {
+          "lexical": 0.5581547388813998,
+          "symbol": 0.009851021013295174,
+          "dependency": 0.7,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.56; content match \"identifier\" in comment at line 87, \"scope\" in comment at line 107, \"is\" in comment at line 84, \"path\" in identifier at line 4",
+          "dependency signal 0.70",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.41263,
+      "scoreGapToTenth": 0.128179,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "babel__babel-16130",
+      "repo": "babel/babel",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/babel-helpers/src/index.ts",
+          "finalRank": 482,
+          "scoreRank": 482,
+          "score": 0.241662,
+          "breakdown": {
+            "lexical": 0.6302311316702828,
+            "symbol": 0.009988088380590319,
+            "dependency": 0.35,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.63; content match \"helper\" in comment at line 38, \"in\" in comment at line 38, \"is\" in comment at line 38, \"file\" in comment at line 38",
+            "dependency signal 0.35",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/babel-helpers/src/index.ts",
+        "finalRank": 482,
+        "scoreRank": 482,
+        "score": 0.241662,
+        "breakdown": {
+          "lexical": 0.6302311316702828,
+          "symbol": 0.009988088380590319,
+          "dependency": 0.35,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.63; content match \"helper\" in comment at line 38, \"in\" in comment at line 38, \"is\" in comment at line 38, \"file\" in comment at line 38",
+          "dependency signal 0.35",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.435288,
+      "scoreGapToTenth": 0.193626,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "facebook__docusaurus-10130",
+      "repo": "facebook/docusaurus",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/docusaurus/src/server/brokenLinks.ts",
+          "finalRank": 37,
+          "scoreRank": 37,
+          "score": 0.381265,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.014841331560572244,
+            "dependency": 0.7,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"anchor\" in comment at line 117, \"anchors\" in comment at line 36, \"broken\" in identifier at line 27, \"links\" in comment at line 36",
+            "dependency signal 0.70",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/docusaurus/src/server/brokenLinks.ts",
+        "finalRank": 37,
+        "scoreRank": 37,
+        "score": 0.381265,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.014841331560572244,
+          "dependency": 0.7,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"anchor\" in comment at line 117, \"anchors\" in comment at line 36, \"broken\" in identifier at line 27, \"links\" in comment at line 36",
+          "dependency signal 0.70",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.582,
+      "scoreGapToTenth": 0.200735,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "facebook__docusaurus-10309",
+      "repo": "facebook/docusaurus",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/docusaurus-plugin-content-docs/src/client/docsClientUtils.ts",
+          "finalRank": 272,
+          "scoreRank": 272,
+          "score": 0.254225,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.01011502507520022,
+            "dependency": 0,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"latest\" in identifier at line 59, \"versions\" in string at line 99, \"version\" in identifier at line 12, \"that\" in comment at line 22",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/docusaurus-plugin-content-docs/src/client/docsClientUtils.ts",
+        "finalRank": 272,
+        "scoreRank": 272,
+        "score": 0.254225,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.01011502507520022,
+          "dependency": 0,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"latest\" in identifier at line 59, \"versions\" in string at line 99, \"version\" in identifier at line 12, \"that\" in comment at line 22",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.521328,
+      "scoreGapToTenth": 0.267103,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "facebook__docusaurus-8927",
+      "repo": "facebook/docusaurus",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/docusaurus-utils/src/markdownLinks.ts",
+          "finalRank": 90,
+          "scoreRank": 90,
+          "score": 0.316353,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.006152023635746095,
+            "dependency": 0.35,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"markdown\" in comment at line 28, \"md\" in comment at line 37, \"like\" in comment at line 17, \"relative\" in comment at line 43",
+            "dependency signal 0.35",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/docusaurus-utils/src/markdownLinks.ts",
+        "finalRank": 90,
+        "scoreRank": 90,
+        "score": 0.316353,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.006152023635746095,
+          "dependency": 0.35,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"markdown\" in comment at line 28, \"md\" in comment at line 37, \"like\" in comment at line 17, \"relative\" in comment at line 43",
+          "dependency signal 0.35",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.54354,
+      "scoreGapToTenth": 0.227187,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "facebook__docusaurus-9897",
+      "repo": "facebook/docusaurus",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/docusaurus-utils/src/markdownUtils.ts",
+          "finalRank": 100,
+          "scoreRank": 100,
+          "score": 0.308814,
+          "breakdown": {
+            "lexical": 0.8722135301987588,
+            "symbol": 0.007248046384115578,
+            "dependency": 0.35,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.87; content match \"line\" in comment at line 77, \"end\" in comment at line 140, \"content\" in comment at line 16, \"will\" in comment at line 99",
+            "dependency signal 0.35",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/docusaurus-utils/src/markdownUtils.ts",
+        "finalRank": 100,
+        "scoreRank": 100,
+        "score": 0.308814,
+        "breakdown": {
+          "lexical": 0.8722135301987588,
+          "symbol": 0.007248046384115578,
+          "dependency": 0.35,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.87; content match \"line\" in comment at line 77, \"end\" in comment at line 140, \"content\" in comment at line 16, \"will\" in comment at line 99",
+          "dependency signal 0.35",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.515111,
+      "scoreGapToTenth": 0.206297,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "mrdoob__three.js-25687",
+      "repo": "mrdoob/three.js",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "src/core/Object3D.js",
+          "finalRank": 44,
+          "scoreRank": 44,
+          "score": 0.257031,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.013941889226049872,
+            "dependency": 0,
+            "git": 0.013093822518445316,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"rotate\" in comment at line 175, \"serialize\" in identifier at line 737, \"up\" in identifier at line 47, \"json\" in comment at line 674",
+            "symbol signal 0.01",
+            "git signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        },
+        {
+          "path": "src/loaders/ObjectLoader.js",
+          "finalRank": 42,
+          "scoreRank": 42,
+          "score": 0.258219,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.02826645055886515,
+            "dependency": 0,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"deserialized\" in identifier at line 439, \"deserialize\" in identifier at line 387, \"loader\" in identifier at line 52, \"camera\" in string at line 792",
+            "symbol signal 0.03"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "src/loaders/ObjectLoader.js",
+        "finalRank": 42,
+        "scoreRank": 42,
+        "score": 0.258219,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.02826645055886515,
+          "dependency": 0,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"deserialized\" in identifier at line 439, \"deserialize\" in identifier at line 387, \"loader\" in identifier at line 52, \"camera\" in string at line 792",
+          "symbol signal 0.03"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.432,
+      "scoreGapToTenth": 0.173781,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "mrdoob__three.js-26589",
+      "repo": "mrdoob/three.js",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "src/objects/Line.js",
+          "finalRank": 377,
+          "scoreRank": 377,
+          "score": 0.113999,
+          "breakdown": {
+            "lexical": 0.40713951106448226,
+            "symbol": 0,
+            "dependency": 0,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.41; content match \"material\" in identifier at line 6, \"object3\" in identifier at line 4, \"name\" in identifier at line 207, \"clone\" in identifier at line 140"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        },
+        {
+          "path": "src/objects/Mesh.js",
+          "finalRank": 236,
+          "scoreRank": 236,
+          "score": 0.148756,
+          "breakdown": {
+            "lexical": 0.5215633924040658,
+            "symbol": 0.01235712998586763,
+            "dependency": 0,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.52; content match \"hit\" in identifier at line 15, \"material\" in identifier at line 9, \"array\" in identifier at line 215, \"object\" in identifier at line 64",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        },
+        {
+          "path": "src/objects/Points.js",
+          "finalRank": 455,
+          "scoreRank": 455,
+          "score": 0.100848,
+          "breakdown": {
+            "lexical": 0.3601726148675261,
+            "symbol": 0,
+            "dependency": 0,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.36; content match \"material\" in identifier at line 6, \"object3\" in identifier at line 4, \"name\" in identifier at line 121, \"object\" in identifier at line 108"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "src/objects/Mesh.js",
+        "finalRank": 236,
+        "scoreRank": 236,
+        "score": 0.148756,
+        "breakdown": {
+          "lexical": 0.5215633924040658,
+          "symbol": 0.01235712998586763,
+          "dependency": 0,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.52; content match \"hit\" in identifier at line 15, \"material\" in identifier at line 9, \"array\" in identifier at line 215, \"object\" in identifier at line 64",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.432,
+      "scoreGapToTenth": 0.283244,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "mrdoob__three.js-27395",
+      "repo": "mrdoob/three.js",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "src/math/Sphere.js",
+          "finalRank": 27,
+          "scoreRank": 27,
+          "score": 0.225399,
+          "breakdown": {
+            "lexical": 0.3205754844571428,
+            "symbol": 0.04380979541157393,
+            "dependency": 0.7,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "dependency signal 0.70",
+            "lexical signal 0.32; content match \"sphere\" in identifier at line 8, \"box3\" in identifier at line 1, \"if\" in identifier at line 30, \"is\" in identifier at line 63",
+            "symbol signal 0.04"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "src/math/Sphere.js",
+        "finalRank": 27,
+        "scoreRank": 27,
+        "score": 0.225399,
+        "breakdown": {
+          "lexical": 0.3205754844571428,
+          "symbol": 0.04380979541157393,
+          "dependency": 0.7,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "dependency signal 0.70",
+          "lexical signal 0.32; content match \"sphere\" in identifier at line 8, \"box3\" in identifier at line 1, \"if\" in identifier at line 30, \"is\" in identifier at line 63",
+          "symbol signal 0.04"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.342576,
+      "scoreGapToTenth": 0.117177,
+      "dominantSignal": "dependency"
+    },
+    {
+      "instanceId": "preactjs__preact-2896",
+      "repo": "preactjs/preact",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "src/diff/children.js",
+          "finalRank": 49,
+          "scoreRank": 49,
+          "score": 0.321873,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.014088874328497243,
+            "dependency": 0.35,
+            "git": 0.02515862388215767,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"array\" in comment at line 7, \"are\" in comment at line 7, \"or\" in comment at line 7, \"like\" in comment at line 208",
+            "dependency signal 0.35",
+            "git signal 0.03"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "src/diff/children.js",
+        "finalRank": 49,
+        "scoreRank": 49,
+        "score": 0.321873,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.014088874328497243,
+          "dependency": 0.35,
+          "git": 0.02515862388215767,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"array\" in comment at line 7, \"are\" in comment at line 7, \"or\" in comment at line 7, \"like\" in comment at line 208",
+          "dependency signal 0.35",
+          "git signal 0.03"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.515093,
+      "scoreGapToTenth": 0.19322,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "preactjs__preact-3062",
+      "repo": "preactjs/preact",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "src/diff/props.js",
+          "finalRank": 37,
+          "scoreRank": 37,
+          "score": 0.330402,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.010905796332293358,
+            "dependency": 0.35,
+            "git": 0.0866828045929021,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"attribute\" in comment at line 125, \"dom\" in comment at line 4, \"an\" in comment at line 4, \"remove\" in comment at line 126",
+            "dependency signal 0.35",
+            "git signal 0.09"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "src/diff/props.js",
+        "finalRank": 37,
+        "scoreRank": 37,
+        "score": 0.330402,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.010905796332293358,
+          "dependency": 0.35,
+          "git": 0.0866828045929021,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"attribute\" in comment at line 125, \"dom\" in comment at line 4, \"an\" in comment at line 4, \"remove\" in comment at line 126",
+          "dependency signal 0.35",
+          "git signal 0.09"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.440679,
+      "scoreGapToTenth": 0.110277,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "preactjs__preact-3345",
+      "repo": "preactjs/preact",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "hooks/src/index.js",
+          "finalRank": 53,
+          "scoreRank": 53,
+          "scoreState": "finite",
+          "score": 0.319786,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.02175469917374123,
+            "dependency": 0.35,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "nonFiniteSignals": [],
+          "reasons": [
+            "lexical signal 0.90; content match \"cleanup\" in comment at line 346, \"effect\" in comment at line 152, \"timeout\" in comment at line 304, \"catch\" in identifier at line 60",
+            "dependency signal 0.35",
+            "symbol signal 0.02"
+          ]
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "hooks/src/index.js",
+        "finalRank": 53,
+        "scoreRank": 53,
+        "scoreState": "finite",
+        "score": 0.319786,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.02175469917374123,
+          "dependency": 0.35,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "nonFiniteSignals": [],
+        "reasons": [
+          "lexical signal 0.90; content match \"cleanup\" in comment at line 346, \"effect\" in comment at line 152, \"timeout\" in comment at line 304, \"catch\" in identifier at line 60",
+          "dependency signal 0.35",
+          "symbol signal 0.02"
+        ]
+      },
+      "tenthCandidateScore": 0.528,
+      "scoreGapToTenth": 0.208214,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "preactjs__preact-3454",
+      "repo": "preactjs/preact",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "src/diff/props.js",
+          "finalRank": 111,
+          "scoreRank": 111,
+          "score": 0.253669,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.007586691685027085,
+            "dependency": 0,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"svg\" in comment at line 4, \"attribute\" in comment at line 128, \"else\" in identifier at line 39, \"xlink\" in comment at line 107",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "src/diff/props.js",
+        "finalRank": 111,
+        "scoreRank": 111,
+        "score": 0.253669,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.007586691685027085,
+          "dependency": 0,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"svg\" in comment at line 4, \"attribute\" in comment at line 128, \"else\" in identifier at line 39, \"xlink\" in comment at line 107",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.501661,
+      "scoreGapToTenth": 0.247992,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "preactjs__preact-3739",
+      "repo": "preactjs/preact",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "hooks/src/index.js",
+          "finalRank": 36,
+          "scoreRank": 36,
+          "score": 0.329034,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.005750392657789234,
+            "dependency": 0.35,
+            "git": 0.08512565307587486,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"queue\" in comment at line 449, \"any\" in comment at line 133, \"hooks\" in identifier at line 55, \"timeout\" in comment at line 422",
+            "dependency signal 0.35",
+            "git signal 0.09"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "hooks/src/index.js",
+        "finalRank": 36,
+        "scoreRank": 36,
+        "score": 0.329034,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.005750392657789234,
+          "dependency": 0.35,
+          "git": 0.08512565307587486,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"queue\" in comment at line 449, \"any\" in comment at line 133, \"hooks\" in identifier at line 55, \"timeout\" in comment at line 422",
+          "dependency signal 0.35",
+          "git signal 0.09"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.432698,
+      "scoreGapToTenth": 0.103664,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "preactjs__preact-4182",
+      "repo": "preactjs/preact",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "src/diff/index.js",
+          "finalRank": 126,
+          "scoreRank": 126,
+          "score": 0.271879,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.0057894052485719764,
+            "dependency": 0,
+            "git": 0.12403473458920847,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"see\" in comment at line 158, \"remove\" in comment at line 369, \"checked\" in string at line 488, \"error\" in comment at line 80",
+            "git signal 0.12",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "src/diff/index.js",
+        "finalRank": 126,
+        "scoreRank": 126,
+        "score": 0.271879,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.0057894052485719764,
+          "dependency": 0,
+          "git": 0.12403473458920847,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"see\" in comment at line 158, \"remove\" in comment at line 369, \"checked\" in string at line 488, \"error\" in comment at line 80",
+          "git signal 0.12",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.518199,
+      "scoreGapToTenth": 0.24632,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "vuejs__core-11739",
+      "repo": "vuejs/core",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/compiler-sfc/src/script/utils.ts",
+          "finalRank": 65,
+          "scoreRank": 65,
+          "score": 0.358837,
+          "breakdown": {
+            "lexical": 0.695888656037166,
+            "symbol": 0.013583191131160221,
+            "dependency": 0.7,
+            "git": 0,
+            "test": 0.35,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.70; content match \"css\" in string at line 119, \"name\" in identifier at line 24, \"default\" in string at line 69, \"use\" in identifier at line 98",
+            "dependency signal 0.70",
+            "test signal 0.35"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        },
+        {
+          "path": "packages/compiler-sfc/src/style/cssVars.ts",
+          "finalRank": 48,
+          "scoreRank": 48,
+          "score": 0.382531,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.020595259656169075,
+            "dependency": 0.7,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"css\" in string at line 15, \"bindings\" in string at line 199, \"bind\" in comment at line 64, \"script\" in comment at line 188",
+            "dependency signal 0.70",
+            "symbol signal 0.02"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        },
+        {
+          "path": "packages/runtime-core/src/hydration.ts",
+          "finalRank": 99,
+          "scoreRank": 99,
+          "score": 0.319584,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.012134494916479053,
+            "dependency": 0.35,
+            "git": 0.012759471051761733,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"hydration\" in comment at line 84, \"details\" in identifier at line 118, \"expected\" in string at line 189, \"css\" in identifier at line 804",
+            "dependency signal 0.35",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        },
+        {
+          "path": "packages/shared/src/escapeHtml.ts",
+          "finalRank": 437,
+          "scoreRank": 437,
+          "score": 0.129793,
+          "breakdown": {
+            "lexical": 0.23854684296252202,
+            "symbol": 0,
+            "dependency": 0.35,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.24; content match \"comments\" in comment at line 47, \"code\" in string at line 1, \"default\" in identifier at line 32, \"string\" in string at line 1",
+            "dependency signal 0.35"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/compiler-sfc/src/style/cssVars.ts",
+        "finalRank": 48,
+        "scoreRank": 48,
+        "score": 0.382531,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.020595259656169075,
+          "dependency": 0.7,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"css\" in string at line 15, \"bindings\" in string at line 199, \"bind\" in comment at line 64, \"script\" in comment at line 188",
+          "dependency signal 0.70",
+          "symbol signal 0.02"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.513249,
+      "scoreGapToTenth": 0.130718,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "vuejs__core-11870",
+      "repo": "vuejs/core",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/runtime-core/src/helpers/renderList.ts",
+          "finalRank": 71,
+          "scoreRank": 71,
+          "score": 0.338948,
+          "breakdown": {
+            "lexical": 0.7491648278040943,
+            "symbol": 0.01446220576851843,
+            "dependency": 0.7,
+            "git": 0,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.75; content match \"item\" in identifier at line 12, \"list\" in identifier at line 10, \"reactive\" in identifier at line 2, \"shallow\" in identifier at line 2",
+            "dependency signal 0.70",
+            "symbol signal 0.01"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/runtime-core/src/helpers/renderList.ts",
+        "finalRank": 71,
+        "scoreRank": 71,
+        "score": 0.338948,
+        "breakdown": {
+          "lexical": 0.7491648278040943,
+          "symbol": 0.01446220576851843,
+          "dependency": 0.7,
+          "git": 0,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.75; content match \"item\" in identifier at line 12, \"list\" in identifier at line 10, \"reactive\" in identifier at line 2, \"shallow\" in identifier at line 2",
+          "dependency signal 0.70",
+          "symbol signal 0.01"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.491748,
+      "scoreGapToTenth": 0.1528,
+      "dominantSignal": "lexical"
+    },
+    {
+      "instanceId": "vuejs__core-11899",
+      "repo": "vuejs/core",
+      "category": "direct-signal-below-cutoff",
+      "goldCandidates": [
+        {
+          "path": "packages/compiler-sfc/src/style/pluginScoped.ts",
+          "finalRank": 58,
+          "scoreRank": 58,
+          "score": 0.382256,
+          "breakdown": {
+            "lexical": 0.9,
+            "symbol": 0.008102110807185344,
+            "dependency": 0.7,
+            "git": 0.016488765493044382,
+            "test": 0,
+            "rule": 0
+          },
+          "reasons": [
+            "lexical signal 0.90; content match \"selector\" in identifier at line 8, \"scoped\" in string at line 19, \"remove\" in identifier at line 146, \"root\" in string at line 82",
+            "dependency signal 0.70",
+            "git signal 0.02"
+          ],
+          "scoreState": "finite",
+          "nonFiniteSignals": []
+        }
+      ],
+      "bestGoldCandidate": {
+        "path": "packages/compiler-sfc/src/style/pluginScoped.ts",
+        "finalRank": 58,
+        "scoreRank": 58,
+        "score": 0.382256,
+        "breakdown": {
+          "lexical": 0.9,
+          "symbol": 0.008102110807185344,
+          "dependency": 0.7,
+          "git": 0.016488765493044382,
+          "test": 0,
+          "rule": 0
+        },
+        "reasons": [
+          "lexical signal 0.90; content match \"selector\" in identifier at line 8, \"scoped\" in string at line 19, \"remove\" in identifier at line 146, \"root\" in string at line 82",
+          "dependency signal 0.70",
+          "git signal 0.02"
+        ],
+        "scoreState": "finite",
+        "nonFiniteSignals": []
+      },
+      "tenthCandidateScore": 0.529636,
+      "scoreGapToTenth": 0.14738,
+      "dominantSignal": "lexical"
+    }
+  ],
+  "limitations": [
+    "These categories describe observed candidate and score conditions; they are not causal ground truth.",
+    "No direct query signal means both lexical and symbol components are zero after task normalization.",
+    "A non-finite score is an arithmetic integrity failure and must be fixed before interpreting relative rank.",
+    "Prediction-policy displacement means a gold file is score-ranked in the top 20 but moved below the final top 20 by category-aware prioritization.",
+    "Candidate not found means the gold path was absent from the supported discovered candidate set; it does not identify which discovery rule excluded it."
+  ]
+}

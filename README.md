@@ -330,7 +330,7 @@ This does not remove the source directory or any `.contextpack/` results already
 
 `manifest.json` provides machine-readable candidates, score breakdowns, relationships, budgets, warnings, and timing data. It is primarily useful for diagnostics and integrations.
 
-Maintainer issue evaluations also emit `audit.md` and `audit.json`, which separate top-10 file-ranking misses from cases where the correct file was found but the emitted region missed the patch hunk.
+Maintainer issue evaluations also emit `audit.md`/`audit.json` and, for newly analyzed instances, `diagnostics.md`/`diagnostics.json`. The audit separates top-10 file-ranking misses from region misses; diagnostics retain post-retrieval gold-file ranks and score components without feeding labels back into retrieval.
 
 ## Privacy and safety
 
@@ -384,6 +384,8 @@ Query-aware region localization raises Axios line recall from `0.000` at every b
 
 The resumable runner now completes all 43 fixed JS/TS instances without skips. On the zero-skip baseline, line recall is `0.000`, `0.062`, and `0.070` at 100, 250, and 500 lines. The failure-stage audit finds 26 top-10 file-ranking misses, 11 cases where a gold file is retrieved but no useful region is emitted, and 6 tasks with both a file and useful-region hit. These figures expose substantial cross-repository file-ranking and localization gaps; they are not directly comparable to the Axios-only smoke subset.
 
+P0.6 reruns the 22 tasks whose gold files were outside the recorded top 20 and retains their score evidence. Every gold file is present in the candidate set, none is displaced by the prediction-diversity policy, and all 22 have a direct lexical or symbol signal but remain below the top-10 cutoff. Lexical evidence is the dominant weighted signal for 20 tasks; 20 of 22 tasks have at least one top-10 candidate at the lexical content ceiling. This points the next controlled experiment toward term discrimination and lexical saturation rather than wider file discovery.
+
 See the [Benchmark document](benchmarks/README.md) for methodology, raw results, limitations, and rejected experiments.
 
 ## Evaluation commands for maintainers
@@ -409,6 +411,10 @@ contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .conte
 
 # Retry only instances previously recorded as skipped
 contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/full-43 --resume --retry-skipped
+
+# Reproduce the P0.6 outside-top-20 diagnostic subset
+npm run benchmark:prepare:diagnostics
+contextpack eval-issues --dataset .benchmarks/datasets/swe-bench-multilingual-p06-ranking-misses.jsonl --output .contextpack/evals/p06-ranking-diagnostics
 ```
 
 Evaluation datasets and repository snapshots stay in the ignored `.benchmarks/` cache. Real-issue reports separate file Recall/MRR from the actual emitted regions. Gold labels are used only after retrieval has produced predictions. `eval-issues` writes an atomic `checkpoint.json` after every attempted instance; `--resume` accepts it only when the dataset fingerprint, selected instances, token/line budgets, and history window still match. Each timed analysis runs in an isolated Worker, and repository fetches have a separate timeout and low-speed cutoff, so one slow instance cannot hold the complete run indefinitely.
@@ -428,7 +434,7 @@ Do not upload private source code, tokens, `.env` files, or other credentials.
 
 ## Project status
 
-ContextPack is an unpublished experimental source preview. The core CLI, package structure, automated tests, performance smoke test, resumable real-issue evaluation, a zero-skip 43-task external baseline, a failure-stage audit, and a first query-aware region localizer are in place. npm publishing, a formal release, zero-knowledge installation, score-level diagnosis of the remaining ranking misses, and broadly reliable within-file localization are not finished.
+ContextPack is an unpublished experimental source preview. The core CLI, package structure, automated tests, performance smoke test, resumable real-issue evaluation, a zero-skip 43-task external baseline, failure-stage and score-level diagnostics, and a first query-aware region localizer are in place. npm publishing, a formal release, zero-knowledge installation, a validated improvement for lexical discrimination, and broadly reliable within-file localization are not finished.
 
 The current goal is to let a small group of testers use the project safely and report understandable feedback—not to promote it broadly.
 
@@ -441,7 +447,7 @@ npm run test:coverage
 npm run perf:smoke
 ```
 
-Current quality gate: 72 tests passing, more than 88% line coverage, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22.
+Current quality gate: 75 tests passing, more than 88% line coverage, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22.
 
 ## License
 

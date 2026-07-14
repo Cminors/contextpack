@@ -330,7 +330,7 @@ npm uninstall -g contextpack
 
 `manifest.json` 提供机器可读的候选列表、分数拆解、关系、预算、警告和性能数据，主要用于排查和二次集成。
 
-面向维护者的 issue 评测还会生成 `audit.md` 和 `audit.json`，用于区分 Top 10 文件排序失败，以及正确文件已找到但输出区域没有覆盖补丁位置的情况。
+面向维护者的 issue 评测还会生成 `audit.md`/`audit.json`；新分析的实例还会生成 `diagnostics.md`/`diagnostics.json`。审计用于区分 Top 10 文件排序失败与区域定位失败，诊断则在检索完成后保存 gold 文件排名和评分分量，不会把标签反馈给检索过程。
 
 ## 隐私与安全
 
@@ -384,6 +384,8 @@ ContextPack 当前拥有两条评测轨：
 
 可恢复的运行器现在已经完成全部 43 个固定 JS/TS 实例，没有跳过。在零跳过基线上，100、250、500 行预算的行召回分别为 `0.000`、`0.062`、`0.070`。失败阶段审计发现 26 个 Top 10 文件排序失败、11 个“正确文件已找到但没有输出有效区域”的任务，以及 6 个同时命中文件和有效区域的任务。这些结果暴露出明显的跨仓库文件排序和文件内定位差距，不能与仅包含 Axios 的六任务冒烟直接比较。
 
+P0.6 重新运行了 22 个 gold 文件不在已记录 Top 20 的任务，并保存分数证据。所有 gold 文件都存在于候选集中，没有实例被预测多样性策略挤出；22 个任务都有直接 lexical 或 symbol 信号，但仍低于 Top 10 阈值。其中 20 个任务以 lexical 为主要加权信号，且 22 个任务中有 20 个的 Top 10 候选至少包含一个达到 lexical 内容分数上限的文件。所以下一个受控实验应优先改善词项区分度和 lexical 分数饱和，而不是扩大文件发现范围。
+
 完整方法、原始结果、限制和失败实验见 [Benchmark 文档](benchmarks/README.md)。
 
 ## 面向维护者的评测命令
@@ -409,6 +411,10 @@ contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .conte
 
 # 只重试检查点里已记录为跳过的实例
 contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .contextpack/evals/full-43 --resume --retry-skipped
+
+# 复现 P0.6 的 Top 20 外诊断子集
+npm run benchmark:prepare:diagnostics
+contextpack eval-issues --dataset .benchmarks/datasets/swe-bench-multilingual-p06-ranking-misses.jsonl --output .contextpack/evals/p06-ranking-diagnostics
 ```
 
 评测数据和仓库快照保存在已忽略的 `.benchmarks/` 缓存中。真实 issue 报告把文件 Recall/MRR 和实际输出片段的行级指标分开，gold label 只在检索完成后用于评分。`eval-issues` 会在每次实例完成或跳过后原子写入 `checkpoint.json`；只有数据集指纹、实例范围、Token/行预算和历史窗口一致时，`--resume` 才会接受该检查点。每个设置超时的分析都在隔离 Worker 中运行，仓库获取另有独立超时和低速中止，因此单个慢实例不会无限占住整轮评测。
@@ -428,7 +434,7 @@ contextpack eval-issues --instance-timeout 600 --git-timeout 300 --output .conte
 
 ## 当前状态
 
-ContextPack 目前是未发布的实验性源码预览版：核心 CLI、打包结构、自动测试、性能烟测、可断点续跑的真实 issue 评测、零跳过的 43 任务外部基线、失败阶段审计和第一版查询感知区域定位已经具备，但 npm 发布、正式 Release、零基础安装体验、剩余排序失败的分数级诊断和更广泛可靠的文件内定位仍未完成。
+ContextPack 目前是未发布的实验性源码预览版：核心 CLI、打包结构、自动测试、性能烟测、可断点续跑的真实 issue 评测、零跳过的 43 任务外部基线、失败阶段与分数级诊断和第一版查询感知区域定位已经具备，但 npm 发布、正式 Release、零基础安装体验、经过验证的 lexical 区分度改进和更广泛可靠的文件内定位仍未完成。
 
 现阶段目标是让小范围测试者能够安全、清楚地试用并反馈问题，而不是进行大规模推广。
 
@@ -441,7 +447,7 @@ npm run test:coverage
 npm run perf:smoke
 ```
 
-当前质量门禁：72 项测试通过、行覆盖率超过 88%、生产依赖漏洞为 0，并包含一个确定性的 360 文件性能烟测。GitHub CI 验证 Node.js 20 和 22。
+当前质量门禁：75 项测试通过、行覆盖率超过 88%、生产依赖漏洞为 0，并包含一个确定性的 360 文件性能烟测。GitHub CI 验证 Node.js 20 和 22。
 
 ## 许可证
 
