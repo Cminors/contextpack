@@ -128,4 +128,14 @@ describe("source content retrieval", () => {
     expect(document.termWeights.package).toBeUndefined();
     expect(document.termWeights.validation).toBeUndefined();
   });
+
+  it("scores terms that share names with object prototype properties", () => {
+    const target = sourceFile("src/factory.ts", "// Reuse the constructor when creating a derived instance.");
+    const document = extractLexicalDocument(target.content, target.path);
+    const match = scoreContentMatches([target], normalizeTaskTerms("reuse constructor instance")).get(target.path);
+
+    expect(document.termWeights.constructor).toBeTypeOf("number");
+    expect(match?.score).toBeGreaterThan(0);
+    expect(Number.isFinite(match?.score)).toBe(true);
+  });
 });

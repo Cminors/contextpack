@@ -97,7 +97,7 @@ export function extractLexicalDocument(
   queryTerms?: ReadonlySet<string>,
 ): LexicalDocument {
   const limited = content.slice(0, LEXICAL_LIMITS.maxCharacters);
-  const termWeights: Record<string, number> = {};
+  const termWeights = Object.create(null) as Record<string, number>;
   const occurrences: LexicalOccurrence[] = [];
   const occurrenceKeys = new Set<string>();
   const counts = new Map<string, number>();
