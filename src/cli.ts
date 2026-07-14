@@ -1,9 +1,10 @@
 import path from "node:path";
 import { Command, InvalidArgumentError } from "commander";
 import { analyzeTask } from "./analysis/analyze.js";
+import { auditIssueFailures } from "./evaluation/issue-audit.js";
 import { runReplay } from "./evaluation/replay.js";
 import { runIssueBenchmark } from "./evaluation/issues.js";
-import { renderContext, renderEvaluation, renderIssueEvaluation } from "./output/markdown.js";
+import { renderContext, renderEvaluation, renderIssueAudit, renderIssueEvaluation } from "./output/markdown.js";
 import { writeArtifacts } from "./output/write.js";
 import { toContextPackError } from "./errors.js";
 import type { EvaluationQueryMode } from "./types.js";
@@ -141,9 +142,12 @@ program.command("eval-issues")
       retrySkipped: options.retrySkipped ?? false,
       onProgress: (message) => process.stderr.write(`${message}\n`),
     });
+    const audit = auditIssueFailures(report);
     await writeArtifacts(output, {
       "report.md": renderIssueEvaluation(report),
       "results.json": `${JSON.stringify(report, null, 2)}\n`,
+      "audit.md": renderIssueAudit(audit),
+      "audit.json": `${JSON.stringify(audit, null, 2)}\n`,
     });
     process.stdout.write(
       `Issue evaluation: ${output}\n`

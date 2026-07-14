@@ -1,4 +1,5 @@
 import type { ContextManifest, EvaluationReport } from "../types.js";
+import type { IssueFailureAudit } from "../evaluation/issue-audit.js";
 import type { IssueBenchmarkReport } from "../evaluation/issue-types.js";
 import { countTokens } from "./tokens.js";
 
@@ -86,4 +87,36 @@ export function renderIssueEvaluation(report: IssueBenchmarkReport): string {
     return `| \`${tableEscape(result.instanceId)}\` | \`${result.repo}\` | ${result.goldFiles.length} | ${result.recallAt5.toFixed(2)} | ${result.recallAt10.toFixed(2)} | ${result.reciprocalRank.toFixed(2)} | ${largest?.lineRecall.toFixed(2) ?? "n/a"} | ${result.estimatedTokens} | ${result.durationMs} |`;
   });
   return `# ContextPack Issue Retrieval Benchmark\n\nThis report evaluates retrieval against real issue/patch pairs. It does not execute patches or tests.\n\n## Dataset\n\n- Source: \`${report.sourceDataset}\`\n- Revision: \`${report.sourceRevision}\`\n- Valid instances: ${report.validInstances}/${report.requestedInstances}\n- Token budget: ${report.tokenBudget}\n- Line budgets: ${report.lineBudgets.join(", ")}\n\n## File Retrieval\n\n- Recall@5: ${report.aggregate.recallAt5.toFixed(3)}\n- Recall@10: ${report.aggregate.recallAt10.toFixed(3)}\n- MRR: ${report.aggregate.mrr.toFixed(3)}\n- Median tokens: ${report.aggregate.medianTokens}\n- Median duration: ${report.aggregate.medianDurationMs} ms\n\n## Line-budget Retrieval\n\n| Lines | Recall | Precision | F1 | Region hit | Region noise | Efficiency | nDCG | Useful hit | First hit |\n|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n${budgetRows.join("\n")}\n\n## Instances\n\n| Instance | Repository | Gold files | R@5 | R@10 | MRR | Recall@max lines | Tokens | Duration ms |\n|---|---|---:|---:|---:|---:|---:|---:|---:|\n${instanceRows.join("\n")}\n\n## Skipped\n\n${report.skipped.map((item) => `- \`${tableEscape(item.instanceId)}\`: ${tableEscape(item.reason)}`).join("\n") || "None."}\n\n## Limitations\n\n${report.limitations.map((item) => `- ${item}`).join("\n")}\n`;
+}
+
+export function renderIssueAudit(audit: IssueFailureAudit): string {
+  const categoryLabels: Record<IssueFailureAudit["entries"][number]["category"], string> = {
+    "file-hit-region-hit": "file hit / region hit",
+    "file-hit-region-miss": "file hit / region miss",
+    "file-miss-rank-11-20": "gold file ranked 11-20",
+    "file-miss-outside-top-20": "gold file outside top 20",
+  };
+  const repositoryRows = audit.byRepository.map(({ repo, counts }) =>
+    `| \`${repo}\` | ${counts.fileHitRegionHit} | ${counts.fileHitRegionMiss} | ${counts.fileMissRank11To20} | ${counts.fileMissOutsideTop20} |`,
+  );
+  const missRows = audit.entries
+    .filter((entry) => entry.category.startsWith("file-miss"))
+    .map((entry) => {
+      const gold = entry.goldFiles
+        .map((file) => `\`${tableEscape(file.path)}\` (${file.rank ?? ">20"})`)
+        .join("<br>");
+      const predictions = entry.topPredictions.slice(0, 3).map((file) => `\`${tableEscape(file)}\``).join("<br>");
+      return `| \`${tableEscape(entry.instanceId)}\` | \`${entry.repo}\` | ${categoryLabels[entry.category]} | ${gold} | ${predictions} |`;
+    });
+  const localizationRows = audit.entries
+    .filter((entry) => entry.category === "file-hit-region-miss")
+    .map((entry) => {
+      const gold = entry.goldFiles
+        .map((file) => `\`${tableEscape(file.path)}\` (${file.rank ?? ">20"})`)
+        .join("<br>");
+      return `| \`${tableEscape(entry.instanceId)}\` | \`${entry.repo}\` | ${gold} |`;
+    });
+  const fileMissRate = audit.validInstances === 0 ? 0 : audit.counts.fileRankingMisses / audit.validInstances;
+
+  return `# ContextPack Issue Failure Audit\n\nThis report locates retrieval failures by pipeline stage. It does not infer an unobserved scoring cause.\n\n## Summary\n\n- Valid instances: ${audit.validInstances}\n- Maximum line budget: ${audit.maximumLineBudget}\n- File hit and useful region: ${audit.counts.fileHitRegionHit}\n- File hit but region miss: ${audit.counts.fileHitRegionMiss}\n- Gold file ranked 11-20: ${audit.counts.fileMissRank11To20}\n- Gold file outside the recorded top 20: ${audit.counts.fileMissOutsideTop20}\n- Top-10 file-ranking misses: ${audit.counts.fileRankingMisses} (${(fileMissRate * 100).toFixed(1)}%)\n\n## By Repository\n\n| Repository | File + region hit | Region miss | Rank 11-20 | Outside top 20 |\n|---|---:|---:|---:|---:|\n${repositoryRows.join("\n")}\n\n## Top-10 File-ranking Misses\n\n| Instance | Repository | Stage | Gold file (recorded rank) | First three predictions |\n|---|---|---|---|---|\n${missRows.join("\n") || "| None | | | | |"}\n\n## File Hit / Region Misses\n\n| Instance | Repository | Gold file (recorded rank) |\n|---|---|---|\n${localizationRows.join("\n") || "| None | | |"}\n\n## Limitations\n\n${audit.limitations.map((item) => `- ${item}`).join("\n")}\n`;
 }
