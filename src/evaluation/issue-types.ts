@@ -1,3 +1,5 @@
+import type { ScoreBreakdown } from "../types.js";
+
 export interface LineRegion {
   path: string;
   startLine: number;
@@ -54,6 +56,22 @@ export interface RegionBudgetAggregate {
   medianFirstUsefulHit: number | null;
 }
 
+export interface IssueCandidateDiagnostic {
+  path: string;
+  finalRank: number | null;
+  scoreRank: number | null;
+  scoreState: "finite" | "non-finite" | "missing";
+  score: number | null;
+  breakdown: ScoreBreakdown | null;
+  nonFiniteSignals: Array<keyof ScoreBreakdown>;
+  reasons: string[];
+}
+
+export interface IssueCandidateDiagnostics {
+  topCandidates: IssueCandidateDiagnostic[];
+  goldCandidates: IssueCandidateDiagnostic[];
+}
+
 export interface IssueEvaluationResult {
   instanceId: string;
   repo: string;
@@ -62,6 +80,7 @@ export interface IssueEvaluationResult {
   predictedRegions: LineRegion[];
   goldFiles: string[];
   predictions: string[];
+  candidateDiagnostics?: IssueCandidateDiagnostics;
   recallAt5: number;
   recallAt10: number;
   reciprocalRank: number;

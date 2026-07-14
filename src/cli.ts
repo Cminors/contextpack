@@ -2,9 +2,16 @@ import path from "node:path";
 import { Command, InvalidArgumentError } from "commander";
 import { analyzeTask } from "./analysis/analyze.js";
 import { auditIssueFailures } from "./evaluation/issue-audit.js";
+import { diagnoseIssueRanking } from "./evaluation/issue-diagnostics.js";
 import { runReplay } from "./evaluation/replay.js";
 import { runIssueBenchmark } from "./evaluation/issues.js";
-import { renderContext, renderEvaluation, renderIssueAudit, renderIssueEvaluation } from "./output/markdown.js";
+import {
+  renderContext,
+  renderEvaluation,
+  renderIssueAudit,
+  renderIssueDiagnostics,
+  renderIssueEvaluation,
+} from "./output/markdown.js";
 import { writeArtifacts } from "./output/write.js";
 import { toContextPackError } from "./errors.js";
 import type { EvaluationQueryMode } from "./types.js";
@@ -143,12 +150,18 @@ program.command("eval-issues")
       onProgress: (message) => process.stderr.write(`${message}\n`),
     });
     const audit = auditIssueFailures(report);
-    await writeArtifacts(output, {
+    const files: Record<string, string> = {
       "report.md": renderIssueEvaluation(report),
       "results.json": `${JSON.stringify(report, null, 2)}\n`,
       "audit.md": renderIssueAudit(audit),
       "audit.json": `${JSON.stringify(audit, null, 2)}\n`,
-    });
+    };
+    if (report.results.some((result) => result.candidateDiagnostics)) {
+      const diagnostics = diagnoseIssueRanking(report);
+      files["diagnostics.md"] = renderIssueDiagnostics(diagnostics);
+      files["diagnostics.json"] = `${JSON.stringify(diagnostics, null, 2)}\n`;
+    }
+    await writeArtifacts(output, files);
     process.stdout.write(
       `Issue evaluation: ${output}\n`
       + `Recall@10 ${report.aggregate.recallAt10.toFixed(3)}; MRR ${report.aggregate.mrr.toFixed(3)}.\n`

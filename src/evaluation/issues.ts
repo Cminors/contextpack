@@ -13,6 +13,8 @@ import type {
   IssueBenchmarkCheckpoint,
   IssueBenchmarkInstance,
   IssueBenchmarkReport,
+  IssueCandidateDiagnostic,
+  IssueCandidateDiagnostics,
   IssueEvaluationResult,
 } from "./issue-types.js";
 import type { IssueWorkerResponse } from "./issue-worker.js";
@@ -149,6 +151,18 @@ async function readCheckpoint(checkpointPath: string): Promise<IssueBenchmarkChe
     const parsed: unknown = JSON.parse(await fs.readFile(checkpointPath, "utf8"));
     if (!isCheckpoint(parsed)) {
       throw new ContextPackError(`Invalid issue benchmark checkpoint: ${checkpointPath}`, 2, "INVALID_CHECKPOINT");
+    }
+    for (const result of parsed.results) {
+      if (!result.candidateDiagnostics) continue;
+      for (const diagnostic of [
+        ...result.candidateDiagnostics.topCandidates,
+        ...result.candidateDiagnostics.goldCandidates,
+      ]) {
+        diagnostic.scoreState ??= diagnostic.score === null || diagnostic.breakdown === null
+          ? "non-finite"
+          : "finite";
+        diagnostic.nonFiniteSignals ??= [];
+      }
     }
     return parsed;
   } catch (error) {
@@ -298,6 +312,49 @@ async function evaluateInstance(
     }));
     const goldFiles = [...new Set(instance.goldRegions.map((region) => region.path))];
     const fileMetrics = commitMetrics(goldFiles, predictions);
+    const finalRankByPath = new Map(manifest.candidates.map((candidate, index) => [candidate.path, index + 1]));
+    const scoreRankByPath = new Map(
+      [...manifest.candidates]
+        .sort((left, right) => right.score - left.score || left.path.localeCompare(right.path))
+        .map((candidate, index) => [candidate.path, index + 1]),
+    );
+    const diagnosticFor = (filePath: string): IssueCandidateDiagnostic => {
+      const candidate = manifest.candidates.find((item) => item.path === filePath);
+      const signalKeys = candidate
+        ? Object.keys(candidate.breakdown) as Array<keyof typeof candidate.breakdown>
+        : [];
+      const nonFiniteSignals = candidate
+        ? signalKeys.filter((signal) => !Number.isFinite(candidate.breakdown[signal]))
+        : [];
+      const finite = candidate !== undefined
+        && Number.isFinite(candidate.score)
+        && nonFiniteSignals.length === 0;
+      return candidate
+        ? {
+            path: filePath,
+            finalRank: finalRankByPath.get(filePath) ?? null,
+            scoreRank: scoreRankByPath.get(filePath) ?? null,
+            scoreState: finite ? "finite" : "non-finite",
+            score: finite ? candidate.score : null,
+            breakdown: finite ? candidate.breakdown : null,
+            nonFiniteSignals,
+            reasons: candidate.reasons,
+          }
+        : {
+            path: filePath,
+            finalRank: null,
+            scoreRank: null,
+            scoreState: "missing",
+            score: null,
+            breakdown: null,
+            nonFiniteSignals: [],
+            reasons: [],
+          };
+    };
+    const candidateDiagnostics: IssueCandidateDiagnostics = {
+      topCandidates: manifest.candidates.slice(0, 10).map((candidate) => diagnosticFor(candidate.path)),
+      goldCandidates: goldFiles.map(diagnosticFor),
+    };
     return {
       instanceId: instance.instanceId,
       repo: instance.repo,
@@ -306,6 +363,7 @@ async function evaluateInstance(
       predictedRegions,
       goldFiles,
       predictions,
+      candidateDiagnostics,
       recallAt5: fileMetrics.recallAt5,
       recallAt10: fileMetrics.recallAt10,
       reciprocalRank: fileMetrics.reciprocalRank,

@@ -84,6 +84,12 @@ describe("real issue benchmark", () => {
       requestedInstances: 1,
       aggregate: { recallAt5: 1, recallAt10: 1, mrr: 1 },
     });
+    expect(report.results[0]?.candidateDiagnostics?.goldCandidates).toEqual([
+      expect.objectContaining({ path: "src/timeout.ts", finalRank: 1, scoreRank: 1 }),
+    ]);
+    expect(report.results[0]?.candidateDiagnostics?.topCandidates).toEqual(expect.arrayContaining([
+      expect.objectContaining({ path: "src/timeout.ts", finalRank: 1, scoreRank: 1 }),
+    ]));
     expect(report.aggregate.regionMetrics["10"]).toMatchObject({
       lineRecall: 1,
       usefulHitRate: 1,
@@ -93,6 +99,18 @@ describe("real issue benchmark", () => {
     expect(progress).toEqual(["[1/1] example__fixture-1"]);
     const saved = JSON.parse(await fs.readFile(checkpoint, "utf8")) as { results: unknown[]; skipped: unknown[] };
     expect(saved).toMatchObject({ version: 1, results: [{ instanceId: "example__fixture-1" }], skipped: [] });
+
+    const legacyCheckpoint = JSON.parse(await fs.readFile(checkpoint, "utf8")) as {
+      results: Array<{ candidateDiagnostics?: { topCandidates: Array<Record<string, unknown>>; goldCandidates: Array<Record<string, unknown>> } }>;
+    };
+    for (const diagnostic of [
+      ...(legacyCheckpoint.results[0]?.candidateDiagnostics?.topCandidates ?? []),
+      ...(legacyCheckpoint.results[0]?.candidateDiagnostics?.goldCandidates ?? []),
+    ]) {
+      delete diagnostic.scoreState;
+      delete diagnostic.nonFiniteSignals;
+    }
+    await fs.writeFile(checkpoint, `${JSON.stringify(legacyCheckpoint, null, 2)}\n`);
 
     await fs.rm(data.cache, { recursive: true, force: true });
     const resumeProgress: string[] = [];

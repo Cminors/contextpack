@@ -1,5 +1,6 @@
 import type { ContextManifest, EvaluationReport } from "../types.js";
 import type { IssueFailureAudit } from "../evaluation/issue-audit.js";
+import type { IssueRankingDiagnostics, RankingEvidenceCategory } from "../evaluation/issue-diagnostics.js";
 import type { IssueBenchmarkReport } from "../evaluation/issue-types.js";
 import { countTokens } from "./tokens.js";
 
@@ -119,4 +120,20 @@ export function renderIssueAudit(audit: IssueFailureAudit): string {
   const fileMissRate = audit.validInstances === 0 ? 0 : audit.counts.fileRankingMisses / audit.validInstances;
 
   return `# ContextPack Issue Failure Audit\n\nThis report locates retrieval failures by pipeline stage. It does not infer an unobserved scoring cause.\n\n## Summary\n\n- Valid instances: ${audit.validInstances}\n- Maximum line budget: ${audit.maximumLineBudget}\n- File hit and useful region: ${audit.counts.fileHitRegionHit}\n- File hit but region miss: ${audit.counts.fileHitRegionMiss}\n- Gold file ranked 11-20: ${audit.counts.fileMissRank11To20}\n- Gold file outside the recorded top 20: ${audit.counts.fileMissOutsideTop20}\n- Top-10 file-ranking misses: ${audit.counts.fileRankingMisses} (${(fileMissRate * 100).toFixed(1)}%)\n\n## By Repository\n\n| Repository | File + region hit | Region miss | Rank 11-20 | Outside top 20 |\n|---|---:|---:|---:|---:|\n${repositoryRows.join("\n")}\n\n## Top-10 File-ranking Misses\n\n| Instance | Repository | Stage | Gold file (recorded rank) | First three predictions |\n|---|---|---|---|---|\n${missRows.join("\n") || "| None | | | | |"}\n\n## File Hit / Region Misses\n\n| Instance | Repository | Gold file (recorded rank) |\n|---|---|---|\n${localizationRows.join("\n") || "| None | | |"}\n\n## Limitations\n\n${audit.limitations.map((item) => `- ${item}`).join("\n")}\n`;
+}
+
+export function renderIssueDiagnostics(diagnostics: IssueRankingDiagnostics): string {
+  const categoryLabels: Record<RankingEvidenceCategory, string> = {
+    "candidate-not-found": "candidate not found",
+    "non-finite-score": "non-finite score",
+    "prediction-policy-displacement": "prediction-policy displacement",
+    "no-direct-query-signal": "no lexical/symbol signal",
+    "direct-signal-below-cutoff": "direct signal below cutoff",
+  };
+  const rows = diagnostics.entries.map((entry) => {
+    const candidate = entry.bestGoldCandidate;
+    return `| \`${tableEscape(entry.instanceId)}\` | \`${entry.repo}\` | ${categoryLabels[entry.category]} | \`${tableEscape(candidate.path)}\` | ${candidate.finalRank ?? "n/a"} | ${candidate.scoreRank ?? "n/a"} | ${candidate.score?.toFixed(3) ?? "n/a"} | ${entry.scoreGapToTenth?.toFixed(3) ?? "n/a"} | ${entry.dominantSignal ?? "none"} |`;
+  });
+
+  return `# ContextPack Issue Ranking Diagnostics\n\nThis report records observed ranking evidence for issue tasks whose gold files remain outside the final top 20. It does not claim a causal root cause.\n\n## Summary\n\n- Eligible outside-top-20 misses: ${diagnostics.eligibleMisses}\n- Diagnosed misses: ${diagnostics.diagnosedMisses}\n- Missing diagnostic evidence: ${diagnostics.missingEvidence.length}\n- Candidate not found: ${diagnostics.counts["candidate-not-found"]}\n- Non-finite score: ${diagnostics.counts["non-finite-score"]}\n- Prediction-policy displacement: ${diagnostics.counts["prediction-policy-displacement"]}\n- No direct lexical or symbol signal: ${diagnostics.counts["no-direct-query-signal"]}\n- Direct signal below cutoff: ${diagnostics.counts["direct-signal-below-cutoff"]}\n\n## Instances\n\n| Instance | Repository | Observed evidence | Best gold file | Final rank | Score rank | Score | Gap to 10th | Dominant signal |\n|---|---|---|---|---:|---:|---:|---:|---|\n${rows.join("\n") || "| None | | | | | | | | |"}\n\n## Missing Evidence\n\n${diagnostics.missingEvidence.map((instanceId) => `- \`${tableEscape(instanceId)}\``).join("\n") || "None."}\n\n## Limitations\n\n${diagnostics.limitations.map((item) => `- ${item}`).join("\n")}\n`;
 }
