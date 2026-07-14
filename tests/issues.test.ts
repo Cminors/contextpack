@@ -215,7 +215,10 @@ describe("real issue benchmark", () => {
       historyCount: 1,
       checkpointPath: checkpoint,
       instanceTimeoutMs: 1,
-    })).rejects.toMatchObject({ code: "NO_VALID_INSTANCES" });
+    })).rejects.toMatchObject({
+      code: "NO_VALID_INSTANCES",
+      message: expect.stringContaining("timed out"),
+    });
     const timedOut = JSON.parse(await fs.readFile(checkpoint, "utf8")) as {
       results: unknown[];
       skipped: Array<{ instanceId: string; reason: string }>;

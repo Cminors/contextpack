@@ -40,12 +40,9 @@ const mean = (values: number[]): number => values.length === 0
   ? 0
   : values.reduce((sum, value) => sum + value, 0) / values.length;
 
-function issueWorkerTarget(): { url: URL; execArgv?: string[] } {
+function issueWorkerTarget(): URL {
   const sourceMode = import.meta.url.endsWith(".ts");
-  return {
-    url: new URL(sourceMode ? "./issue-worker.ts" : "./issue-worker.js", import.meta.url),
-    ...(sourceMode ? { execArgv: ["--import", "tsx"] } : {}),
-  };
+  return new URL(sourceMode ? "./issue-worker-bootstrap.mjs" : "./issue-worker.js", import.meta.url);
 }
 
 async function analyzeTaskIsolated(
@@ -56,10 +53,8 @@ async function analyzeTaskIsolated(
   timeoutMs: number | undefined,
 ): Promise<ContextManifest> {
   if (timeoutMs === undefined) return analyzeTask({ root, task, budget, historyCount });
-  const target = issueWorkerTarget();
-  const worker = new Worker(target.url, {
+  const worker = new Worker(issueWorkerTarget(), {
     workerData: { root, task, budget, historyCount },
-    ...(target.execArgv ? { execArgv: target.execArgv } : {}),
   });
   return new Promise<ContextManifest>((resolve, reject) => {
     let settled = false;
@@ -426,7 +421,14 @@ export async function runIssueBenchmark(options: IssueBenchmarkOptions): Promise
   results.sort((left, right) => (instanceOrder.get(left.instanceId) ?? 0) - (instanceOrder.get(right.instanceId) ?? 0));
   skipped.sort((left, right) => (instanceOrder.get(left.instanceId) ?? 0) - (instanceOrder.get(right.instanceId) ?? 0));
   await persistCheckpoint();
-  if (results.length === 0) throw new ContextPackError("Every issue benchmark instance failed.", 4, "NO_VALID_INSTANCES");
+  if (results.length === 0) {
+    const reasons = skipped.slice(0, 3).map((entry) => `${entry.instanceId}: ${entry.reason}`).join("; ");
+    throw new ContextPackError(
+      `Every issue benchmark instance failed.${reasons ? ` ${reasons}` : ""}`,
+      4,
+      "NO_VALID_INSTANCES",
+    );
+  }
   return {
     version: 1,
     generatedAt: new Date().toISOString(),
