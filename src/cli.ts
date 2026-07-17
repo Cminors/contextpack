@@ -14,6 +14,7 @@ import {
 } from "./output/markdown.js";
 import { writeArtifacts } from "./output/write.js";
 import { toContextPackError } from "./errors.js";
+import { renderDoctor, runDoctor } from "./doctor.js";
 import type { EvaluationQueryMode } from "./types.js";
 
 const program = new Command();
@@ -54,6 +55,15 @@ function slug(value: string): string {
 }
 
 program.name("contextpack").description("Build small, explainable context packs for JS/TS coding tasks.").version("0.1.0");
+
+program.command("doctor")
+  .description("Check whether the current project is ready for ContextPack")
+  .option("--json", "print a machine-readable report")
+  .action(async (options: { json?: boolean }) => {
+    const report = await runDoctor(process.cwd());
+    process.stdout.write(options.json ? `${JSON.stringify(report, null, 2)}\n` : renderDoctor(report));
+    if (!report.ready) process.exitCode = 2;
+  });
 
 program.command("task")
   .argument("<description>", "feature task description")

@@ -17,7 +17,12 @@ function git(root: string, args: string[]): string {
   return result.stdout.trim();
 }
 
-afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, { recursive: true, force: true }))));
+afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, {
+  recursive: true,
+  force: true,
+  maxRetries: 5,
+  retryDelay: 100,
+}))));
 
 async function fixture(): Promise<{ root: string; dataset: string; cache: string }> {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-issues-test-"));
@@ -220,7 +225,7 @@ describe("real issue benchmark", () => {
       checkpointPath: checkpoint,
       resume: true,
     })).rejects.toMatchObject({ code: "CHECKPOINT_MISMATCH" });
-  });
+  }, 30_000);
 
   it("records hard timeouts and can retry skipped instances on resume", async () => {
     const data = await fixture();

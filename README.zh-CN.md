@@ -127,6 +127,14 @@ contextpack --version
 0.1.0
 ```
 
+第一次生成任务前，先检查当前项目和环境：
+
+```bash
+contextpack doctor
+```
+
+看到 `Ready: yes`，表示 Node.js 版本、项目目录权限和受支持源码文件均已满足要求。Git 是推荐项但不是硬性要求；没有 Git 历史时，`doctor` 只会警告，不会阻止静态分析。需要机器可读结果时使用 `contextpack doctor --json`。
+
 ### 第 3 步：在你的项目中运行
 
 先进入需要分析的 JS/TS 项目目录。
@@ -227,10 +235,18 @@ contextpack explain src/auth.ts --task "增加 GitHub OAuth"
 contextpack explain loginWithGithub --task "增加 GitHub OAuth"
 ```
 
+### 检查当前项目
+
+```bash
+contextpack doctor
+contextpack doctor --json
+```
+
 ### 查看帮助
 
 ```bash
 contextpack --help
+contextpack doctor --help
 contextpack task --help
 contextpack explain --help
 ```
@@ -434,7 +450,7 @@ contextpack eval-issues --dataset .benchmarks/datasets/swe-bench-multilingual-p0
 
 ## 当前状态
 
-ContextPack 目前是未发布的实验性源码预览版：核心 CLI、打包结构、自动测试、性能烟测、可断点续跑的真实 issue 评测、零跳过的 43 任务外部基线、失败阶段与分数级诊断和第一版查询感知区域定位已经具备，但 npm 发布、正式 Release、零基础安装体验、经过验证的 lexical 区分度改进和更广泛可靠的文件内定位仍未完成。
+ContextPack 目前是正在向 Beta 候选推进的未发布实验性源码预览版：核心 CLI、`doctor` 环境诊断、真实打包产物安装烟测、自动测试、性能烟测、可断点续跑的真实 issue 评测、零跳过的 43 任务外部基线、失败阶段与分数级诊断和第一版查询感知区域定位已经具备，但 npm 发布、正式 Release、完全零基础的安装体验、经过验证的 lexical 区分度改进和更广泛可靠的文件内定位仍未完成。
 
 现阶段目标是让小范围测试者能够安全、清楚地试用并反馈问题，而不是进行大规模推广。
 
@@ -447,7 +463,7 @@ npm run test:coverage
 npm run perf:smoke
 ```
 
-当前质量门禁：77 项测试通过、行覆盖率超过 88%、生产依赖漏洞为 0，并包含一个确定性的 360 文件性能烟测。GitHub CI 验证 Node.js 20 和 22。
+当前质量门禁：80 项测试通过、行覆盖率超过 88%、真实打包产物安装与任务烟测、生产依赖漏洞为 0，并包含一个确定性的 360 文件性能烟测。GitHub CI 在 Ubuntu 和 Windows 上验证 Node.js 20 和 22。
 
 ## 许可证
 

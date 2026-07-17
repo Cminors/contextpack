@@ -127,6 +127,14 @@ Expected output:
 0.1.0
 ```
 
+Before the first task, check the current project and environment:
+
+```bash
+contextpack doctor
+```
+
+`Ready: yes` means the required Node.js version, project permissions, and supported source files are available. Git is recommended but optional; `doctor` reports a warning instead of blocking static analysis when Git history is unavailable. Use `contextpack doctor --json` for a machine-readable report.
+
 ### Step 3: Run it inside your project
 
 First change into the JavaScript or TypeScript project you want to analyze.
@@ -227,10 +235,18 @@ contextpack explain src/auth.ts --task "add GitHub OAuth"
 contextpack explain loginWithGithub --task "add GitHub OAuth"
 ```
 
+### Check the current project
+
+```bash
+contextpack doctor
+contextpack doctor --json
+```
+
 ### Show help
 
 ```bash
 contextpack --help
+contextpack doctor --help
 contextpack task --help
 contextpack explain --help
 ```
@@ -434,7 +450,7 @@ Do not upload private source code, tokens, `.env` files, or other credentials.
 
 ## Project status
 
-ContextPack is an unpublished experimental source preview. The core CLI, package structure, automated tests, performance smoke test, resumable real-issue evaluation, a zero-skip 43-task external baseline, failure-stage and score-level diagnostics, and a first query-aware region localizer are in place. npm publishing, a formal release, zero-knowledge installation, a validated improvement for lexical discrimination, and broadly reliable within-file localization are not finished.
+ContextPack is an unpublished experimental source preview moving toward a beta candidate. The core CLI, `doctor` environment diagnostics, packed-artifact installation smoke test, automated tests, performance smoke test, resumable real-issue evaluation, a zero-skip 43-task external baseline, failure-stage and score-level diagnostics, and a first query-aware region localizer are in place. npm publishing, a formal release, a fully zero-knowledge installation, a validated improvement for lexical discrimination, and broadly reliable within-file localization are not finished.
 
 The current goal is to let a small group of testers use the project safely and report understandable feedback—not to promote it broadly.
 
@@ -447,7 +463,7 @@ npm run test:coverage
 npm run perf:smoke
 ```
 
-Current quality gate: 77 tests passing, more than 88% line coverage, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22.
+Current quality gate: 80 tests passing, more than 88% line coverage, a packed-artifact install/task smoke test, no production dependency vulnerabilities, and a deterministic 360-file performance smoke test. GitHub CI verifies Node.js 20 and 22 on Ubuntu and Windows.
 
 ## License
 
