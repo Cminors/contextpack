@@ -223,7 +223,13 @@ export function scoreContentMatches(files: FileAnalysis[], terms: string[]): Map
         bestOccurrence.set(occurrence.term, occurrence);
       }
     }
-    const score = Math.min(1, contributions.reduce((sum, item) => sum + item.value, 0) / denominator);
+    const matchedCount = contributions.length;
+    const coverageRatio = matchedCount / Math.max(1, queryTerms.length);
+    const coverageMultiplier = Math.pow(coverageRatio, 0.4);
+    const score = Math.min(
+      1,
+      (contributions.reduce((sum, item) => sum + item.value, 0) / denominator) * coverageMultiplier,
+    );
     const contributionByTerm = new Map(contributions.map((item) => [item.term, item.value]));
     const localizationEvidence = document.occurrences
       .filter((item) => matchedTerms.has(item.term))

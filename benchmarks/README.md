@@ -174,6 +174,27 @@ The first diagnostic run exposed non-finite lexical scores in two tasks whose qu
 
 Lexical evidence is the dominant weighted component for 20 tasks and dependency evidence for two. Gold-file final ranks fall into these bands: eight at 21-50, six at 51-100, seven at 101-500, and one above 500. The median score gap to the tenth candidate is `0.196` (range `0.104`-`0.333`). Thirteen gold files reach the `0.9` lexical content ceiling, while 20 of 22 tasks have at least one top-10 candidate at that ceiling. This is evidence of weak lexical discrimination on this fixed miss set, not proof that one generic stop-word rule will improve retrieval. Raw results and diagnostics are stored in `benchmarks/results/swebench-multilingual-p06-ranking-diagnostics/`.
 
+## P0.7 Term Discrimination
+
+P0.7 tested full-query normalization and a distinct-term coverage penalty. Applying both changes together raised Axios File Recall@10 to `0.700` but reduced MRR to `0.117`; exponents `0.3` and `0.2`, a four-term activation threshold, and the denominator-only variant also missed the `0.205` MRR gate. The current-code control reproduced only `0.182` MRR versus the recorded P0.3 `0.205`, but every full-query-denominator variant reduced it further. The denominator-cap removal was therefore rejected and the final scorer keeps `denominator = Math.max(2, Math.min(queryTerms.length, 6))` while multiplying the normalized contribution sum by `coverageRatio^0.4`, where `coverageRatio` is the fraction of distinct query terms matched by the file.
+
+The final coverage-only variant produced the following six-task Axios result:
+
+| Implementation | File R@5 | File R@10 | MRR | Line recall @100 | @250 | @500 | Useful hit @500 | Median tokens | Median analysis |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| P0.7 coverage-only term discrimination | 0.567 | 0.650 | 0.338 | 0.185 | 0.373 | 0.411 | 0.667 | 3,301 | 3,153 ms |
+
+Historical replay on this checkout found only nine valid feature commits rather than the recorded baseline's 20. Per the replay gate this count difference is noted rather than treated as a failure; both available query modes remained above their metric floors:
+
+| Query mode | Valid commits | Recall@10 | MRR |
+|---|---:|---:|---:|
+| `title` | 9 | 0.604 | 0.622 |
+| `keyword-ablated` | 9 | 0.604 | 0.622 |
+
+On the fixed 22-task P0.6 ranking-miss subset, all tasks completed without skips. File Recall@10 increased from `0.000` to `0.114` and MRR from `0.000` to `0.081`; File Recall@5 reached `0.068`. This confirms that the coverage multiplier promotes some known gold files into the top 10. Raw P0.7 artifacts are stored under `.contextpack/evals/` and remain intentionally untracked.
+
+The full 43-task SWE-bench Multilingual set was not re-run for P0.7.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
