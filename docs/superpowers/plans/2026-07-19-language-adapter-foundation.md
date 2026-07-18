@@ -455,7 +455,10 @@ projection or metric gates.
 Run the exact P0.9 smoke commands with new output directories:
 
 ```powershell
-node dist/cli.js eval-issues --repo axios/axios --history 50 --budget 12000 `
+node dist/cli.js eval-issues `
+  --dataset C:\Users\Administrator\Documents\contextpack\.benchmarks\datasets\swe-bench-multilingual-js-ts.jsonl `
+  --cache C:\Users\Administrator\Documents\contextpack\.benchmarks\repositories `
+  --repo axios/axios --history 50 --budget 12000 `
   --line-budgets 100,250,500 --instance-timeout 600 --git-timeout 300 `
   --output .contextpack/evals/p10-axios-smoke
 node dist/cli.js eval --commits 20 --budget 12000 --query-mode title `
