@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { analyzeFiles, enrichSemanticReferences } from "../src/analysis/ast.js";
 import { ContextPackError } from "../src/errors.js";
 import { createLanguageAdapterRegistry } from "../src/languages/registry.js";
 import type { LanguageAdapter } from "../src/languages/types.js";
+import type { DiscoveredRepository, FileAnalysis } from "../src/types.js";
 
 const adapter = (
   id: string,
@@ -14,6 +16,40 @@ const adapter = (
   configPatterns,
   owns: (filePath) => ownedPaths.includes(filePath),
   analyzeFiles: async () => [],
+});
+
+const repository = (sourceFiles: string[]): DiscoveredRepository => ({
+  snapshot: {
+    root: "/repo",
+    commit: "unavailable",
+    branch: null,
+    packageManager: "unknown",
+    projectType: [],
+    isGitRepository: false,
+    isShallow: false,
+  },
+  sourceFiles,
+  configFiles: ["package.json"],
+  packages: [],
+  rules: [],
+  warnings: [],
+});
+
+const analysis = (filePath: string): FileAnalysis => ({
+  path: filePath,
+  absolutePath: `/repo/${filePath}`,
+  language: filePath.endsWith(".ts") ? "typescript" : "javascript",
+  content: "",
+  lineCount: 1,
+  imports: [],
+  importedBy: [],
+  references: [],
+  referencedBy: [],
+  referenceSymbols: {},
+  symbols: [],
+  isTest: false,
+  isConfig: false,
+  packageDirectory: null,
 });
 
 describe("createLanguageAdapterRegistry", () => {
@@ -100,5 +136,62 @@ describe("createLanguageAdapterRegistry", () => {
     expect(() => registry.ownerFor("src/a.ts")).toThrowError(
       expect.objectContaining({ code: "LANGUAGE_ADAPTER_OWNERSHIP" }),
     );
+  });
+});
+
+describe("language adapter dispatch", () => {
+  it("groups source paths and invokes adapters sequentially in registry order", async () => {
+    const calls: string[] = [];
+    const first: LanguageAdapter = {
+      ...adapter("first", ["**/*.ts"], [], ["src/a.ts", "src/c.ts"]),
+      analyzeFiles: async (_repository, sourceFiles) => {
+        calls.push(`first:${sourceFiles.join(",")}`);
+        return [analysis("src/c.ts"), analysis("src/a.ts")];
+      },
+    };
+    const second: LanguageAdapter = {
+      ...adapter("second", ["**/*.js"], [], ["src/b.js"]),
+      analyzeFiles: async (_repository, sourceFiles) => {
+        calls.push(`second:${sourceFiles.join(",")}`);
+        return [analysis("src/b.js")];
+      },
+    };
+    const registry = createLanguageAdapterRegistry([first, second]);
+
+    const files = await analyzeFiles(repository(["src/c.ts", "src/b.js", "src/a.ts"]), registry);
+
+    expect(calls).toEqual(["first:src/c.ts,src/a.ts", "second:src/b.js"]);
+    expect(files.map((file) => file.path)).toEqual(["src/a.ts", "src/b.js", "src/c.ts"]);
+  });
+
+  it("enriches source focus paths by owner in registry order", () => {
+    const calls: string[] = [];
+    const first: LanguageAdapter = {
+      ...adapter("first", ["**/*.ts"], [], ["src/a.ts"]),
+      enrichSemanticReferences: (_repository, _files, focusPaths) => {
+        calls.push(`first:${focusPaths.join(",")}`);
+        return false;
+      },
+    };
+    const second: LanguageAdapter = {
+      ...adapter("second", ["**/*.js"], [], ["src/b.js"]),
+      enrichSemanticReferences: (_repository, _files, focusPaths) => {
+        calls.push(`second:${focusPaths.join(",")}`);
+        return true;
+      },
+    };
+    const registry = createLanguageAdapterRegistry([first, second]);
+    const discovered = repository(["src/a.ts", "src/b.js"]);
+    const files = [analysis("src/a.ts"), analysis("src/b.js")];
+
+    const enriched = enrichSemanticReferences(
+      discovered,
+      files,
+      ["src/b.js", "package.json", "src/a.ts"],
+      registry,
+    );
+
+    expect(calls).toEqual(["first:src/a.ts", "second:src/b.js"]);
+    expect(enriched).toBe(true);
   });
 });

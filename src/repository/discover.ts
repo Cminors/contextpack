@@ -3,23 +3,14 @@ import path from "node:path";
 import fg from "fast-glob";
 import ignore from "ignore";
 import { ContextPackError } from "../errors.js";
+import { defaultLanguageAdapterRegistry } from "../languages/defaults.js";
+import type { LanguageAdapterRegistry } from "../languages/types.js";
 import type { ContextWarning, DiscoveredRepository, RepositorySnapshot } from "../types.js";
 import { findGitRoot, runGit } from "../utils/git.js";
-import { isSensitivePath } from "../utils/security.js";
 import { toPosixPath } from "../utils/path.js";
+import { isSensitivePath } from "../utils/security.js";
 import { detectPackageManager, detectProjectTypes, discoverPackages } from "./packages.js";
 import { discoverRules } from "./rules.js";
-
-const SOURCE_PATTERNS = ["**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}"];
-const CONFIG_PATTERNS = [
-  "package.json",
-  "**/package.json",
-  "tsconfig.json",
-  "**/tsconfig*.json",
-  "next.config.*",
-  "vite.config.*",
-  "eslint.config.*",
-];
 const ALWAYS_IGNORED = [
   "**/.git/**",
   "**/node_modules/**",
@@ -64,7 +55,10 @@ function snapshotFor(root: string, packageManager: RepositorySnapshot["packageMa
   };
 }
 
-export async function discoverRepository(start: string): Promise<DiscoveredRepository> {
+export async function discoverRepository(
+  start: string,
+  registry: LanguageAdapterRegistry = defaultLanguageAdapterRegistry,
+): Promise<DiscoveredRepository> {
   const requestedRoot = path.resolve(start);
   const gitRoot = findGitRoot(requestedRoot);
   const root = path.resolve(gitRoot ?? requestedRoot);
@@ -82,8 +76,8 @@ export async function discoverRepository(start: string): Promise<DiscoveredRepos
 
   const gitIgnore = await loadGitIgnore(root);
   const [sourceMatches, configMatches, fileNames, packages, rules] = await Promise.all([
-    fg(SOURCE_PATTERNS, { cwd: root, onlyFiles: true, unique: true, ignore: ALWAYS_IGNORED }),
-    fg(CONFIG_PATTERNS, { cwd: root, onlyFiles: true, unique: true, ignore: ALWAYS_IGNORED }),
+    fg([...registry.sourcePatterns], { cwd: root, onlyFiles: true, unique: true, ignore: ALWAYS_IGNORED }),
+    fg([...registry.configPatterns], { cwd: root, onlyFiles: true, unique: true, ignore: ALWAYS_IGNORED }),
     rootFileNames(root),
     discoverPackages(root),
     discoverRules(root),
@@ -95,6 +89,8 @@ export async function discoverRepository(start: string): Promise<DiscoveredRepos
   };
   const sourceFiles = sourceMatches.filter(filterPath).map(toPosixPath).sort();
   const configFiles = configMatches.filter(filterPath).map(toPosixPath).sort();
+
+  for (const sourceFile of sourceFiles) registry.ownerFor(sourceFile);
 
   if (sourceFiles.length === 0) {
     throw new ContextPackError(
