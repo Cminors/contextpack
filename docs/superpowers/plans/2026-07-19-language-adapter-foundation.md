@@ -327,7 +327,7 @@ git commit -m "refactor: move JavaScript analysis behind language adapter"
 - Create: `src/languages/defaults.ts`
 - Modify: `src/repository/discover.ts`
 - Modify: `src/analysis/ast.ts`
-- Modify: `tests/discover.test.ts`
+- Create: `tests/discover.test.ts`
 - Modify: `tests/language-registry.test.ts`
 
 **Interfaces:**
