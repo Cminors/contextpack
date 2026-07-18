@@ -23,6 +23,12 @@ Give context.md and the original task to your coding assistant
 
 ContextPack does not call an LLM, require an API key, upload your repository, or edit your source code.
 
+## Internal architecture
+
+P1.0 places language-specific discovery and source analysis behind a small internal adapter boundary. A deterministic registry supplies the source and configuration patterns, validates that every discovered source file has exactly one owner, and dispatches analysis in stable order. The existing JavaScript/TypeScript adapter continues to produce the normalized `FileAnalysis` data consumed by the language-neutral ranking, region selection, and rendering pipeline. Compatibility facades preserve the existing analysis API and manifest format.
+
+This is an internal implementation boundary, not a plugin or public SDK surface. ContextPack continues to support only JavaScript and TypeScript repositories; no additional language or integration support is implied by the adapter architecture.
+
 > [!IMPORTANT]
 > ContextPack is still an unpublished source preview. There is no npm release or formal beta yet. It is suitable for small, guided tests using this document, not for presenting as a finished product.
 
@@ -395,6 +401,7 @@ Current key results:
 | MCP TypeScript SDK, keyword ablation | 20 | 0.341 | 0.402 | retrieval after answer hints are removed |
 | SWE-bench Axios issues | 6 | 0.617 | 0.205 | real-issue file and region smoke test |
 | SWE-bench JS/TS fixed set | 43 valid / 43 attempted | 0.299 | 0.079 | seven-repository P0.5 zero-skip baseline |
+| SWE-bench JS/TS P1.0 parity run | 43 valid / 43 attempted | 0.389 | 0.177 | P0.9 predictions reproduced exactly |
 
 Query-aware region localization raises Axios line recall from `0.000` at every budget to `0.167`, `0.355`, and `0.411` at 100, 250, and 500 emitted lines. Useful-hit rate reaches `0.667` at 500 lines, but this is still a six-task smoke result with high region noise—not evidence of general agent success.
 

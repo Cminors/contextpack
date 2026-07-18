@@ -254,6 +254,30 @@ Historical replay retained ten valid commits in both modes. Title produced Recal
 
 **Verdict: retain P0.9.** It reduces the full-set localization-miss count and improves both line recall @500 and useful-hit @500 while leaving file retrieval unchanged. Raw diagnostics and evaluation artifacts remain intentionally untracked under `.contextpack/evals/p09-*`.
 
+## P1.0 Language Adapter Foundation
+
+P1.0 moved JavaScript/TypeScript discovery and compiler-backed analysis behind a deterministic internal language-adapter registry. Ranking, region selection, rendering, manifest version, and CLI behavior remain unchanged. The registry validates unique adapter ownership, merges source/config patterns deterministically, and dispatches the existing normalized `FileAnalysis` producer; it does not add a public plugin API or support additional languages.
+
+The local gates passed: `npm run check` (24 test files, 115 tests, build, and package smoke) and `npm run perf:smoke` (final median total `1,310 ms`, below the `4,000 ms` limit).
+
+The full 43-task run used the pinned dataset and repository cache from the main checkout, with `43/43` valid instances and zero skips. The stable projection comparison against P0.9 returned `Parity: equal`, including every per-instance `predictions` and `predictedRegions` array.
+
+| Metric | P0.9 reference | P1.0 | Delta |
+|---|---:|---:|---:|
+| File Recall@5 | 0.242 | 0.242 | 0.000 |
+| File Recall@10 | 0.389 | 0.389 | 0.000 |
+| File MRR | 0.177 | 0.177 | 0.000 |
+| Line recall @100 | 0.026 | 0.026 | 0.000 |
+| Line recall @250 | 0.070 | 0.070 | 0.000 |
+| Line recall @500 | 0.103 | 0.103 | 0.000 |
+| Useful hit @500 | 0.209 | 0.209 | 0.000 |
+
+The six-task Axios smoke also reproduced the P0.9 gates: File Recall@10 `0.650`, MRR `0.380`, line recall @500 `0.577`, and useful-hit @500 `0.833`, with `6/6` valid instances and zero skips.
+
+Historical replay produced 11 valid commits in each mode on this branch. The expanded aggregates were title Recall@10 `0.6243867` / MRR `0.6228355`, and keyword-ablated Recall@10 `0.6243867` / MRR `0.5470779`. The P0.9 artifacts contain 10 common commits; on that common set, both modes had zero prediction-array mismatches and reproduced title `0.6439683 / 0.6601190` and keyword-ablated `0.6439683 / 0.5767857` (rounded `0.644 / 0.660` and `0.644 / 0.577`). The additional eligible commit was `88a601` (P0.9), whose per-commit result was Recall@10 `0.4285714` / MRR `0.25`; the larger aggregate is therefore a sample-set difference, not an adapter regression.
+
+**Verdict: parity.** P1.0 changes the internal producer boundary only; all controlled retrieval outputs and metrics match P0.9. Raw artifacts remain intentionally untracked under `.contextpack/evals/p10-*`.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
