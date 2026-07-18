@@ -193,7 +193,34 @@ Historical replay on this checkout found only nine valid feature commits rather 
 
 On the fixed 22-task P0.6 ranking-miss subset, all tasks completed without skips. File Recall@10 increased from `0.000` to `0.114` and MRR from `0.000` to `0.081`; File Recall@5 reached `0.068`. This confirms that the coverage multiplier promotes some known gold files into the top 10. Raw P0.7 artifacts are stored under `.contextpack/evals/` and remain intentionally untracked.
 
-The full 43-task SWE-bench Multilingual set was not re-run for P0.7.
+The full 43-task SWE-bench Multilingual set was validated in P0.8 and produced a full-set uplift; see the P0.8 section.
+
+## P0.8 Full-Set Validation
+
+P0.8 ran the full 43-task SWE-bench Multilingual set on the committed P0.7 scorer (`coverageRatio^0.4`, denominator cap retained). **Verdict: uplift versus the P0.5 full-set baseline.** Every instance completed successfully, with 43 valid results and zero skips.
+
+| Metric | P0.5 baseline | P0.8 result | Delta |
+|---|---:|---:|---:|
+| File Recall@5 | 0.117 | 0.242 | +0.125 |
+| File Recall@10 | 0.299 | 0.389 | +0.090 |
+| File MRR | 0.079 | 0.177 | +0.098 |
+| Line recall @100 | 0.000 | 0.026 | +0.026 |
+| Line recall @250 | 0.062 | 0.070 | +0.008 |
+| Line recall @500 | 0.070 | 0.099 | +0.029 |
+| Useful hit @500 | 0.140 | 0.186 | +0.046 |
+
+All three primary must-not-regress floors passed: File Recall@10 `0.389 >= 0.279`, MRR `0.177 >= 0.059`, and line recall @500 `0.099 >= 0.050`. The P0.8 audit contains seven file-hit/region-hit tasks, 13 file-hit/region-miss tasks, nine gold files ranked 11-20, and 14 gold files outside the recorded top 20. Compared with P0.5, the coverage multiplier moved more gold files into retrieval range, while the downstream localization-miss group increased from 11 to 13 because the top-10 file-hit population also increased.
+
+### Self-Replay
+
+| Query mode | Valid commits | Recall@10 | MRR | P0.7 record | Floor | Gate |
+|---|---:|---:|---:|---:|---:|---|
+| `title` | 10 | 0.644 | 0.660 | 0.604 / 0.622 | 0.574 / 0.592 | pass |
+| `keyword-ablated` (two-run average) | 10 | 0.644 | 0.577 | 0.604 / 0.622 | 0.574 / 0.592 | **MRR fail** |
+
+The keyword-ablated mode was run twice because its first MRR was below the floor; both runs reproduced `0.644 / 0.577`, so the average is unchanged and the formal aggregate replay MRR gate fails by `0.015`. The valid-commit count increased from nine to ten because the committed P0.7 change itself became eligible. On the nine commits shared with the P0.7 record, keyword-ablated Recall@10 and MRR reproduce the prior values exactly (`0.604409 / 0.622354`). The new P0.7 commit alone has Recall@10 `1.000` and reciprocal rank `0.167` after keyword ablation removes `lexical`, which explains the aggregate MRR decrease without hiding the failed gate.
+
+Raw P0.8 artifacts remain intentionally untracked under `.contextpack/evals/p08-*`.
 
 ## Baseline Comparison
 
@@ -248,7 +275,7 @@ The V0.2 content scorer and P0.3 query-aware region localizer are retained as th
 - Final median token use is lower than V0.1 on both tracks.
 - The P0.3 Axios track produces non-zero line recall at 100/250/500 lines without reducing file Recall@10.
 
-The external track still measures retrieval rather than Coding Agent success. The zero-skip report, failure-stage audit, and gold-file score diagnostics are now established. The next retrieval experiment should improve term discrimination or reduce lexical score saturation on the fixed 22-miss set, then prove an uplift on the full 43-task baseline without regressing the historical title and keyword-ablated tracks. Multi-region selection can then target the 11 file-hit/region-miss tasks, followed by CLI packaging validation; adding a UI, more languages, or an embedded LLM is not justified by these results alone.
+The external track still measures retrieval rather than Coding Agent success. P0.8 proves that P0.7 term discrimination improves the full 43-task baseline, but the expanded ten-commit keyword-ablated replay aggregate misses its MRR floor even though the original common-nine track reproduces exactly. The next retrieval experiment is P0.9 diagnostic-first multi-region selection, targeting the 13 file-hit/region-miss tasks in the P0.8 audit while requiring every per-instance file prediction array to remain unchanged. Adding a UI, more languages, or an embedded LLM is not justified by these results alone.
 
 ## Reproduce
 
