@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import ts from "typescript";
+import { packageDirectoryFor } from "../analysis/config-files.js";
 import type { DiscoveredRepository, FileAnalysis, SymbolKind, SymbolRecord } from "../types.js";
 import { toPosixPath } from "../utils/path.js";
 import type { LanguageAdapter } from "./types.js";
@@ -282,14 +283,6 @@ function testPath(filePath: string): boolean {
   );
 }
 
-function packageDirectoryFor(filePath: string, repository: DiscoveredRepository): string | null {
-  const matches = repository.packages
-    .map((item) => item.directory)
-    .filter((directory) => directory === "." || filePath === directory || filePath.startsWith(`${directory}/`))
-    .sort((left, right) => right.length - left.length);
-  return matches[0] ?? null;
-}
-
 function resolveImport(
   fromPath: string,
   specifier: string,
@@ -392,28 +385,6 @@ async function analyzeJavaScriptTypeScriptFiles(
       isTest: testPath(relativePath),
       isConfig: /(?:^|\/)[^/]*config\.[cm]?[jt]sx?$/i.test(relativePath),
       packageDirectory: packageDirectoryFor(relativePath, repository),
-    });
-  }
-
-  for (const configPath of repository.configFiles) {
-    if (knownFiles.has(configPath)) continue;
-    const absolutePath = path.join(repository.snapshot.root, configPath);
-    const content = await fs.readFile(absolutePath, "utf8");
-    analyses.push({
-      path: configPath,
-      absolutePath,
-      language: "json",
-      content,
-      lineCount: content.split(/\r?\n/).length,
-      imports: [],
-      importedBy: [],
-      references: [],
-      referencedBy: [],
-      referenceSymbols: {},
-      symbols: [],
-      isTest: false,
-      isConfig: true,
-      packageDirectory: packageDirectoryFor(configPath, repository),
     });
   }
 

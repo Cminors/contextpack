@@ -1,6 +1,10 @@
-import { describe, expect, it } from "vitest";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { afterEach, describe, expect, it } from "vitest";
 import { analyzeFiles, enrichSemanticReferences } from "../src/analysis/ast.js";
 import { ContextPackError } from "../src/errors.js";
+import { javascriptTypeScriptAdapter } from "../src/languages/javascript-typescript.js";
 import { createLanguageAdapterRegistry } from "../src/languages/registry.js";
 import type { LanguageAdapter } from "../src/languages/types.js";
 import type { DiscoveredRepository, FileAnalysis } from "../src/types.js";
@@ -18,9 +22,13 @@ const adapter = (
   analyzeFiles: async () => [],
 });
 
-const repository = (sourceFiles: string[]): DiscoveredRepository => ({
+const created: string[] = [];
+
+afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, { recursive: true, force: true }))));
+
+const repository = (sourceFiles: string[], root = "/repo"): DiscoveredRepository => ({
   snapshot: {
-    root: "/repo",
+    root,
     commit: "unavailable",
     branch: null,
     packageManager: "unknown",
@@ -29,7 +37,7 @@ const repository = (sourceFiles: string[]): DiscoveredRepository => ({
     isShallow: false,
   },
   sourceFiles,
-  configFiles: ["package.json"],
+  configFiles: [],
   packages: [],
   rules: [],
   warnings: [],
@@ -164,6 +172,39 @@ describe("language adapter dispatch", () => {
     expect(files.map((file) => file.path)).toEqual(["src/a.ts", "src/b.js", "src/c.ts"]);
   });
 
+  it("analyzes config-only files once across multiple adapters", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-registry-config-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "package.json"), "{\n  \"name\": \"fixture\"\n}\n");
+    await fs.writeFile(path.join(root, "src", "a.ts"), "export const a = true;\n");
+    await fs.writeFile(path.join(root, "src", "b.js"), "export const b = true;\n");
+    const first: LanguageAdapter = {
+      ...javascriptTypeScriptAdapter,
+      id: "typescript",
+      owns: (filePath) => filePath.endsWith(".ts"),
+    };
+    const second: LanguageAdapter = {
+      ...javascriptTypeScriptAdapter,
+      id: "javascript",
+      owns: (filePath) => filePath.endsWith(".js"),
+    };
+    const registry = createLanguageAdapterRegistry([first, second]);
+    const discovered = repository(["src/a.ts", "src/b.js"], root);
+    discovered.configFiles = ["package.json"];
+    discovered.packages = [{ directory: ".", name: "fixture", scripts: {} }];
+
+    const files = await analyzeFiles(discovered, registry);
+    const configFiles = files.filter((file) => file.path === "package.json");
+
+    expect(configFiles).toEqual([expect.objectContaining({
+      language: "json",
+      isConfig: true,
+      packageDirectory: ".",
+    })]);
+    expect(files.map((file) => file.path)).toEqual(["package.json", "src/a.ts", "src/b.js"]);
+  });
+
   it("enriches source focus paths by owner in registry order", () => {
     const calls: string[] = [];
     const first: LanguageAdapter = {
@@ -187,7 +228,7 @@ describe("language adapter dispatch", () => {
     const enriched = enrichSemanticReferences(
       discovered,
       files,
-      ["src/b.js", "package.json", "src/a.ts"],
+      ["src/b.js", "package.json", "src/a.ts", "src/b.js", "src/a.ts"],
       registry,
     );
 
