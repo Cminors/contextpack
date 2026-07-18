@@ -124,6 +124,11 @@ export interface ContextCandidate {
   reasons: string[];
   relationships: CandidateRelationship[];
   estimatedTokens: number;
+  alternateRegions?: Array<{
+    symbol: SymbolRecord | null;
+    startLine: number;
+    endLine: number;
+  }>;
 }
 
 export interface PredictionOptions {

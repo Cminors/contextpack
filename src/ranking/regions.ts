@@ -28,12 +28,21 @@ export interface LocatedRegion {
   endLine: number;
 }
 
+export interface LocatedRegionCandidate extends LocatedRegion {
+  evidence: ContentEvidence[];
+  distinctTerms: number;
+}
+
+function evidenceKey(item: ContentEvidence): string {
+  return `${item.term}\0${item.field}\0${item.line}`;
+}
+
 function uniqueEvidence(evidence: ContentEvidence[]): ContentEvidence[] {
   const seen = new Set<string>();
   return evidence
     .filter((item) => Number.isInteger(item.line) && item.line > 0 && !LOCALIZATION_STOP_WORDS.has(item.term))
     .filter((item) => {
-      const key = `${item.term}\0${item.field}\0${item.line}`;
+      const key = evidenceKey(item);
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
@@ -106,9 +115,7 @@ function boundedWindow(
   return { startLine, endLine };
 }
 
-export function locateContentRegion(file: FileAnalysis, evidence: ContentEvidence[]): LocatedRegion | null {
-  const cluster = bestCluster(evidence);
-  if (cluster.length === 0) return null;
+function locateCluster(file: FileAnalysis, cluster: ContentEvidence[]): LocatedRegion {
   const lines = cluster.map((item) => item.line).sort((left, right) => left - right);
   const firstLine = lines[0] ?? 1;
   const lastLine = lines.at(-1) ?? firstLine;
@@ -117,4 +124,53 @@ export function locateContentRegion(file: FileAnalysis, evidence: ContentEvidenc
   const maximum = symbol?.endLine ?? file.lineCount;
   const range = boundedWindow(firstLine, lastLine, minimum, maximum);
   return { symbol, ...range };
+}
+
+function regionsOverlap(left: LocatedRegion, right: LocatedRegion): boolean {
+  return Math.max(left.startLine, right.startLine) <= Math.min(left.endLine, right.endLine);
+}
+
+export function locateTopRegionCandidates(
+  file: FileAnalysis,
+  evidence: ContentEvidence[],
+  maxRegions: number,
+): LocatedRegionCandidate[] {
+  const limit = Number.isFinite(maxRegions) ? Math.max(0, Math.floor(maxRegions)) : 0;
+  if (limit === 0) return [];
+  let remaining = uniqueEvidence(evidence);
+  const candidates: LocatedRegionCandidate[] = [];
+
+  while (remaining.length > 0 && candidates.length < limit) {
+    const cluster = bestCluster(remaining);
+    if (cluster.length === 0) break;
+    const consumed = new Set(cluster.map(evidenceKey));
+    remaining = remaining.filter((item) => !consumed.has(evidenceKey(item)));
+    const region = locateCluster(file, cluster);
+    if (candidates.some((candidate) => regionsOverlap(candidate, region))) continue;
+    const sortedEvidence = [...cluster].sort((left, right) =>
+      left.line - right.line || left.term.localeCompare(right.term) || left.field.localeCompare(right.field));
+    candidates.push({
+      ...region,
+      evidence: sortedEvidence,
+      distinctTerms: new Set(cluster.map((item) => item.term)).size,
+    });
+  }
+
+  return candidates;
+}
+
+export function locateTopRegions(
+  file: FileAnalysis,
+  evidence: ContentEvidence[],
+  maxRegions: number,
+): LocatedRegion[] {
+  return locateTopRegionCandidates(file, evidence, maxRegions).map(({ symbol, startLine, endLine }) => ({
+    symbol,
+    startLine,
+    endLine,
+  }));
+}
+
+export function locateContentRegion(file: FileAnalysis, evidence: ContentEvidence[]): LocatedRegion | null {
+  return locateTopRegions(file, evidence, 1)[0] ?? null;
 }

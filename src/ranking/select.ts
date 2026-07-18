@@ -3,6 +3,8 @@ import { containsLikelySecret } from "../utils/security.js";
 import { countTokens } from "../output/tokens.js";
 
 export const MAX_SELECTED_SNIPPETS = 16;
+const PRIMARY_DIVERSITY_FLOOR = 10;
+const MAX_GLOBAL_ALTERNATES = 2;
 
 function snippetFor(file: FileAnalysis, candidate: ContextCandidate): ContextSelection | null {
   const lines = file.content.split(/\r?\n/);
@@ -20,18 +22,58 @@ export function selectCandidates(candidates: ContextCandidate[], files: FileAnal
   const available = Math.max(800, budget - Math.min(mapReserve, Math.floor(budget * 0.42)));
   let used = 0;
   const selected: ContextSelection[] = [];
-  for (const candidate of candidates) {
-    if (candidate.score <= 0) continue;
+  const selectedPrimaries: Array<{ candidate: ContextCandidate; file: FileAnalysis }> = [];
+  const selectPrimary = (candidate: ContextCandidate): boolean => {
+    if (candidate.score <= 0) return false;
     const file = byPath.get(candidate.path);
-    if (!file) continue;
+    if (!file) return false;
     const selection = snippetFor(file, candidate);
-    if (!selection) continue;
+    if (!selection) return false;
     candidate.estimatedTokens = selection.estimatedTokens;
-    if (used + selection.estimatedTokens > available && selected.length > 0) continue;
+    if (used + selection.estimatedTokens > available && selected.length > 0) return false;
     candidate.selected = true;
     selected.push(selection);
+    selectedPrimaries.push({ candidate, file });
     used += selection.estimatedTokens;
-    if (selected.length >= MAX_SELECTED_SNIPPETS || used >= available) break;
+    return true;
+  };
+
+  let nextCandidate = 0;
+  while (
+    nextCandidate < candidates.length
+    && selectedPrimaries.length < PRIMARY_DIVERSITY_FLOOR
+    && selected.length < MAX_SELECTED_SNIPPETS
+    && used < available
+  ) {
+    const candidate = candidates[nextCandidate];
+    nextCandidate += 1;
+    if (candidate) selectPrimary(candidate);
+  }
+
+  let alternatesEmitted = 0;
+  for (const { candidate, file } of selectedPrimaries) {
+    if (alternatesEmitted >= MAX_GLOBAL_ALTERNATES || selected.length >= MAX_SELECTED_SNIPPETS || used >= available) break;
+    for (const alternate of candidate.alternateRegions ?? []) {
+      if (alternatesEmitted >= MAX_GLOBAL_ALTERNATES || selected.length >= MAX_SELECTED_SNIPPETS || used >= available) break;
+      const { alternateRegions: _alternateRegions, ...candidateWithoutAlternates } = candidate;
+      const alternateSelection = snippetFor(file, {
+        ...candidateWithoutAlternates,
+        symbol: alternate.symbol,
+        startLine: alternate.startLine,
+        endLine: alternate.endLine,
+        estimatedTokens: 0,
+      });
+      if (!alternateSelection || used + alternateSelection.estimatedTokens > available) continue;
+      selected.push(alternateSelection);
+      used += alternateSelection.estimatedTokens;
+      alternatesEmitted += 1;
+    }
+  }
+
+  while (nextCandidate < candidates.length && selected.length < MAX_SELECTED_SNIPPETS && used < available) {
+    const candidate = candidates[nextCandidate];
+    nextCandidate += 1;
+    if (candidate) selectPrimary(candidate);
   }
   return selected;
 }

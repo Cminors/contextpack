@@ -222,6 +222,38 @@ The keyword-ablated mode was run twice because its first MRR was below the floor
 
 Raw P0.8 artifacts remain intentionally untracked under `.contextpack/evals/p08-*`.
 
+## P0.9 Multi-Region Selection
+
+P0.9 tested whether query-derived alternate regions can recover P0.8's file-hit/region-miss cases without changing file retrieval. The label-blind Phase 1 diagnostic found a gold-overlapping second or third cluster for 9 of the 13 misses, exceeding the predeclared threshold of `max(3, ceil(13 * 0.25)) = 4`. Proposal generation did not receive gold paths or line ranges; gold regions were used only to classify the completed proposals.
+
+The implementation keeps primary file selection ahead of alternates: it selects up to ten primary snippets first, then adds at most two alternate snippets globally within the existing token and 16-snippet limits, before resuming remaining primaries. On the full 43-task set, every instance completed with zero skips and every per-instance file `predictions` array exactly matched P0.8.
+
+| Metric | P0.8 | P0.9 | Delta |
+|---|---:|---:|---:|
+| File Recall@5 | 0.242 | 0.242 | 0.000 |
+| File Recall@10 | 0.389 | 0.389 | 0.000 |
+| File MRR | 0.177 | 0.177 | 0.000 |
+| Line recall @100 | 0.026 | 0.026 | 0.000 |
+| Line recall @250 | 0.070 | 0.070 | 0.000 |
+| Line recall @500 | 0.099 | 0.103 | +0.004 |
+| Useful hit @500 | 0.186 | 0.209 | +0.023 |
+| File-hit/region-miss tasks | 13 | 11 | -2 |
+
+The non-gating @500 region-quality measures also moved in the intended direction:
+
+| Metric | P0.8 | P0.9 | Delta |
+|---|---:|---:|---:|
+| Line precision | 0.003776 | 0.004072 | +0.000296 |
+| Noise region rate | 0.986919 | 0.985465 | -0.001453 |
+| Context efficiency | 0.003776 | 0.004069 | +0.000293 |
+| nDCG | 0.033199 | 0.035125 | +0.001926 |
+
+The six-task Axios smoke passed its gates with File Recall@10 `0.650`, MRR `0.380`, line recall @500 `0.577`, and useful hit @500 `0.833`. Its file-hit/region-miss count fell to zero.
+
+Historical replay retained ten valid commits in both modes. Title produced Recall@10 `0.644` and MRR `0.660`; keyword-ablated produced `0.644` and `0.577`. All ten common-commit prediction arrays exactly matched P0.8. The keyword-ablated aggregate therefore inherits P0.8's formal MRR floor failure (`0.577 < 0.592`); it is not a P0.9 regression.
+
+**Verdict: retain P0.9.** It reduces the full-set localization-miss count and improves both line recall @500 and useful-hit @500 while leaving file retrieval unchanged. Raw diagnostics and evaluation artifacts remain intentionally untracked under `.contextpack/evals/p09-*`.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
@@ -250,6 +282,7 @@ These rows are not a controlled model-only comparison because the commit filter 
 - Root-`tsconfig`-aware module resolution with bounded, task-focused TypeScript Program expansion.
 - Structured source-content retrieval with BM25-style rarity, saturation, and length normalization.
 - Explainable content evidence containing only normalized task terms, source fields, and line numbers.
+- Bounded multi-region selection after ten primary snippets, with at most two alternates globally.
 - A compact output policy of at most 16 snippets, 120 lines per snippet, and two rendered relationships per file.
 
 ## Rejected Experiments
@@ -275,7 +308,7 @@ The V0.2 content scorer and P0.3 query-aware region localizer are retained as th
 - Final median token use is lower than V0.1 on both tracks.
 - The P0.3 Axios track produces non-zero line recall at 100/250/500 lines without reducing file Recall@10.
 
-The external track still measures retrieval rather than Coding Agent success. P0.8 proves that P0.7 term discrimination improves the full 43-task baseline, but the expanded ten-commit keyword-ablated replay aggregate misses its MRR floor even though the original common-nine track reproduces exactly. The next retrieval experiment is P0.9 diagnostic-first multi-region selection, targeting the 13 file-hit/region-miss tasks in the P0.8 audit while requiring every per-instance file prediction array to remain unchanged. Adding a UI, more languages, or an embedded LLM is not justified by these results alone.
+The external track still measures retrieval rather than Coding Agent success. P0.8 proves that P0.7 term discrimination improves the full 43-task baseline, and P0.9 reduces file-hit/region-miss cases from 13 to 11 while preserving every file prediction array. The expanded ten-commit keyword-ablated replay aggregate still misses its historical MRR floor, but P0.9 reproduces all P0.8 replay predictions exactly. No further retrieval experiment is selected yet; the remaining 11 localization misses and the inherited replay-floor caveat should be reviewed before choosing the next hypothesis. Adding a UI, more languages, or an embedded LLM is not justified by these results alone.
 
 ## Reproduce
 

@@ -210,6 +210,36 @@ describe("candidate ranking", () => {
     expect(ranked[0]?.endLine).toBeGreaterThanOrEqual(425);
   });
 
+  it("retains alternate content regions without changing the candidate score", () => {
+    const lines = Array.from({ length: 420 }, (_, index) => `// filler line ${index + 1}`);
+    lines[48] = "// timeout message exceeded while connecting";
+    lines[50] = "throw new Error('timeout message exceeded');";
+    lines[348] = "// socket closed after timeout";
+    lines[350] = "reportSocketClosed('timeout');";
+    const target = {
+      ...file("src/handler.ts"),
+      content: lines.join("\n"),
+      lineCount: lines.length,
+      symbols: [],
+    };
+
+    const ranked = rankCandidates(
+      [target],
+      ["timeout", "message", "exceeded", "socket", "closed"],
+      emptyGitHistory(),
+      [],
+    );
+
+    expect(ranked[0]?.score).toBeGreaterThan(0);
+    expect(ranked[0]?.alternateRegions).toHaveLength(1);
+    expect(ranked[0]?.alternateRegions?.[0]).toMatchObject({
+      startLine: expect.any(Number),
+      endLine: expect.any(Number),
+    });
+    expect(ranked[0]?.alternateRegions?.[0]?.startLine).toBeLessThanOrEqual(349);
+    expect(ranked[0]?.alternateRegions?.[0]?.endLine).toBeGreaterThanOrEqual(351);
+  });
+
   it("keeps exact path relevance ahead of a content-only match", () => {
     const exact = file("src/malformed-payload.ts");
     const contentOnly = {

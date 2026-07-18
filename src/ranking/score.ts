@@ -10,7 +10,7 @@ import type {
 } from "../types.js";
 import { coChangeStrength } from "../analysis/git-history.js";
 import { scoreContentMatches } from "./lexical.js";
-import { locateContentRegion } from "./regions.js";
+import { locateContentRegion, locateTopRegions } from "./regions.js";
 
 export const SCORE_WEIGHTS = {
   lexical: 0.28,
@@ -332,6 +332,10 @@ export function rankCandidates(
       && (distinctEvidenceTerms >= 2 || symbolRelevance === 0)
       ? locateContentRegion(file, relevance.content.localizationEvidence)
       : null;
+    const topRegions = contentRegion && relevance.content
+      ? locateTopRegions(file, relevance.content.localizationEvidence, 3)
+      : [];
+    const alternateRegions = topRegions.slice(1);
     return {
       path: file.path,
       symbol: contentRegion ? contentRegion.symbol : chosenSymbol,
@@ -343,6 +347,7 @@ export function rankCandidates(
       reasons: reasons.length > 0 ? reasons : ["deterministic repository fallback"],
       relationships: relationshipsFor(file, files, history, seeds, rules),
       estimatedTokens: 0,
+      ...(alternateRegions.length > 0 ? { alternateRegions } : {}),
     };
   }).sort((left, right) => right.score - left.score || left.path.localeCompare(right.path));
 }

@@ -18,7 +18,12 @@ function tableEscape(value: string): string {
 }
 
 function composeContext(manifest: ContextManifest): string {
-  const selectedPaths = new Set(manifest.selected.map((item) => item.path));
+  const selectedByPath = new Map<string, ContextManifest["selected"][number]>();
+  for (const selection of manifest.selected) {
+    if (!selectedByPath.has(selection.path)) selectedByPath.set(selection.path, selection);
+  }
+  const selectedFiles = [...selectedByPath.values()];
+  const selectedPaths = new Set(selectedByPath.keys());
   const applicableRules = manifest.rules.filter((rule) =>
     [...selectedPaths].some((filePath) => rule.scopeDirectory === "." || filePath.startsWith(`${rule.scopeDirectory}/`)),
   );
@@ -32,9 +37,9 @@ function composeContext(manifest: ContextManifest): string {
     "## 3. Task Map",
     "| Rank | File / symbol | Lines | Score |\n|---:|---|---:|---:|\n" + manifest.candidates.slice(0, 15).map((item, index) => `| ${index + 1} | \`${item.path}${item.symbol ? `#${tableEscape(item.symbol.name)}` : ""}\` | ${item.startLine}-${item.endLine} | ${item.score.toFixed(3)} |`).join("\n"),
     "## 4. Why Included",
-    manifest.selected.map((item) => `- \`${item.path}\`: ${item.reasons.join("; ")}`).join("\n") || "No snippets fit the budget.",
+    selectedFiles.map((item) => `- \`${item.path}\`: ${item.reasons.join("; ")}`).join("\n") || "No snippets fit the budget.",
     "## 5. Relationships",
-    manifest.selected.flatMap((item) => item.relationships.slice(0, 2).map((relation) => `- \`${item.path}\` ${relation.kind} \`${relation.target}\` (${relation.strength.toFixed(2)}): ${relation.detail}`)).join("\n") || "No direct relationships were detected.",
+    selectedFiles.flatMap((item) => item.relationships.slice(0, 2).map((relation) => `- \`${item.path}\` ${relation.kind} \`${relation.target}\` (${relation.strength.toFixed(2)}): ${relation.detail}`)).join("\n") || "No direct relationships were detected.",
     "## 6. Applicable Rules",
     applicableRules.slice(0, 10).map((rule) => `- \`${rule.path}\` (${rule.kind}, scope \`${rule.scopeDirectory}\`)`).join("\n") || "No supported repository instruction files apply to the selected paths.",
     "## 7. Suggested Verification",
@@ -62,7 +67,7 @@ export function renderContext(manifest: ContextManifest): string {
     const removed = manifest.selected.pop();
     if (removed) {
       const candidate = manifest.candidates.find((item) => item.path === removed.path);
-      if (candidate) candidate.selected = false;
+      if (candidate) candidate.selected = manifest.selected.some((item) => item.path === removed.path);
       manifest.budget.truncated = true;
     }
   }
