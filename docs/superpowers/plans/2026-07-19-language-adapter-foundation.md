@@ -468,9 +468,13 @@ node dist/cli.js eval --commits 20 --budget 12000 --query-mode keyword-ablated `
 ```
 
 Compare every common replay `predictions` array against the P0.9 JSON with a
-structured script or PowerShell JSON comparison. Required values remain Axios
-R@10 `0.650`, MRR `0.380`, line@500 `0.577`, useful-hit@500 `0.833`; title
-`0.644/0.660`; keyword-ablated `0.644/0.577`.
+structured script or PowerShell JSON comparison. Required Axios values remain
+R@10 `0.650`, MRR `0.380`, line@500 `0.577`, and useful-hit@500 `0.833`. On
+the ten replay commits common with P0.9, required Recall@10/MRR values are title
+`0.644/0.660` and keyword-ablated `0.644/0.577`. The expanded 11-commit P1.0
+aggregates are title `0.6243867/0.6228355` and keyword-ablated
+`0.6243867/0.5470779`; record them as the actual expanded-sample results, not
+as a direct regression comparison against the ten-commit reference.
 
 - [ ] **Step 5: Update documentation**
 

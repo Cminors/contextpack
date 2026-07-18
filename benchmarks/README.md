@@ -276,7 +276,7 @@ The six-task Axios smoke also reproduced the P0.9 gates: File Recall@10 `0.650`,
 
 Historical replay produced 11 valid commits in each mode on this branch. The expanded aggregates were title Recall@10 `0.6243867` / MRR `0.6228355`, and keyword-ablated Recall@10 `0.6243867` / MRR `0.5470779`. The P0.9 artifacts contain 10 common commits; on that common set, both modes had zero prediction-array mismatches and reproduced title `0.6439683 / 0.6601190` and keyword-ablated `0.6439683 / 0.5767857` (rounded `0.644 / 0.660` and `0.644 / 0.577`). The additional eligible commit was `88a601` (P0.9), whose per-commit result was Recall@10 `0.4285714` / MRR `0.25`; the larger aggregate is therefore a sample-set difference, not an adapter regression.
 
-**Verdict: parity.** P1.0 changes the internal producer boundary only; all controlled retrieval outputs and metrics match P0.9. Raw artifacts remain intentionally untracked under `.contextpack/evals/p10-*`.
+**Verdict: parity.** P1.0 changes the internal producer boundary only. The full-set outputs and metrics, including the six Axios instances, match P0.9; the ten common replay commits also match in every prediction array and both aggregate metrics. The expanded 11-commit replay aggregates differ only because the eligible sample set includes the additional P0.9 commit described above. Raw artifacts remain intentionally untracked under `.contextpack/evals/p10-*`.
 
 ## Baseline Comparison
 
