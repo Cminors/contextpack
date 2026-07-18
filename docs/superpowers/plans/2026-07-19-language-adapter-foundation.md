@@ -222,7 +222,7 @@ git commit -m "refactor: define deterministic language adapter registry"
 **Files:**
 - Create: `src/languages/javascript-typescript.ts`
 - Modify: `src/analysis/ast.ts`
-- Modify: `tests/ast.test.ts`
+- Create: `tests/ast.test.ts`
 - Modify: `tests/integration.test.ts`
 
 **Interfaces:**
