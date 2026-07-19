@@ -1,7 +1,7 @@
 {
   "name": "contextpack",
   "version": "0.1.0",
-  "description": "Build small, explainable task-context packs for JavaScript and TypeScript coding agents.",
+  "description": "Build small, explainable task-context packs for JavaScript, TypeScript, and Python coding agents.",
   "type": "module",
   "bin": {
     "contextpack": "dist/cli.js"
@@ -22,6 +22,7 @@
     "benchmark:prepare:swebench": "tsx scripts/prepare-swebench.ts",
     "benchmark:prepare:diagnostics": "tsx scripts/prepare-issue-diagnostic-subset.ts",
     "perf:smoke": "tsx scripts/performance-smoke.ts",
+    "perf:python": "tsx scripts/python-smoke.ts",
     "check": "npm run typecheck && npm run test && npm run build && npm run test:package"
   },
   "engines": {

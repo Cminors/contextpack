@@ -278,6 +278,34 @@ Historical replay produced 11 valid commits in each mode on this branch. The exp
 
 **Verdict: parity.** P1.0 changes the internal producer boundary only. The full-set outputs and metrics, including the six Axios instances, match P0.9; the ten common replay commits also match in every prediction array and both aggregate metrics. The expanded 11-commit replay aggregates differ only because the eligible sample set includes the additional P0.9 commit described above. Raw artifacts remain intentionally untracked under `.contextpack/evals/p10-*`.
 
+## P1.1 Python Adapter Vertical Slice
+
+P1.1 adds the first non-JavaScript language adapter while keeping the P1.0
+JavaScript/TypeScript path unchanged. Python 3.8+ files are discovered and
+batched through the standard-library `ast` worker; the normalized analysis
+includes top-level functions, async functions, classes, methods, variables,
+repository-internal imports, pytest-style test classification, and common
+Python packaging/configuration files. Python `#` comments and strings
+participate in lexical ranking, and evidence-based suggestions cover pytest,
+unittest fallback, Ruff, mypy, and Python builds. If Python is unavailable or a
+file cannot be parsed, the adapter emits a warning and retains lexical
+fallback output so mixed repositories remain usable.
+
+The deterministic local smoke generates 120 Python modules and 40 test files,
+warms one analysis, then runs three measured iterations. It requires a Python
+candidate, a resolved internal import edge, stable candidate paths/scores/
+reasons, and a median total duration at or below 4,000 ms. The current run
+passed with median total duration **848 ms** (runs: 848, 879, and 725 ms) and
+confirmed a resolved import edge. This is a synthetic performance and
+integration smoke, not a Python benchmark against real issue data.
+
+The existing quality gates and the P1.0 JavaScript/TypeScript parity projection
+remain mandatory. The pinned P1.0 full-43 parity result is the reference
+(`Parity: equal`, R@10 `0.3891472868`, MRR `0.1771596393`, line@500
+`0.1030487768`, useful-hit@500 `0.2093023256`). A fresh P1.1 full-43 rerun and
+expanded Python issue benchmark are **pending measurements**; no uplift or
+regression claim is made for either until those runs complete.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:

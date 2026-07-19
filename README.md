@@ -9,7 +9,7 @@ Give an AI coding assistant a small, focused repository briefing before it start
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![CI](https://github.com/Cminors/contextpack/actions/workflows/ci.yml/badge.svg)](https://github.com/Cminors/contextpack/actions/workflows/ci.yml)
 
-ContextPack is a local command-line tool for JavaScript and TypeScript repositories. Describe a coding task in one sentence and it finds the code, tests, repository rules, and related files an AI coding assistant should inspect first. It then creates a `context.md` briefing that you can give to Codex, Cursor, Claude Code, or another coding agent.
+ContextPack is a local command-line tool for JavaScript, TypeScript, and Python repositories. Describe a coding task in one sentence and it finds the code, tests, repository rules, and related files an AI coding assistant should inspect first. It then creates a `context.md` briefing that you can give to Codex, Cursor, Claude Code, or another coding agent.
 
 ```text
 Your task description
@@ -25,9 +25,9 @@ ContextPack does not call an LLM, require an API key, upload your repository, or
 
 ## Internal architecture
 
-P1.0 places language-specific discovery and source analysis behind a small internal adapter boundary. A deterministic registry supplies the source and configuration patterns, validates that every discovered source file has exactly one owner, and dispatches analysis in stable order. The existing JavaScript/TypeScript adapter continues to produce the normalized `FileAnalysis` data consumed by the language-neutral ranking, region selection, and rendering pipeline. Compatibility facades preserve the existing analysis API and manifest format.
+P1.1 places language-specific discovery and source analysis behind a small internal adapter boundary. A deterministic registry supplies the source and configuration patterns, validates that every discovered source file has exactly one owner, and dispatches analysis in stable order. JavaScript/TypeScript uses its compiler-backed adapter; Python uses a Python 3.8+ standard-library `ast` worker with a controlled lexical fallback when no interpreter is available. Both produce the normalized `FileAnalysis` data consumed by the language-neutral ranking, region selection, and rendering pipeline. Compatibility facades preserve the existing analysis API and manifest format.
 
-This is an internal implementation boundary, not a plugin or public SDK surface. ContextPack continues to support only JavaScript and TypeScript repositories; no additional language or integration support is implied by the adapter architecture.
+This is an internal implementation boundary, not a plugin, Skills, MCP, or public SDK surface. Python support covers source discovery, top-level symbols, internal imports, test/config classification, Python comments and strings, and evidence-based verification commands. It does not imply framework semantics or full type inference.
 
 > [!IMPORTANT]
 > ContextPack is still an unpublished source preview. There is no npm release or formal beta yet. It is suitable for small, guided tests using this document, not for presenting as a finished product.
@@ -47,14 +47,14 @@ It does not write the implementation. It prepares the repository briefing the as
 Good fit:
 
 - people using Codex, Cursor, Claude Code, or another AI coding assistant;
-- people who already have a JavaScript or TypeScript repository;
+- people who already have a JavaScript, TypeScript, Python, or mixed JS/Python repository;
 - people who want to reduce blind exploration in a large codebase;
 - testers who are comfortable trying experimental tooling and reporting problems.
 
 Not a good fit yet:
 
 - people without a code repository who only want a general chatbot;
-- Python, Go, Rust, Java, or other non-JS/TS projects;
+- Go, Rust, Java, or other unsupported-language projects;
 - users who expect the tool to edit or commit code automatically;
 - teams that require a stable commercial SLA or proven agent-success improvements.
 
@@ -74,6 +74,7 @@ The target project needs at least one supported source file:
 
 ```text
 .js  .jsx  .ts  .tsx  .mjs  .cjs  .mts  .cts
+.py
 ```
 
 Run ContextPack from the project root—the directory that normally contains `package.json`, `src/`, or `.git/`.
@@ -143,7 +144,7 @@ contextpack doctor
 
 ### Step 3: Run it inside your project
 
-First change into the JavaScript or TypeScript project you want to analyze.
+First change into the JavaScript, TypeScript, Python, or mixed-language project you want to analyze.
 
 Windows example:
 
@@ -286,9 +287,9 @@ node "/path/to/contextpack/dist/cli.js" task "your task"
 
 Node.js is either missing or the terminal has not been restarted since installation. Install the current LTS release, close all terminal windows, and try again.
 
-### `No supported JavaScript or TypeScript source files were found`
+### `No supported source files were found`
 
-The current directory contains no supported JS/TS files. Make sure you changed into the actual project root, not the ContextPack directory, your desktop, or an empty folder.
+The current directory contains no supported JavaScript, TypeScript, or Python files. Make sure you changed into the actual project root, not the ContextPack directory, your desktop, or an empty folder.
 
 ### ContextPack says the directory is not a Git repository
 
@@ -370,7 +371,9 @@ Automated filtering cannot guarantee that every sensitive value will be recogniz
 
 Supported today:
 
-- JavaScript, JSX, TypeScript, TSX, MJS, CJS, MTS, and CTS;
+- JavaScript, JSX, TypeScript, TSX, MJS, CJS, MTS, CTS, and Python 3.8+;
+- Python top-level functions, async functions, classes, methods, variables, internal imports, pytest-style test files, and common packaging/configuration files;
+- Python-only and mixed JavaScript/Python repositories, with lexical fallback when Python is unavailable;
 - npm, pnpm, Yarn, and Bun project metadata;
 - single-package repositories and common workspace/monorepo layouts;
 - `tsconfig` path aliases;
@@ -381,7 +384,9 @@ Supported today:
 Not supported or not yet proven:
 
 - automatic code changes or automatic agent execution;
-- Python, Go, Rust, Java, and other languages;
+- Go, Rust, Java, and other languages;
+- Python framework semantics, full type inference, dynamic imports, and semantic call/reference graphs;
+- public language-plugin APIs, Skills, and MCP integrations;
 - arbitrary large refactors, security audits, or complete bug diagnosis;
 - hosted accounts, team collaboration, or built-in LLM calls;
 - claims that ContextPack reliably improves final coding-agent success.
