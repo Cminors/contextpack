@@ -10,7 +10,13 @@ const codeFence = (filePath: string): string => {
     ? "typescript"
     : extension === "js" || extension === "jsx" || extension === "mjs" || extension === "cjs"
       ? "javascript"
-      : extension === "json" ? "json" : "text";
+      : extension === "py"
+        ? "python"
+        : extension === "toml"
+          ? "toml"
+          : extension === "ini" || extension === "cfg"
+            ? "ini"
+            : extension === "json" ? "json" : "text";
 };
 
 function tableEscape(value: string): string {
@@ -43,7 +49,7 @@ function composeContext(manifest: ContextManifest): string {
     "## 6. Applicable Rules",
     applicableRules.slice(0, 10).map((rule) => `- \`${rule.path}\` (${rule.kind}, scope \`${rule.scopeDirectory}\`)`).join("\n") || "No supported repository instruction files apply to the selected paths.",
     "## 7. Suggested Verification",
-    manifest.commands.map((command) => `- \`${command.command}\` in \`${command.directory}\` — ${command.reason}`).join("\n") || "No package verification scripts were discovered.",
+    manifest.commands.map((command) => `- \`${command.command}\` in \`${command.directory}\` — ${command.reason}`).join("\n") || "No verification commands were discovered.",
     "## 8. Risk Surface",
     risk.map((item) => `- \`${item.path}\` (score ${item.score.toFixed(3)}): relevant but omitted by rank or budget.`).join("\n") || "No additional scored candidates.",
     "## 9. Selected Snippets",

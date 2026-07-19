@@ -1,3 +1,5 @@
+import fs from "node:fs/promises";
+import path from "node:path";
 import { performance } from "node:perf_hooks";
 import type { AnalysisOptions, AnalysisTimings, ContextManifest, SuggestedCommand } from "../types.js";
 import { extractConventionalScope, normalizeTaskTerms } from "../utils/task-terms.js";
@@ -8,13 +10,81 @@ import { rankCandidates } from "../ranking/score.js";
 import { selectCandidates } from "../ranking/select.js";
 import { prioritizeCandidates } from "../ranking/predictions.js";
 
-function suggestedCommands(packages: Awaited<ReturnType<typeof discoverRepository>>["packages"]): SuggestedCommand[] {
+type Repository = Awaited<ReturnType<typeof discoverRepository>>;
+
+interface PythonCommandEvidence {
+  pytest: boolean;
+  ruff: boolean;
+  mypy: boolean;
+  build: boolean;
+}
+
+const emptyPythonEvidence = (): PythonCommandEvidence => ({ pytest: false, ruff: false, mypy: false, build: false });
+
+const configDirectory = (filePath: string): string => {
+  const directory = path.posix.dirname(filePath);
+  return directory === "" ? "." : directory;
+};
+
+const hasSection = (content: string, section: string): boolean => {
+  const escaped = section.replaceAll(".", "\\.");
+  return new RegExp(`^\\s*\\[${escaped}(?:[.\\]]|$)`, "im").test(content);
+};
+
+const hasStandalonePytestDependency = (content: string): boolean =>
+  /(?:^|[\s"'=,[({])pytest(?:\s*(?:[<>=!~]=?|@|\[)|(?=$|[\s"',;)\]}]))/im.test(content);
+
+async function pythonCommandEvidence(repository: Repository): Promise<Map<string, PythonCommandEvidence>> {
+  const evidence = new Map<string, PythonCommandEvidence>();
+  const add = (directory: string): PythonCommandEvidence => {
+    const current = evidence.get(directory) ?? emptyPythonEvidence();
+    evidence.set(directory, current);
+    return current;
+  };
+
+  for (const filePath of repository.configFiles) {
+    let content: string;
+    try {
+      content = await fs.readFile(path.join(repository.snapshot.root, filePath), "utf8");
+    } catch {
+      continue;
+    }
+    const base = path.posix.basename(filePath).toLowerCase();
+    const current = add(configDirectory(filePath));
+    if (base === "pytest.ini" || (base === "pyproject.toml" && hasSection(content, "tool.pytest"))) {
+      current.pytest = true;
+    }
+    if ((/^requirements.*\.txt$/i.test(base) || base === "setup.cfg" || base === "setup.py")
+      && hasStandalonePytestDependency(content)) {
+      current.pytest = true;
+    }
+    if (base === "ruff.toml" || base === ".ruff.toml"
+      || (base === "pyproject.toml" && hasSection(content, "tool.ruff"))) {
+      current.ruff = true;
+    }
+    if (base === "mypy.ini" || base === ".mypy.ini"
+      || (base === "pyproject.toml" && hasSection(content, "tool.mypy"))) {
+      current.mypy = true;
+    }
+    if (base === "pyproject.toml" && hasSection(content, "build-system")) current.build = true;
+  }
+  return evidence;
+}
+
+async function suggestedCommands(repository: Repository): Promise<SuggestedCommand[]> {
   const commands: SuggestedCommand[] = [];
+  const seen = new Set<string>();
+  const add = (command: SuggestedCommand): void => {
+    const key = `${command.directory}\0${command.command}`;
+    if (seen.has(key) || commands.length >= 5) return;
+    seen.add(key);
+    commands.push(command);
+  };
   const priorities = ["test", "typecheck", "lint", "check", "build"];
-  for (const packageInfo of packages) {
+  for (const packageInfo of repository.packages) {
     for (const name of priorities) {
       if (!packageInfo.scripts[name]) continue;
-      commands.push({
+      add({
         name,
         command: `${name === "test" ? "npm test" : `npm run ${name}`}`,
         directory: packageInfo.directory,
@@ -22,6 +92,26 @@ function suggestedCommands(packages: Awaited<ReturnType<typeof discoverRepositor
       });
       if (commands.length >= 5) return commands;
     }
+  }
+
+  const pythonEvidence = await pythonCommandEvidence(repository);
+  const hasPytestEvidence = [...pythonEvidence.values()].some((item) => item.pytest);
+  if (!hasPytestEvidence && repository.sourceFiles.some((filePath) =>
+    /\.py$/i.test(filePath)
+    && (/(?:^|\/)(?:tests?|spec)(?:\/|$)/i.test(filePath)
+      || /(?:^|\/)(?:test_[^/]+|[^/]+_test)\.py$/i.test(filePath)))) {
+    add({
+      name: "test",
+      command: "python -m unittest discover",
+      directory: ".",
+      reason: "Python test files detected",
+    });
+  }
+  for (const [directory, item] of [...pythonEvidence.entries()].sort(([left], [right]) => left.localeCompare(right))) {
+    if (item.pytest) add({ name: "test", command: "python -m pytest", directory, reason: "Pytest configuration detected" });
+    if (item.ruff) add({ name: "lint", command: "python -m ruff check .", directory, reason: "Ruff configuration detected" });
+    if (item.mypy) add({ name: "typecheck", command: "python -m mypy .", directory, reason: "mypy configuration detected" });
+    if (item.build) add({ name: "build", command: "python -m build", directory, reason: "Python build system detected" });
   }
   return commands;
 }
@@ -70,7 +160,7 @@ export async function analyzeTask(options: AnalysisOptions): Promise<ContextMani
   const candidates = prioritizeCandidates(rankedCandidates, { limit: 20 });
   const selected = selectCandidates(candidates, files, options.budget);
   const snippetTokens = selected.reduce((sum, item) => sum + item.estimatedTokens, 0);
-  const commands = suggestedCommands(repository.packages);
+  const commands = await suggestedCommands(repository);
   phaseDurations.selectionMs = performance.now() - phaseStarted;
   const roundedPhases = Object.fromEntries(
     Object.entries(phaseDurations).map(([key, value]) => [key, Math.round(value)]),

@@ -58,6 +58,24 @@ const manifest = (requestedTokens: number, snippets: ContextSelection[]): Contex
 };
 
 describe("context rendering with multiple regions per path", () => {
+  it("uses Python and configuration code fences and generic empty verification copy", () => {
+    const candidate = contextCandidate();
+    const snippets = [
+      { ...selection(candidate, 1, "def refresh(): pass"), path: "src/session.py" },
+      { ...selection(candidate, 1, "[tool.ruff]"), path: "pyproject.toml" },
+      { ...selection(candidate, 1, "[pytest]"), path: "pytest.ini" },
+      { ...selection(candidate, 1, "[metadata]"), path: "setup.cfg" },
+    ];
+
+    const markdown = renderContext(manifest(12_000, snippets));
+
+    expect(markdown).toContain("```python\ndef refresh(): pass");
+    expect(markdown).toContain("```toml\n[tool.ruff]");
+    expect(markdown).toContain("```ini\n[pytest]");
+    expect(markdown).toContain("```ini\n[metadata]");
+    expect(markdown).toContain("No verification commands were discovered.");
+  });
+
   it("keeps a candidate selected when truncation removes only its alternate", () => {
     const candidate = contextCandidate();
     const primary = selection(candidate, 10, "export const primary = true;");

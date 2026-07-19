@@ -32,13 +32,28 @@ async function main(): Promise<void> {
     const packDirectory = path.join(temp, "pack");
     const consumer = path.join(temp, "consumer");
     const fixture = path.join(consumer, "fixture");
+    const pythonFixture = path.join(consumer, "python-fixture");
     await fs.mkdir(packDirectory, { recursive: true });
     await fs.mkdir(path.join(fixture, "src"), { recursive: true });
+    await fs.mkdir(path.join(pythonFixture, "src"), { recursive: true });
+    await fs.mkdir(path.join(pythonFixture, "tests"), { recursive: true });
     await fs.writeFile(path.join(consumer, "package.json"), JSON.stringify({ private: true }));
     await fs.writeFile(path.join(fixture, "package.json"), JSON.stringify({ name: "package-smoke-fixture", private: true }));
     await fs.writeFile(
       path.join(fixture, "src", "auth.ts"),
       "export function refreshSession() { return 'ready'; }\n",
+    );
+    await fs.writeFile(
+      path.join(pythonFixture, "pyproject.toml"),
+      "[project]\nname = 'python-package-smoke'\n[tool.pytest.ini_options]\ntestpaths = ['tests']\n",
+    );
+    await fs.writeFile(
+      path.join(pythonFixture, "src", "session.py"),
+      "def refresh_python_session():\n    \"\"\"Refresh the Python session.\"\"\"\n    return 'ready'\n",
+    );
+    await fs.writeFile(
+      path.join(pythonFixture, "tests", "test_session.py"),
+      "from src.session import refresh_python_session\n\ndef test_refresh_python_session():\n    assert refresh_python_session() == 'ready'\n",
     );
 
     run(process.execPath, [npmCli, "run", "prepack"], repositoryRoot);
@@ -68,6 +83,23 @@ async function main(): Promise<void> {
       fs.access(path.join(output, "context.md")),
       fs.access(path.join(output, "manifest.json")),
     ]);
+
+    const pythonOutput = path.join(pythonFixture, ".contextpack", "package-smoke");
+    run(
+      process.execPath,
+      [installedCli, "task", "refresh the Python session", "--budget", "4000", "--history", "1", "--output", pythonOutput],
+      pythonFixture,
+    );
+    const pythonManifest = JSON.parse(await fs.readFile(path.join(pythonOutput, "manifest.json"), "utf8")) as {
+      candidates?: Array<{ path?: string }>;
+    };
+    const pythonMarkdown = await fs.readFile(path.join(pythonOutput, "context.md"), "utf8");
+    if (!pythonManifest.candidates?.some((candidate) => candidate.path?.endsWith(".py"))) {
+      throw new Error("Packed CLI did not emit a Python candidate.");
+    }
+    if (!pythonMarkdown.includes("```python")) {
+      throw new Error("Packed CLI did not render a Python code fence.");
+    }
     process.stdout.write(`Package smoke passed: ${packageResult.filename}\n`);
   } finally {
     await fs.rm(temp, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });

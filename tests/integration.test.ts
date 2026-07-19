@@ -12,6 +12,110 @@ const created: string[] = [];
 afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, { recursive: true, force: true }))));
 
 describe("task analysis", () => {
+  it("suggests configured Python verification commands in deterministic order", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-commands-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(
+      path.join(root, "pyproject.toml"),
+      [
+        "[build-system]",
+        "requires = ['setuptools']",
+        "[tool.pytest.ini_options]",
+        "testpaths = ['tests']",
+        "[tool.ruff]",
+        "line-length = 100",
+        "[tool.mypy]",
+        "strict = true",
+      ].join("\n"),
+    );
+    await fs.writeFile(path.join(root, "pytest.ini"), "[pytest]\ntestpaths = tests\n");
+    await fs.writeFile(path.join(root, "src", "session.py"), "def refresh():\n    return True\n");
+
+    const manifest = await analyzeTask({ root, task: "refresh session", budget: 4000, historyCount: 1 });
+
+    expect(manifest.commands).toEqual([
+      { name: "test", command: "python -m pytest", directory: ".", reason: "Pytest configuration detected" },
+      { name: "lint", command: "python -m ruff check .", directory: ".", reason: "Ruff configuration detected" },
+      { name: "typecheck", command: "python -m mypy .", directory: ".", reason: "mypy configuration detected" },
+      { name: "build", command: "python -m build", directory: ".", reason: "Python build system detected" },
+    ]);
+  });
+
+  it("uses unittest for Python tests without pytest evidence", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-unittest-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "tests"), { recursive: true });
+    await fs.writeFile(path.join(root, "tests", "test_session.py"), "def test_refresh():\n    assert True\n");
+
+    const manifest = await analyzeTask({ root, task: "refresh session", budget: 4000, historyCount: 1 });
+
+    expect(manifest.commands).toContainEqual({
+      name: "test",
+      command: "python -m unittest discover",
+      directory: ".",
+      reason: "Python test files detected",
+    });
+    expect(manifest.commands.some((item) => item.command === "python -m pytest")).toBe(false);
+  });
+
+  it("does not treat JavaScript test directories as unittest evidence", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-js-test-directory-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "tests"), { recursive: true });
+    await fs.writeFile(path.join(root, "package.json"), JSON.stringify({ name: "js-only" }));
+    await fs.writeFile(path.join(root, "tests", "session.test.ts"), "export const ready = true;\n");
+
+    const manifest = await analyzeTask({ root, task: "check session", budget: 4000, historyCount: 1 });
+
+    expect(manifest.commands.some((item) => item.command.includes("unittest"))).toBe(false);
+  });
+
+  it("keeps npm commands first and caps mixed verification suggestions at five", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-mixed-commands-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "package.json"), JSON.stringify({
+      name: "mixed",
+      scripts: { test: "vitest", typecheck: "tsc --noEmit" },
+    }));
+    await fs.writeFile(path.join(root, "src", "index.ts"), "export const ready = true;\n");
+    await fs.writeFile(path.join(root, "src", "session.py"), "ready = True\n");
+    await fs.writeFile(
+      path.join(root, "pyproject.toml"),
+      "[build-system]\nrequires = ['setuptools']\n[tool.pytest.ini_options]\n[tool.ruff]\n[tool.mypy]\n",
+    );
+
+    const manifest = await analyzeTask({ root, task: "check readiness", budget: 4000, historyCount: 1 });
+
+    expect(manifest.commands).toHaveLength(5);
+    expect(manifest.commands.map((item) => item.command)).toEqual([
+      "npm test",
+      "npm run typecheck",
+      "python -m pytest",
+      "python -m ruff check .",
+      "python -m mypy .",
+    ]);
+  });
+
+  it("detects pytest dependencies and standalone Ruff and mypy configs", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-tool-files-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "src", "session.py"), "ready = True\n");
+    await fs.writeFile(path.join(root, "requirements-dev.txt"), "pytest>=8\npytest-cov>=5\n");
+    await fs.writeFile(path.join(root, "ruff.toml"), "line-length = 100\n");
+    await fs.writeFile(path.join(root, "mypy.ini"), "[mypy]\nstrict = true\n");
+
+    const manifest = await analyzeTask({ root, task: "check session", budget: 4000, historyCount: 1 });
+
+    expect(manifest.commands.map((item) => item.command)).toEqual([
+      "python -m pytest",
+      "python -m ruff check .",
+      "python -m mypy .",
+    ]);
+  });
+
   it("retrieves Python behavior evidence from comments and docstrings", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-ranking-"));
     created.push(root);

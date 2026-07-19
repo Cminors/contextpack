@@ -15,6 +15,8 @@ import {
 const pythonConfigPatterns = [
   "pyproject.toml", "**/pyproject.toml", "setup.py", "**/setup.py", "setup.cfg", "**/setup.cfg",
   "tox.ini", "**/tox.ini", "pytest.ini", "**/pytest.ini", "requirements*.txt", "**/requirements*.txt",
+  "ruff.toml", "**/ruff.toml", ".ruff.toml", "**/.ruff.toml", "mypy.ini", "**/mypy.ini",
+  ".mypy.ini", "**/.mypy.ini",
   "Pipfile", "**/Pipfile", "poetry.lock", "**/poetry.lock", "uv.lock", "**/uv.lock",
 ];
 
