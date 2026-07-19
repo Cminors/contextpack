@@ -31,8 +31,42 @@ const hasSection = (content: string, section: string): boolean => {
   return new RegExp(`^\\s*\\[${escaped}(?:[.\\]]|$)`, "im").test(content);
 };
 
-const hasStandalonePytestDependency = (content: string): boolean =>
-  /(?:^|[\s"'=,[({])pytest(?:\s*(?:[<>=!~]=?|@|\[)|(?=$|[\s"',;)\]}]))/im.test(content);
+const stripConfigComment = (line: string): string => {
+  let quote: "'" | "\"" | null = null;
+  let escaped = false;
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (quote) {
+      if (character === "\\") escaped = true;
+      else if (character === quote) quote = null;
+      continue;
+    }
+    if (character === "'" || character === "\"") quote = character;
+    else if (character === "#") return line.slice(0, index).trim();
+  }
+  return line.trim();
+};
+
+const PYTEST_REQUIREMENT = /^pytest(?:\[[A-Za-z0-9_.-]+(?:\s*,\s*[A-Za-z0-9_.-]+)*\])?(?:(?:\s*(?:===|==|~=|!=|<=|>=|<|>)\s*[A-Za-z0-9*+!._-]+)(?:\s*,\s*(?:===|==|~=|!=|<=|>=|<|>)\s*[A-Za-z0-9*+!._-]+)*|\s*@\s*\S+)?(?:\s*;\s*(?:python_version|python_full_version|os_name|sys_platform|platform_release|platform_system|platform_version|platform_machine|platform_python_implementation|implementation_name|implementation_version|extra)\b.+)?$/i;
+
+const normalizeDependencyCandidate = (value: string): string =>
+  value.trim().replace(/^[\s[({,]+/, "").replace(/[\s\])},]+$/, "").trim();
+
+const hasStandalonePytestDependency = (content: string): boolean => content.split(/\r?\n/).some((line) => {
+  const uncommented = stripConfigComment(line);
+  if (!uncommented) return false;
+  const candidates = [uncommented];
+  const assignment = uncommented.match(/^[A-Za-z_][A-Za-z0-9_.-]*\s*=\s*(.+)$/);
+  if (assignment?.[1]) candidates.push(assignment[1]);
+  for (const match of uncommented.matchAll(/(["'])(.*?)\1/g)) {
+    if (match[2]) candidates.push(match[2]);
+  }
+  return candidates.some((candidate) => PYTEST_REQUIREMENT.test(normalizeDependencyCandidate(candidate)));
+});
 
 async function pythonCommandEvidence(repository: Repository): Promise<Map<string, PythonCommandEvidence>> {
   const evidence = new Map<string, PythonCommandEvidence>();

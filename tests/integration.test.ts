@@ -103,7 +103,10 @@ describe("task analysis", () => {
     created.push(root);
     await fs.mkdir(path.join(root, "src"), { recursive: true });
     await fs.writeFile(path.join(root, "src", "session.py"), "ready = True\n");
-    await fs.writeFile(path.join(root, "requirements-dev.txt"), "pytest>=8\npytest-cov>=5\n");
+    await fs.writeFile(
+      path.join(root, "requirements-dev.txt"),
+      "# pytest>=7 is no longer supported\npytest[testing]==8.3.2 # pinned test runner\npytest-cov>=5\n",
+    );
     await fs.writeFile(path.join(root, "ruff.toml"), "line-length = 100\n");
     await fs.writeFile(path.join(root, "mypy.ini"), "[mypy]\nstrict = true\n");
 
@@ -114,6 +117,45 @@ describe("task analysis", () => {
       "python -m ruff check .",
       "python -m mypy .",
     ]);
+  });
+
+  it("ignores pytest mentions in dependency comments and prose", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-dependency-comments-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "src", "session.py"), "ready = True\n");
+    await fs.writeFile(
+      path.join(root, "requirements-dev.txt"),
+      "# pytest>=8 was removed\npytest-cov>=5\npytest>=8 was previously used\n",
+    );
+    await fs.writeFile(
+      path.join(root, "setup.cfg"),
+      "[metadata]\ndescription = pytest>=8 was removed\n# tests_require = pytest\n",
+    );
+
+    const manifest = await analyzeTask({ root, task: "check session", budget: 4000, historyCount: 1 });
+
+    expect(manifest.commands.some((item) => item.command === "python -m pytest")).toBe(false);
+  });
+
+  it("detects a pinned pytest token in setup dependency configuration", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-setup-dependency-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "src", "session.py"), "ready = True\n");
+    await fs.writeFile(
+      path.join(root, "setup.cfg"),
+      "[options.extras_require]\ntest =\n    pytest~=8.3 # supported test runner\n",
+    );
+
+    const manifest = await analyzeTask({ root, task: "check session", budget: 4000, historyCount: 1 });
+
+    expect(manifest.commands).toContainEqual({
+      name: "test",
+      command: "python -m pytest",
+      directory: ".",
+      reason: "Pytest configuration detected",
+    });
   });
 
   it("retrieves Python behavior evidence from comments and docstrings", async () => {
