@@ -23,6 +23,10 @@ Review hardening added strict nested worker-response validation with requested
 path completeness checks, relative-import suffix restrictions, and lexical
 fallback for non-zero/malformed worker output. Node and the embedded worker now
 enforce repository-root and realpath containment before reading source files.
+Unsafe-path fallbacks also expose only a synthetic root-contained absolute path.
+A filesystem symlink regression test verifies escaped content remains unread,
+the warning is `PYTHON_ANALYSIS_FAILED`, and fallback metadata stays inside the
+repository; it skips only when the platform cannot create file symlinks.
 
 Commit: `feat: add Python AST language adapter` (atomic implementation commit).
 

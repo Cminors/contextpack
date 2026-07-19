@@ -42,10 +42,17 @@ function isPythonConfig(filePath: string): boolean {
   return /(?:^|\/)setup\.py$/i.test(toPosixPath(filePath));
 }
 
-function fallbackAnalysis(repository: DiscoveredRepository, relativePath: string, content: string): FileAnalysis {
+function fallbackAbsolutePath(repository: DiscoveredRepository, relativePath: string, safe: boolean): string {
+  const candidate = path.resolve(repository.snapshot.root, relativePath);
+  if (safe && isWithinRoot(repository.snapshot.root, candidate)) return candidate;
+  const stableName = relativePath.replace(/[^A-Za-z0-9_-]/g, "_") || "unknown";
+  return path.join(repository.snapshot.root, ".contextpack-invalid-python", `${stableName}.py`);
+}
+
+function fallbackAnalysis(repository: DiscoveredRepository, relativePath: string, content: string, safe = true): FileAnalysis {
   return {
     path: relativePath,
-    absolutePath: path.join(repository.snapshot.root, relativePath),
+    absolutePath: fallbackAbsolutePath(repository, relativePath, safe),
     language: "python",
     content,
     lineCount: content.split(/\r?\n/).length,
@@ -218,7 +225,13 @@ async function analyzePythonFiles(repository: DiscoveredRepository, sourceFiles:
   }
   for (const relativePath of unsafePaths) warning(repository, "PYTHON_ANALYSIS_FAILED", "Python source path escaped the repository root; using lexical fallback.", relativePath);
   const contents = await readContents(repository, safePaths);
-  const fallback = (relativePath: string): FileAnalysis => fallbackAnalysis(repository, relativePath, contents.get(relativePath) ?? "");
+  const unsafeSet = new Set(unsafePaths);
+  const fallback = (relativePath: string): FileAnalysis => fallbackAnalysis(
+    repository,
+    relativePath,
+    contents.get(relativePath) ?? "",
+    !unsafeSet.has(relativePath),
+  );
   const run = runWorker({ version: 1, root: repository.snapshot.root, files: safePaths });
   if (!run.response) {
     if (safePaths.length > 0) warning(repository, run.unavailable ? "PYTHON_UNAVAILABLE" : "PYTHON_ANALYSIS_FAILED", run.unavailable

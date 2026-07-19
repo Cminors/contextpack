@@ -111,6 +111,7 @@ describe("pythonAdapter", () => {
       const analyses = await pythonAdapter.analyzeFiles(repo, repo.sourceFiles);
       expect(analyses).toHaveLength(2);
       expect(analyses.every((item) => item.content === "")).toBe(true);
+      expect(analyses.every((item) => path.relative(root, item.absolutePath).startsWith("..") === false)).toBe(true);
       expect(repo.warnings).toEqual(expect.arrayContaining([
         expect.objectContaining({ code: "PYTHON_ANALYSIS_FAILED", path: "../contextpack-python-outside.py" }),
         expect.objectContaining({ code: "PYTHON_ANALYSIS_FAILED", path: absoluteOutside }),
@@ -120,17 +121,27 @@ describe("pythonAdapter", () => {
     }
   });
 
-  it("rejects source symlinks whose real path escapes the repository", async () => {
+  it("rejects source symlinks whose real path escapes the repository", async ({ skip }) => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-symlink-"));
     roots.push(root);
     const outside = path.join(path.dirname(root), "contextpack-python-symlink-outside.py");
     const linked = path.join(root, "linked.py");
     await fs.writeFile(outside, "SECRET = 'must not be read'\n");
     try {
-      await fs.symlink(outside, linked, "file");
+      try {
+        await fs.symlink(outside, linked, "file");
+      } catch (error) {
+        const code = (error as NodeJS.ErrnoException).code;
+        if (["EPERM", "EACCES", "ENOSYS", "ENOTSUP", "EOPNOTSUPP"].includes(code ?? "")) {
+          skip();
+          return;
+        }
+        throw error;
+      }
       const repo = repository(root, ["linked.py"]);
       const analyses = await pythonAdapter.analyzeFiles(repo, repo.sourceFiles);
       expect(analyses[0]?.content).toBe("");
+      expect(path.relative(root, analyses[0]?.absolutePath ?? "").startsWith("..")).toBe(false);
       expect(repo.warnings).toEqual([expect.objectContaining({ code: "PYTHON_ANALYSIS_FAILED", path: "linked.py" })]);
     } finally {
       await fs.rm(outside, { force: true });
