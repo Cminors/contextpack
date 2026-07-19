@@ -6,8 +6,10 @@
 
 ## Goal
 
-Add first-class Python repository support without changing the language-neutral
-ranking, region-localization, selection, manifest, or CLI contracts. A Python
+Add first-class Python repository support without changing the ranking weights,
+region-localization, selection, manifest, or CLI contracts. Python gets only
+additive lexical and structural path handling; existing JS/TS behavior remains
+unchanged. A Python
 repository, and a repository mixing Python with JavaScript/TypeScript, should
 produce useful context packs with deterministic source discovery, symbols,
 internal imports, pytest-aware test classification, and evidence-based
@@ -112,7 +114,9 @@ sections/files are present. Suggestions remain deterministic and capped at five.
 If no Python executable is available, the adapter emits a warning with stable
 code `PYTHON_UNAVAILABLE` and produces lexical-only Python analyses with empty
 imports and symbols. A malformed individual file receives the same controlled
-fallback and a `PYTHON_PARSE_FAILED` warning; other files continue to analyze.
+fallback and a `PYTHON_PARSE_FAILED` warning; malformed worker output or a
+non-zero worker process produces `PYTHON_ANALYSIS_FAILED`; other files continue
+to analyze.
 The repository remains usable for mixed projects and does not silently claim
 semantic Python coverage. JavaScript/TypeScript behavior is unaffected.
 
