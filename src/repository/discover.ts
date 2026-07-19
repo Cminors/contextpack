@@ -20,6 +20,14 @@ const ALWAYS_IGNORED = [
   "**/coverage/**",
   "**/vendor/**",
   "**/.contextpack/**",
+  "**/.venv/**",
+  "**/venv/**",
+  "**/__pycache__/**",
+  "**/.tox/**",
+  "**/.nox/**",
+  "**/site-packages/**",
+  "**/*.egg-info/**",
+  "**/eggs/**",
 ];
 
 async function loadGitIgnore(root: string): Promise<ReturnType<typeof ignore>> {
@@ -94,7 +102,7 @@ export async function discoverRepository(
 
   if (sourceFiles.length === 0) {
     throw new ContextPackError(
-      "No supported JavaScript or TypeScript source files were found.",
+      "No supported source files were found.",
       2,
       "UNSUPPORTED_REPOSITORY",
     );
@@ -105,7 +113,7 @@ export async function discoverRepository(
   }
 
   const packageManager = detectPackageManager(root, fileNames);
-  const projectType = await detectProjectTypes(root, packages);
+  const projectType = await detectProjectTypes(root, packages, sourceFiles, configFiles);
   const snapshot = snapshotFor(root, packageManager, projectType);
   if (snapshot.isShallow) {
     warnings.push({ code: "SHALLOW_CLONE", message: "Git co-change analysis is limited by the shallow clone." });

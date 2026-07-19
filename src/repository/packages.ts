@@ -45,7 +45,12 @@ export async function discoverPackages(root: string): Promise<PackageInfo[]> {
   return packages;
 }
 
-export async function detectProjectTypes(root: string, packages: PackageInfo[]): Promise<string[]> {
+export async function detectProjectTypes(
+  root: string,
+  packages: PackageInfo[],
+  sourceFiles: readonly string[] = [],
+  configFiles: readonly string[] = [],
+): Promise<string[]> {
   const types = new Set<string>();
 
   for (const packageInfo of packages) {
@@ -63,6 +68,13 @@ export async function detectProjectTypes(root: string, packages: PackageInfo[]):
       // Best-effort metadata only.
     }
   }
+
+  const hasPythonEvidence = sourceFiles.some((filePath) => /\.py$/i.test(filePath))
+    || configFiles.some((filePath) => /(?:^|\/)(?:pyproject\.toml|setup\.py|setup\.cfg|tox\.ini|pytest\.ini|requirements[^/]*\.txt|Pipfile|poetry\.lock|uv\.lock)$/i.test(filePath));
+  const hasJavaScriptEvidence = sourceFiles.some((filePath) => /\.(?:js|jsx|ts|tsx|mjs|cjs|mts|cts)$/i.test(filePath));
+
+  if (hasJavaScriptEvidence && hasPythonEvidence && types.size === 0) types.add("JavaScript/TypeScript");
+  if (hasPythonEvidence) types.add("Python");
 
   if (types.size === 0) {
     types.add("JavaScript/TypeScript");

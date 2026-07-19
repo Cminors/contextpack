@@ -44,7 +44,7 @@ async function directoryCheck(root: string): Promise<DoctorCheck> {
         id: "directory",
         status: "fail",
         message: `The current path is not a directory: ${root}`,
-        recommendation: "Run ContextPack from the root of a JavaScript or TypeScript project.",
+        recommendation: "Run ContextPack from the root of a JavaScript, TypeScript, or Python project.",
       };
     }
     await fs.access(root, fsConstants.R_OK | fsConstants.W_OK);
@@ -65,7 +65,7 @@ async function sourcesCheck(root: string): Promise<DoctorCheck> {
     return {
       id: "sources",
       status: "pass",
-      message: `Found ${repository.sourceFiles.length} supported JavaScript or TypeScript source files.`,
+      message: `Found ${repository.sourceFiles.length} supported source files.`,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
@@ -73,7 +73,7 @@ async function sourcesCheck(root: string): Promise<DoctorCheck> {
       id: "sources",
       status: "fail",
       message,
-      recommendation: "Change into the project root containing .js, .jsx, .ts, .tsx, .mjs, .cjs, .mts, or .cts files.",
+      recommendation: "Change into a project root containing JavaScript, TypeScript, or Python source files.",
     };
   }
 }

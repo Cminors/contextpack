@@ -11,6 +11,24 @@ const created: string[] = [];
 afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, { recursive: true, force: true }))));
 
 describe("JavaScript and TypeScript AST analysis", () => {
+  it("analyzes setup.py once as Python source and config", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-ast-python-config-"));
+    created.push(root);
+    await fs.writeFile(path.join(root, "setup.py"), "from setuptools import setup\nsetup(name='fixture')\n");
+
+    const repository = await discoverRepository(root);
+    const files = await analyzeFiles(repository);
+    const setupFiles = files.filter((file) => file.path === "setup.py");
+
+    expect(repository.sourceFiles).toEqual(["setup.py"]);
+    expect(repository.configFiles).toEqual(["setup.py"]);
+    expect(setupFiles).toEqual([expect.objectContaining({
+      language: "python",
+      isConfig: true,
+      packageDirectory: ".",
+    })]);
+  });
+
   it("exposes the JavaScript and TypeScript language adapter contract", () => {
     expect(javascriptTypeScriptAdapter.id).toBe("javascript-typescript");
     expect(javascriptTypeScriptAdapter.sourcePatterns).toEqual(["**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}"]);

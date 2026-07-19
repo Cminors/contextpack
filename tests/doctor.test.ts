@@ -29,7 +29,27 @@ describe("doctor", () => {
       expect.objectContaining({ id: "sources", status: "pass" }),
       expect.objectContaining({ id: "git", status: "warn" }),
     ]));
+    expect(report.checks).toContainEqual(expect.objectContaining({
+      id: "sources",
+      message: "Found 1 supported source files.",
+    }));
     expect(renderDoctor(report)).toContain("Ready: yes");
+  });
+
+  it("accepts a Python project without requiring a Python runtime check", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-doctor-python-"));
+    created.push(root);
+    await fs.writeFile(path.join(root, "app.py"), "ready = True\n");
+
+    const report = await runDoctor(root);
+
+    expect(report.ready).toBe(true);
+    expect(report.checks.map((check) => check.id)).toEqual(["node", "directory", "sources", "git"]);
+    expect(report.checks).toContainEqual(expect.objectContaining({
+      id: "sources",
+      status: "pass",
+      message: "Found 1 supported source files.",
+    }));
   });
 
   it("rejects a directory without supported source files", async () => {
@@ -39,7 +59,12 @@ describe("doctor", () => {
     const report = await runDoctor(root);
 
     expect(report.ready).toBe(false);
-    expect(report.checks).toContainEqual(expect.objectContaining({ id: "sources", status: "fail" }));
+    expect(report.checks).toContainEqual(expect.objectContaining({
+      id: "sources",
+      status: "fail",
+      message: "No supported source files were found.",
+      recommendation: "Change into a project root containing JavaScript, TypeScript, or Python source files.",
+    }));
     expect(renderDoctor(report)).toContain("Ready: no");
   });
 

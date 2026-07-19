@@ -4,6 +4,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { analyzeTask } from "../src/analysis/analyze.js";
 import { analyzeFiles, enrichSemanticReferences } from "../src/analysis/ast.js";
+import { analyzeConfigFiles, packageDirectoryFor } from "../src/analysis/config-files.js";
 import { discoverRepository } from "../src/repository/discover.js";
 import { renderContext } from "../src/output/markdown.js";
 
@@ -11,6 +12,23 @@ const created: string[] = [];
 afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, { recursive: true, force: true }))));
 
 describe("task analysis", () => {
+  it("classifies Python config files and resolves the nearest Python package root", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-config-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "services", "api", "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "pyproject.toml"), "[project]\nname = 'root'\n");
+    await fs.writeFile(path.join(root, "services", "api", "setup.cfg"), "[metadata]\nname = api\n");
+    await fs.writeFile(path.join(root, "services", "api", "src", "app.py"), "app = True\n");
+    const repository = await discoverRepository(root);
+    const analyses = await analyzeConfigFiles(repository);
+
+    expect(packageDirectoryFor("services/api/src/app.py", repository)).toBe("services/api");
+    expect(analyses).toEqual(expect.arrayContaining([
+      expect.objectContaining({ path: "pyproject.toml", language: "text", isConfig: true, packageDirectory: "." }),
+      expect.objectContaining({ path: "services/api/setup.cfg", language: "text", isConfig: true, packageDirectory: "services/api" }),
+    ]));
+  });
+
   it("builds a bounded, explainable context pack without Git history", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-fixture-"));
     created.push(root);
