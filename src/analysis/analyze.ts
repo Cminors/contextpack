@@ -56,17 +56,138 @@ const PYTEST_REQUIREMENT = /^pytest(?:\[[A-Za-z0-9_.-]+(?:\s*,\s*[A-Za-z0-9_.-]+
 const normalizeDependencyCandidate = (value: string): string =>
   value.trim().replace(/^[\s[({,]+/, "").replace(/[\s\])},]+$/, "").trim();
 
-const hasStandalonePytestDependency = (content: string): boolean => content.split(/\r?\n/).some((line) => {
-  const uncommented = stripConfigComment(line);
-  if (!uncommented) return false;
-  const candidates = [uncommented];
-  const assignment = uncommented.match(/^[A-Za-z_][A-Za-z0-9_.-]*\s*=\s*(.+)$/);
-  if (assignment?.[1]) candidates.push(assignment[1]);
-  for (const match of uncommented.matchAll(/(["'])(.*?)\1/g)) {
+const containsPytestRequirement = (value: string): boolean => {
+  const candidates = [value];
+  for (const match of value.matchAll(/(["'])(.*?)\1/g)) {
     if (match[2]) candidates.push(match[2]);
   }
   return candidates.some((candidate) => PYTEST_REQUIREMENT.test(normalizeDependencyCandidate(candidate)));
-});
+};
+
+const hasRequirementsPytest = (content: string): boolean => content.split(/\r?\n/)
+  .some((line) => {
+    const uncommented = stripConfigComment(line);
+    return uncommented !== "" && PYTEST_REQUIREMENT.test(normalizeDependencyCandidate(uncommented));
+  });
+
+const hasSetupCfgPytest = (content: string): boolean => {
+  let section = "";
+  let dependencyContinuation = false;
+  for (const rawLine of content.split(/\r?\n/)) {
+    const uncommented = stripConfigComment(rawLine);
+    if (!uncommented) continue;
+    const sectionMatch = uncommented.match(/^\[([^\]]+)\]$/);
+    if (sectionMatch?.[1]) {
+      section = sectionMatch[1].toLowerCase();
+      dependencyContinuation = false;
+      continue;
+    }
+    const assignment = uncommented.match(/^([A-Za-z_][A-Za-z0-9_.-]*)\s*=\s*(.*)$/);
+    if (section === "options.extras_require") {
+      if (assignment) {
+        dependencyContinuation = true;
+        if (assignment[2] && containsPytestRequirement(assignment[2])) return true;
+      } else if (dependencyContinuation && /^\s/.test(rawLine) && containsPytestRequirement(uncommented)) {
+        return true;
+      }
+      continue;
+    }
+    if (section === "options") {
+      if (assignment) {
+        const field = assignment[1]?.toLowerCase();
+        dependencyContinuation = field === "install_requires" || field === "tests_require";
+        if (dependencyContinuation && assignment[2] && containsPytestRequirement(assignment[2])) return true;
+      } else if (dependencyContinuation && /^\s/.test(rawLine) && containsPytestRequirement(uncommented)) {
+        return true;
+      } else {
+        dependencyContinuation = false;
+      }
+    }
+  }
+  return false;
+};
+
+interface PythonExpression {
+  text: string;
+  consumed: number;
+}
+
+const firstPythonExpression = (value: string): PythonExpression => {
+  const start = value.search(/\S/);
+  if (start < 0) return { text: "", consumed: value.length };
+  let quote: "'" | "\"" | null = null;
+  let escaped = false;
+  let depth = 0;
+  let sawBracket = false;
+  const quotedRoot = value[start] === "'" || value[start] === "\"";
+  for (let index = start; index < value.length; index += 1) {
+    const character = value[index];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (quote) {
+      if (character === "\\") escaped = true;
+      else if (character === quote) {
+        quote = null;
+        if (quotedRoot && depth === 0) return { text: value.slice(start, index + 1), consumed: index + 1 };
+      }
+      continue;
+    }
+    if (character === "'" || character === "\"") {
+      quote = character;
+      continue;
+    }
+    if (character === "[" || character === "{" || character === "(") {
+      depth += 1;
+      sawBracket = true;
+    } else if (character === "]" || character === "}" || character === ")") {
+      depth -= 1;
+      if (sawBracket && depth === 0) return { text: value.slice(start, index + 1), consumed: index + 1 };
+    } else if ((character === "," || character === "\n") && depth === 0) {
+      return { text: value.slice(start, index), consumed: index + 1 };
+    }
+  }
+  return { text: value.slice(start), consumed: value.length };
+};
+
+const hasSetupPyPytest = (content: string): boolean => {
+  const uncommented = content.split(/\r?\n/).map(stripConfigComment).join("\n");
+  let quote: "'" | "\"" | null = null;
+  let escaped = false;
+  for (let index = 0; index < uncommented.length; index += 1) {
+    const character = uncommented[index];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (quote) {
+      if (character === "\\") escaped = true;
+      else if (character === quote) quote = null;
+      continue;
+    }
+    if (character === "'" || character === "\"") {
+      quote = character;
+      continue;
+    }
+    const previous = uncommented[index - 1];
+    if (previous && /[A-Za-z0-9_]/.test(previous)) continue;
+    const assignment = uncommented.slice(index).match(/^(?:install_requires|tests_require|extras_require)\s*=\s*/);
+    if (!assignment) continue;
+    const expressionStart = index + assignment[0].length;
+    const expression = firstPythonExpression(uncommented.slice(expressionStart));
+    if (containsPytestRequirement(expression.text)) return true;
+    index = expressionStart + expression.consumed - 1;
+  }
+  return false;
+};
+
+const hasSetupDependencyPytest = (base: string, content: string): boolean =>
+  /^requirements.*\.txt$/i.test(base)
+    ? hasRequirementsPytest(content)
+    : base === "setup.cfg"
+      ? hasSetupCfgPytest(content)
+      : base === "setup.py" && hasSetupPyPytest(content);
 
 async function pythonCommandEvidence(repository: Repository): Promise<Map<string, PythonCommandEvidence>> {
   const evidence = new Map<string, PythonCommandEvidence>();
@@ -88,8 +209,7 @@ async function pythonCommandEvidence(repository: Repository): Promise<Map<string
     if (base === "pytest.ini" || (base === "pyproject.toml" && hasSection(content, "tool.pytest"))) {
       current.pytest = true;
     }
-    if ((/^requirements.*\.txt$/i.test(base) || base === "setup.cfg" || base === "setup.py")
-      && hasStandalonePytestDependency(content)) {
+    if (hasSetupDependencyPytest(base, content)) {
       current.pytest = true;
     }
     if (base === "ruff.toml" || base === ".ruff.toml"

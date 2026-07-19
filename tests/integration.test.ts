@@ -130,7 +130,7 @@ describe("task analysis", () => {
     );
     await fs.writeFile(
       path.join(root, "setup.cfg"),
-      "[metadata]\ndescription = pytest>=8 was removed\n# tests_require = pytest\n",
+      "[metadata]\nkeywords = pytest\ndescription = \"pytest\"\nsummary = pytest>=8 was removed\n# tests_require = pytest\n",
     );
 
     const manifest = await analyzeTask({ root, task: "check session", budget: 4000, historyCount: 1 });
@@ -156,6 +156,47 @@ describe("task analysis", () => {
       directory: ".",
       reason: "Pytest configuration detected",
     });
+  });
+
+  it("detects pytest in setup install_requires", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-install-requires-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "src", "session.py"), "ready = True\n");
+    await fs.writeFile(
+      path.join(root, "setup.cfg"),
+      "[metadata]\nkeywords = pytest\n[options]\ninstall_requires =\n    pytest>=8.3,<9\n",
+    );
+
+    const manifest = await analyzeTask({ root, task: "check session", budget: 4000, historyCount: 1 });
+
+    expect(manifest.commands.some((item) => item.command === "python -m pytest")).toBe(true);
+  });
+
+  it("limits setup.py evidence to dependency keyword expressions", async () => {
+    const negativeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-setup-py-metadata-"));
+    const positiveRoot = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-setup-py-dependency-"));
+    created.push(negativeRoot, positiveRoot);
+    for (const root of [negativeRoot, positiveRoot]) {
+      await fs.mkdir(path.join(root, "src"), { recursive: true });
+      await fs.writeFile(path.join(root, "src", "session.py"), "ready = True\n");
+    }
+    await fs.writeFile(
+      path.join(negativeRoot, "setup.py"),
+      "from setuptools import setup\nsetup(description='pytest', keywords=['pytest'])\n",
+    );
+    await fs.writeFile(
+      path.join(positiveRoot, "setup.py"),
+      "from setuptools import setup\nsetup(description='pytest', extras_require={'test': ['pytest>=8']})\n",
+    );
+
+    const [negative, positive] = await Promise.all([
+      analyzeTask({ root: negativeRoot, task: "check session", budget: 4000, historyCount: 1 }),
+      analyzeTask({ root: positiveRoot, task: "check session", budget: 4000, historyCount: 1 }),
+    ]);
+
+    expect(negative.commands.some((item) => item.command === "python -m pytest")).toBe(false);
+    expect(positive.commands.some((item) => item.command === "python -m pytest")).toBe(true);
   });
 
   it("retrieves Python behavior evidence from comments and docstrings", async () => {
