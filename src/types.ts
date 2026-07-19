@@ -61,7 +61,7 @@ export interface LexicalDocument {
 export interface FileAnalysis {
   path: string;
   absolutePath: string;
-  language: "javascript" | "typescript" | "json" | "markdown";
+  language: "javascript" | "typescript" | "python" | "json" | "markdown" | "text";
   content: string;
   lineCount: number;
   imports: string[];
