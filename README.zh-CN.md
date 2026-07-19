@@ -9,7 +9,7 @@
 [![许可证：MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![CI](https://github.com/Cminors/contextpack/actions/workflows/ci.yml/badge.svg)](https://github.com/Cminors/contextpack/actions/workflows/ci.yml)
 
-ContextPack 是一个面向 JavaScript 和 TypeScript 项目的本地命令行工具。你用一句话描述任务，它会从仓库中找出最值得 AI 编程助手优先阅读的代码、测试、项目规则和关联文件，并生成一份可直接交给 Codex、Cursor、Claude Code 等工具的 `context.md`。
+ContextPack 是一个面向 JavaScript、TypeScript 和 Python 项目的本地命令行工具，也支持混合 JS/Python 仓库。你用一句话描述任务，它会从仓库中找出最值得 AI 编程助手优先阅读的代码、测试、项目规则和关联文件，并生成一份可直接交给 Codex、Cursor、Claude Code 等工具的 `context.md`。
 
 ```text
 你的任务描述
@@ -144,7 +144,7 @@ contextpack doctor
 
 ### 第 3 步：在你的项目中运行
 
-先进入需要分析的 JS/TS 项目目录。
+先进入需要分析的 JavaScript、TypeScript、Python 或混合项目目录。
 
 Windows 示例：
 

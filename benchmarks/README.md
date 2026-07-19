@@ -294,17 +294,29 @@ fallback output so mixed repositories remain usable.
 The deterministic local smoke generates 120 Python modules and 40 test files,
 warms one analysis, then runs three measured iterations. It requires a Python
 candidate, a resolved internal import edge, stable candidate paths/scores/
-reasons, and a median total duration at or below 4,000 ms. The current run
-passed with median total duration **848 ms** (runs: 848, 879, and 725 ms) and
-confirmed a resolved import edge. This is a synthetic performance and
-integration smoke, not a Python benchmark against real issue data.
+reasons, and a median total duration at or below 4,000 ms. The recorded Task 5
+sample passed with median total duration **848 ms** (runs: 848, 879, and 725 ms)
+and confirmed a resolved import edge. Runtime varies by host and concurrent
+load; the enforced claim is the 4,000 ms ceiling. This is a synthetic
+performance and integration smoke, not a Python benchmark against real issue data.
 
-The existing quality gates and the P1.0 JavaScript/TypeScript parity projection
-remain mandatory. The pinned P1.0 full-43 parity result is the reference
-(`Parity: equal`, R@10 `0.3891472868`, MRR `0.1771596393`, line@500
-`0.1030487768`, useful-hit@500 `0.2093023256`). A fresh P1.1 full-43 rerun and
-expanded Python issue benchmark are **pending measurements**; no uplift or
-regression claim is made for either until those runs complete.
+The fresh P1.1 JavaScript/TypeScript validation completed all **43/43** pinned
+instances with zero skips and `Parity: equal` against P1.0. The full-set
+aggregate remained R@10 `0.3891472868`, MRR `0.1771596393`, line@500
+`0.1030487768`, and useful-hit@500 `0.2093023256`. The six-task Axios smoke
+also remained R@10 `0.650`, MRR `0.380`, line@500 `0.577`, and useful-hit@500
+`0.833`.
+
+The P1.1 self-replay tracks had 16 valid commits: title R@10 `0.5899801587`
+and MRR `0.5636160714`; keyword-ablated R@10 `0.5651785714` and MRR
+`0.4979910714`. The 11 commits shared with P1.0 produced identical prediction
+arrays in both modes; the aggregate changes reflect five newly eligible P1.1
+commits. Raw artifacts remain untracked under `.contextpack/evals/p11-*`.
+
+**Verdict: parity.** P1.1 adds Python analysis without changing any pinned
+JavaScript/TypeScript retrieval output. A real Python issue benchmark remains
+a future measurement, so the synthetic smoke does not establish Python
+retrieval quality on external repositories.
 
 ## Baseline Comparison
 

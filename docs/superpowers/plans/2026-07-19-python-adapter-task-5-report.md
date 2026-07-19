@@ -19,8 +19,8 @@ documentation with the implemented Python boundary.
   analysis, lexical fallback, symbols/imports/tests/configuration/commands,
   Python-only and mixed JS/Python repositories, and explicit non-goals.
 - Added a P1.1 benchmark section with the measured synthetic smoke result and
-  marked the fresh full-43 parity and real Python issue measurements as
-  pending rather than claiming unrun results.
+  separated the completed JavaScript/TypeScript parity evidence from the
+  still-pending real Python issue measurement.
 
 ## Verification
 
@@ -30,13 +30,19 @@ documentation with the implemented Python boundary.
   (848, 879, 725 ms), below the 4,000 ms default limit.
 - The smoke reported the expected `NO_GIT_REPOSITORY` warning for its temporary
   fixture; no Python analysis warning occurred.
-- Full `npm run check`, `npm run perf:smoke`, and fresh P1.1 full-43 parity are
-  left for the parent agent's final integration gate.
+- Full `npm run check` passed with 25 test files and 150 tests. Both
+  `npm run perf:smoke` and `npm run perf:python` passed below their 4,000 ms
+  limits.
+- The fresh P1.1 full-43 run completed 43/43 instances with zero skips and
+  `Parity: equal` against P1.0. The six-task Axios smoke retained R@10 `0.650`
+  and MRR `0.380`.
+- Title and keyword-ablated replay had 16 valid commits; the 11 commits shared
+  with P1.0 retained identical prediction arrays in both modes.
 
 ## Concerns And Follow-up
 
 - The smoke is intentionally synthetic and does not establish retrieval
   quality on real Python issue datasets.
-- The benchmark section preserves P1.0 parity as a reference and explicitly
-  labels the fresh P1.1 rerun as pending.
+- The benchmark section records the fresh P1.1 parity result and leaves only
+  the real Python issue benchmark as a future measurement.
 - `.superpowers/` and other existing untracked workflow files were not staged.
