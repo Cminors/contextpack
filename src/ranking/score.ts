@@ -157,13 +157,21 @@ function barrelDistances(files: FileAnalysis[], seeds: Set<string>): Map<string,
     const file = byPath.get(current.filePath);
     if (!file) continue;
     for (const importerPath of file.importedBy) {
-      if (!/(?:^|\/)index\.[cm]?[jt]sx?$/i.test(importerPath) || distances.has(importerPath)) continue;
+      if (!/(?:^|\/)(?:index\.[cm]?[jt]sx?|__init__\.py)$/i.test(importerPath) || distances.has(importerPath)) continue;
       const distance = current.distance + 1;
       distances.set(importerPath, distance);
       queue.push({ filePath: importerPath, distance });
     }
   }
   return distances;
+}
+
+function testStem(filePath: string): string {
+  const basename = path.posix.basename(filePath);
+  if (/\.py$/i.test(basename)) {
+    return basename.replace(/\.py$/i, "").replace(/^test_/i, "").replace(/_test$/i, "");
+  }
+  return basename.replace(/\.(?:test|spec)?\.[^.]+$/, "");
 }
 
 function testStrength(file: FileAnalysis, files: FileAnalysis[], seeds: Set<string>): number {
@@ -174,9 +182,9 @@ function testStrength(file: FileAnalysis, files: FileAnalysis[], seeds: Set<stri
       (item) => item.isTest && [...item.imports, ...item.references].includes(file.path) && seeds.has(file.path),
     )
   ) return 0.8;
-  const stem = path.posix.basename(file.path).replace(/\.(?:test|spec)?\.[^.]+$/, "");
+  const stem = testStem(file.path);
   const matchingTest = files.find((item) =>
-    item.path !== file.path && item.isTest && path.posix.basename(item.path).replace(/\.(?:test|spec)\.[^.]+$/, "") === stem,
+    item.path !== file.path && item.isTest && testStem(item.path) === stem,
   );
   if (matchingTest && (seeds.has(file.path) || seeds.has(matchingTest.path))) return 0.75;
   return matchingTest ? 0.35 : 0;

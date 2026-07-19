@@ -25,6 +25,7 @@ export const CONTENT_FIELD_WEIGHTS: Record<LexicalContentField, number> = {
 const BM25_K1 = 1.2;
 const BM25_B = 0.75;
 const CONTENT_TOKEN = /\/\/[^\r\n]*|\/\*[\s\S]*?\*\/|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"|`(?:\\.|[^`\\])*`|[A-Za-z_$\u3400-\u9fff][\w$\u3400-\u9fff]*/g;
+const PYTHON_CONTENT_TOKEN = /#[^\r\n]*|'''(?:\\.|(?!''')[\s\S])*?'''|"""(?:\\.|(?!""")[\s\S])*?"""|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"|[A-Za-z_$\u3400-\u9fff][\w$\u3400-\u9fff]*/g;
 const MODULE_PREFIX = /\b(?:from|import|require)\s*(?:\(\s*)?$/;
 const TEST_TITLE_PREFIX = /\b(?:describe|it|suite|test)(?:\s*\.\s*(?:concurrent|each|only|skip|todo))*\s*\(\s*$/;
 const ASCII_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
@@ -92,7 +93,7 @@ function contentTerms(
 
 export function extractLexicalDocument(
   content: string,
-  _filePath: string,
+  filePath: string,
   _sourceFile?: ts.SourceFile,
   queryTerms?: ReadonlySet<string>,
 ): LexicalDocument {
@@ -129,14 +130,15 @@ export function extractLexicalDocument(
 
   let line = 1;
   let traversed = 0;
-  for (const match of limited.matchAll(CONTENT_TOKEN)) {
+  const tokenPattern = /\.py$/i.test(filePath) ? PYTHON_CONTENT_TOKEN : CONTENT_TOKEN;
+  for (const match of limited.matchAll(tokenPattern)) {
     const position = match.index;
     for (let index = traversed; index < position; index += 1) {
       if (limited.charCodeAt(index) === 10) line += 1;
     }
     const value = match[0];
     const prefix = limited.slice(Math.max(0, position - 96), position);
-    if (value.startsWith("//") || value.startsWith("/*")) {
+    if (value.startsWith("//") || value.startsWith("/*") || value.startsWith("#")) {
       addText(value, "comment", line);
     } else if (value.startsWith("'") || value.startsWith('"') || value.startsWith("`")) {
       if (!MODULE_PREFIX.test(prefix)) {
@@ -176,7 +178,10 @@ export function scoreContentMatches(files: FileAnalysis[], terms: string[]): Map
   if (queryTerms.length === 0) return new Map();
   const queryTermSet = new Set(queryTerms);
   const documents = files
-    .filter((file) => !file.isConfig && (file.language === "javascript" || file.language === "typescript"))
+    .filter((file) =>
+      !file.isConfig
+      && (file.language === "javascript" || file.language === "typescript" || file.language === "python"),
+    )
     .map((file) => ({ file, document: lexicalDocument(file, queryTermSet) }));
   if (documents.length === 0) return new Map();
 

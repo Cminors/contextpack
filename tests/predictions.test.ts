@@ -9,6 +9,36 @@ const candidate = (path: string, score: number): ContextCandidate => ({
 });
 
 describe("prediction selection", () => {
+  it("applies category caps to Python tests, configs, and package barrels", () => {
+    const paths = [
+      "test_auth.py", "auth_test.py",
+      "pyproject.toml", "setup.cfg",
+      "pkg/__init__.py", "pkg/internal/__init__.py",
+      "src/auth.py", "src/app.ts",
+    ];
+    const candidates = paths.map((item, index) => candidate(item, 1 - index / 10));
+
+    expect(selectPredictions(candidates, {
+      limit: 5,
+      maxTests: 1,
+      maxConfigs: 1,
+      maxBarrels: 1,
+    })).toEqual([
+      "test_auth.py", "pyproject.toml", "pkg/__init__.py", "src/auth.py", "src/app.ts",
+    ]);
+  });
+
+  it("keeps mixed JavaScript and Python prediction order deterministic", () => {
+    const paths = ["test_auth.py", "src/index.ts", "pkg/__init__.py", "src/auth.py", "src/helper.ts"];
+    const candidates = paths.map((item, index) => candidate(item, 1 - index / 10));
+    const options = { limit: 4, maxTests: 1, maxBarrels: 1 };
+
+    expect(selectPredictions(candidates, options)).toEqual(selectPredictions(candidates, options));
+    expect(selectPredictions(candidates, options)).toEqual([
+      "test_auth.py", "src/index.ts", "src/auth.py", "src/helper.ts",
+    ]);
+  });
+
   it("keeps task predictions diverse without reordering within categories", () => {
     const paths = [
       "test/a.test.ts", "test/b.test.ts", "test/c.test.ts",

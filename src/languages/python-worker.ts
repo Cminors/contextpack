@@ -43,6 +43,14 @@ def is_test(path):
 def is_config(path):
     return os.path.basename(path).lower() == "setup.py"
 
+def has_pytest_structure(tree):
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name.startswith("test_"):
+            return True
+        if isinstance(node, ast.ClassDef) and node.name.startswith("Test"):
+            return True
+    return False
+
 def decorated_start(node):
     starts = [node.lineno]
     starts.extend(getattr(item, "lineno", node.lineno) for item in getattr(node, "decorator_list", []))
@@ -131,7 +139,7 @@ def main():
             continue
         lines = content.splitlines(True)
         result["files"].append({"path": rel, "symbols": symbols_for(tree, lines, rel),
-                                 "imports": imports_for(tree), "isTest": is_test(rel),
+                                 "imports": imports_for(tree), "isTest": is_test(rel) or has_pytest_structure(tree),
                                  "isConfig": is_config(rel)})
     result["files"].sort(key=lambda item: item["path"])
     result["errors"].sort(key=lambda item: (item["path"], item["code"]))

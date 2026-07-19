@@ -12,6 +12,28 @@ const created: string[] = [];
 afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, { recursive: true, force: true }))));
 
 describe("task analysis", () => {
+  it("retrieves Python behavior evidence from comments and docstrings", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-ranking-"));
+    created.push(root);
+    await fs.mkdir(path.join(root, "src"), { recursive: true });
+    await fs.writeFile(path.join(root, "pyproject.toml"), "[project]\nname = 'sessions'\n");
+    await fs.writeFile(
+      path.join(root, "src", "session.py"),
+      "def refresh():\n    \"\"\"Reconcile orphaned sessions safely.\"\"\"\n    return True\n",
+    );
+    await fs.writeFile(path.join(root, "src", "cache.py"), "def warm_cache():\n    return True\n");
+
+    const manifest = await analyzeTask({
+      root,
+      task: "reconcile orphaned sessions safely",
+      budget: 4000,
+      historyCount: 10,
+    });
+
+    expect(manifest.candidates[0]?.path).toBe("src/session.py");
+    expect(manifest.candidates[0]?.reasons.join(" ")).toContain("content match");
+  });
+
   it("classifies Python config files and resolves the nearest Python package root", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-config-"));
     created.push(root);

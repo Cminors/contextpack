@@ -63,6 +63,18 @@ describe("pythonAdapter", () => {
     expect(service.symbols.find((symbol) => symbol.name === "refresh_accounts")?.text).toContain("@decorator");
   });
 
+  it("classifies top-level pytest functions and classes outside test paths", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-pytest-"));
+    roots.push(root);
+    await fs.writeFile(path.join(root, "function_checks.py"), "def test_refresh():\n    assert True\n");
+    await fs.writeFile(path.join(root, "class_checks.py"), "class TestRefresh:\n    def check(self):\n        assert True\n");
+    const files = ["class_checks.py", "function_checks.py"];
+    const analyses = await pythonAdapter.analyzeFiles(repository(root, files), files);
+
+    expect(analyses.find((item) => item.path === "function_checks.py")?.isTest).toBe(true);
+    expect(analyses.find((item) => item.path === "class_checks.py")?.isTest).toBe(true);
+  });
+
   it("adds a module fallback for a non-empty symbol-free module", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-python-module-"));
     roots.push(root);

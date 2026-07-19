@@ -24,7 +24,51 @@ const sourceFile = (path: string, content: string, isTest = false): FileAnalysis
   packageDirectory: ".",
 });
 
+const pythonFile = (path: string, content: string, isTest = false): FileAnalysis => ({
+  ...sourceFile(path, content, isTest),
+  language: "python",
+});
+
 describe("source content retrieval", () => {
+  it("extracts Python comments, identifiers, and multiline strings with line evidence", () => {
+    const content = [
+      "def reconcile_sessions():",
+      "    \"\"\"Restore orphaned sessions",
+      "    after an interrupted refresh.\"\"\"",
+      "    # Preserve credential metadata during recovery.",
+      "    return True",
+    ].join("\n");
+    const document = extractLexicalDocument(content, "src/session.py");
+
+    expect(document.occurrences).toContainEqual({ term: "reconcile", field: "identifier", line: 1 });
+    expect(document.occurrences).toContainEqual({ term: "orphaned", field: "string", line: 2 });
+    expect(document.occurrences).toContainEqual({ term: "credential", field: "comment", line: 4 });
+  });
+
+  it("ranks relevant Python content above unrelated Python content", () => {
+    const target = pythonFile(
+      "src/session.py",
+      "def refresh():\n    # Reconcile orphaned sessions safely.\n    return True\n",
+    );
+    const unrelated = pythonFile("src/cache.py", "def warm_cache():\n    return True\n");
+    const matches = scoreContentMatches([unrelated, target], normalizeTaskTerms("reconcile orphaned sessions"));
+
+    expect(matches.get(target.path)?.score).toBeGreaterThan(matches.get(unrelated.path)?.score ?? 0);
+    expect(matches.get(target.path)?.evidence).toContainEqual(
+      expect.objectContaining({ term: "orphaned", field: "comment", line: 2 }),
+    );
+  });
+
+  it("keeps TypeScript private fields as identifiers rather than Python comments", () => {
+    const document = extractLexicalDocument(
+      "class Vault { #credentialCache = true; refreshSession() {} }",
+      "src/vault.ts",
+    );
+
+    expect(document.occurrences).toContainEqual({ term: "credential", field: "identifier", line: 1 });
+    expect(document.occurrences).not.toContainEqual(expect.objectContaining({ field: "comment" }));
+  });
+
   it("extracts identifiers, comments, strings, and test titles with line evidence", () => {
     const document = extractLexicalDocument(
       [

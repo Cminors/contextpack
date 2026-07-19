@@ -20,6 +20,12 @@ const file = (path: string, imports: string[] = [], importedBy: string[] = [], i
   packageDirectory: ".",
 });
 
+const pythonFile = (path: string, imports: string[] = [], importedBy: string[] = [], isTest = false): FileAnalysis => ({
+  ...file(path, imports, importedBy, isTest),
+  language: "python",
+  content: "def login():\n    return True\n",
+});
+
 describe("candidate ranking", () => {
   it("keeps the documented weights normalized", () => {
     expect(Object.values(SCORE_WEIGHTS).reduce((sum, value) => sum + value, 0)).toBeCloseTo(1);
@@ -126,6 +132,31 @@ describe("candidate ranking", () => {
     const ranked = rankCandidates([publicBarrel, localBarrel, implementation], ["feature"], emptyGitHistory(), []);
     expect(ranked.find((item) => item.path === localBarrel.path)?.breakdown.dependency).toBe(1);
     expect(ranked.find((item) => item.path === publicBarrel.path)?.breakdown.dependency).toBe(0.85);
+  });
+
+  it("propagates a strong structural signal through Python package barrels", () => {
+    const implementation = pythonFile("src/accounts/feature.py", [], ["src/accounts/__init__.py"]);
+    const localBarrel = pythonFile(
+      "src/accounts/__init__.py",
+      [implementation.path],
+      ["src/__init__.py"],
+    );
+    const publicBarrel = pythonFile("src/__init__.py", [localBarrel.path]);
+    const ranked = rankCandidates([publicBarrel, localBarrel, implementation], ["feature"], emptyGitHistory(), []);
+
+    expect(ranked.find((item) => item.path === localBarrel.path)?.breakdown.dependency).toBe(1);
+    expect(ranked.find((item) => item.path === publicBarrel.path)?.breakdown.dependency).toBe(0.85);
+  });
+
+  it("associates both Python test naming conventions with their source stem", () => {
+    const source = pythonFile("src/service.py");
+    const leading = pythonFile("tests/test_service.py", [], [], true);
+    const trailing = pythonFile("tests/service_test.py", [], [], true);
+    const ranked = rankCandidates([source, leading, trailing], ["service"], emptyGitHistory(), []);
+
+    expect(ranked.find((item) => item.path === source.path)?.breakdown.test).toBe(0.75);
+    expect(ranked.find((item) => item.path === leading.path)?.breakdown.test).toBe(0.75);
+    expect(ranked.find((item) => item.path === trailing.path)?.breakdown.test).toBe(0.75);
   });
 
   it("maps a direct test to a task seed without overriding dependency rank", () => {
