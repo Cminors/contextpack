@@ -13,7 +13,7 @@ for complete benchmark history.
 | Base commit | `32dcf5f` |
 | Active branch | `codex/p1.2-python-benchmark` |
 | Active milestone | P1.2 Python Benchmark |
-| Phase | Design approved; written specification awaiting review |
+| Phase | Design approved; implementation plan awaiting review |
 | Product status | Unpublished source preview moving toward a beta candidate |
 
 ## Current Position
@@ -107,8 +107,8 @@ against the test set.
 |---|---|
 | Repository and evaluator reconnaissance | Complete |
 | Dataset source and two-tier scale decision | Complete |
-| Written P1.2 design | In review |
-| Implementation plan | Pending design approval |
+| Written P1.2 design | Approved |
+| Implementation plan | In review |
 | Evaluator and preparation implementation | Not started |
 | 57-task engineering run | Not started |
 | 300-task support-claim run | Not started |
@@ -118,7 +118,7 @@ against the test set.
 
 - Benchmark methodology and recorded results: `benchmarks/README.md`
 - P1.2 design: `docs/superpowers/specs/2026-07-20-python-benchmark-design.md`
-- P1.2 implementation plan: not written until the design is approved
+- P1.2 implementation plan: `docs/superpowers/plans/2026-07-20-python-benchmark.md`
 - Generated datasets and repository caches: `.benchmarks/` (ignored)
 - Raw P1.2 reports: `.contextpack/evals/p12-*` (ignored)
 

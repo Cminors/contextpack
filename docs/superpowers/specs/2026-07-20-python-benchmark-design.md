@@ -2,9 +2,8 @@
 
 ## Status
 
-Proposed on 2026-07-20. The dataset source, two-tier run structure, and root
-project-state ledger have been approved. This written specification is awaiting
-final review before an implementation plan is created.
+Approved on 2026-07-20. The executable task breakdown is recorded in
+`docs/superpowers/plans/2026-07-20-python-benchmark.md`.
 
 ## Objective
 
