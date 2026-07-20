@@ -9,11 +9,11 @@ for complete benchmark history.
 
 | Field | Value |
 |---|---|
-| Updated | 2026-07-20 |
+| Updated | 2026-07-21 |
 | Base commit | `32dcf5f` |
 | Active branch | `codex/p1.2-python-benchmark` |
 | Active milestone | P1.2 Python Benchmark |
-| Phase | Compatibility validation complete; Python benchmark runs pending |
+| Phase | Python engineering benchmark complete; full 300-task claim gate pending |
 | Product status | Unpublished source preview moving toward a beta candidate |
 
 ## Current Position
@@ -114,7 +114,7 @@ against the test set.
 | Python issue evaluator | Complete; Task 3 review clean (`81bd109`) |
 | Automated Python support gates | Complete; Task 4 review clean (`eee54e0`) |
 | Quality, performance, data, and JS/TS parity validation | Complete; Task 5 passed |
-| 57-task engineering run | Not started |
+| 57-task engineering run | Complete; 57/57 valid, zero skips; Task 6 |
 | 300-task support-claim run | Not started |
 | Documentation and final verdict | Not started |
 
@@ -137,6 +137,32 @@ against the test set.
   `0.1771596392663424`, line recall @500 `0.10304877678487387`, and useful
   hit @500 `0.20930232558139536`.
 
+### P1.2 Python Engineering Checkpoint
+
+The balanced engineering run completed 57/57 requested instances with 57
+unique results and zero skips. The report contains all configured region
+budgets (`100`, `250`, and `500`). This is an engineering validity gate only;
+it is not the Python support verdict, which remains pending the frozen 300-task
+run.
+
+| Metric | Result |
+|---|---:|
+| File Recall@5 | `0.2982456140350877` |
+| File Recall@10 | `0.47368421052631576` |
+| File MRR | `0.18793068529910634` |
+| Line recall @100 | `0.01417004048582996` |
+| Line recall @250 | `0.058953050642801326` |
+| Line recall @500 | `0.10338114576749088` |
+| Useful hit @500 | `0.17543859649122806` |
+| Median estimated tokens | `3996` |
+| Median duration | `26590 ms` |
+
+The audit classified 6 instances as file-hit/region-hit, 21 as
+file-hit/region-miss, 9 as file-miss ranks 11-20, and 21 as file-miss outside
+the top 20. Its aggregate failure counts were 30 file-ranking misses and 21
+region-localization misses. The run environment was Node `v24.13.0`, Python
+`3.9.11`, and Windows 10 Pro `10.0.19041` x64.
+
 ## Evidence And Artifacts
 
 - Benchmark methodology and recorded results: `benchmarks/README.md`
@@ -148,6 +174,8 @@ against the test set.
   `.benchmarks/datasets/swe-bench-lite-python-{full-300,balanced-57}.jsonl`
 - P1.2 JavaScript/TypeScript parity report:
   `.contextpack/evals/p12-js-ts-full-43/results.json`
+- P1.2 Python balanced engineering artifacts:
+  `.contextpack/evals/p12-python-balanced-57/{results,checkpoint,audit,diagnostics}.json`
 - Stable parity reference: `.contextpack/evals/p10-full-43/results.json`
 
 ## Decision Log
@@ -159,6 +187,7 @@ against the test set.
 | 2026-07-20 | Use 57-task engineering and 300-task final gates | Fast infrastructure feedback without weakening the final evidence |
 | 2026-07-20 | Keep scoring frozen during P1.2 | This milestone measures Python retrieval; it does not tune against the test set |
 | 2026-07-20 | Maintain this root status file each iteration | Give humans and external models one current, versioned handoff |
+| 2026-07-21 | Balanced Python engineering gate passed | 57/57 valid with zero skips; the full 300-task support verdict remains pending |
 
 ## Roadmap
 
