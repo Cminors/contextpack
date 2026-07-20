@@ -13,7 +13,7 @@ for complete benchmark history.
 | Base commit | `32dcf5f` |
 | Active branch | `codex/p1.2-python-benchmark` |
 | Active milestone | P1.2 Python Benchmark |
-| Phase | Design approved; implementation plan awaiting review |
+| Phase | Compatibility validation complete; Python benchmark runs pending |
 | Product status | Unpublished source preview moving toward a beta candidate |
 
 ## Current Position
@@ -108,11 +108,34 @@ against the test set.
 | Repository and evaluator reconnaissance | Complete |
 | Dataset source and two-tier scale decision | Complete |
 | Written P1.2 design | Approved |
-| Implementation plan | In review |
-| Evaluator and preparation implementation | Not started |
+| Implementation plan | Approved and executing |
+| Generic dataset language and Python patch regions | Complete; Task 1 review clean (`d1501bf`) |
+| Pinned full/balanced Python dataset preparation | Complete; Task 2 review clean (`332af84`) |
+| Python issue evaluator | Complete; Task 3 review clean (`81bd109`) |
+| Automated Python support gates | Complete; Task 4 review clean (`eee54e0`) |
+| Quality, performance, data, and JS/TS parity validation | Complete; Task 5 passed |
 | 57-task engineering run | Not started |
 | 300-task support-claim run | Not started |
 | Documentation and final verdict | Not started |
+
+### P1.2 Compatibility Checkpoint
+
+- `npm run check` passed with 28 test files and 216 tests, followed by a
+  successful build and installed-package smoke.
+- The JavaScript/TypeScript 360-file performance smoke passed with median
+  total duration `3,003 ms`, below the `4,000 ms` limit.
+- The Python performance smoke passed with median total duration `1,474 ms`,
+  160 Python candidates, and a resolved repository-internal import edge.
+- The pinned Python preparation produced 300 full and 57 balanced instances.
+  Independent JSONL and manifest parsing confirmed 300/57 unique matching
+  IDs, 12 repository keys in each manifest, source revision
+  `6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2`, and Parquet SHA-256
+  `7a21f37b8bc179c7db5beeb14e88ac538ba283455c776e6b2535bbfb6e3551b4`.
+- The P1.2 JavaScript/TypeScript projection completed 43/43 instances with
+  zero skips and returned `Parity: equal` against the P1.0 reference. Its
+  aggregate remained Recall@10 `0.38914728682170546`, MRR
+  `0.1771596392663424`, line recall @500 `0.10304877678487387`, and useful
+  hit @500 `0.20930232558139536`.
 
 ## Evidence And Artifacts
 
@@ -121,6 +144,11 @@ against the test set.
 - P1.2 implementation plan: `docs/superpowers/plans/2026-07-20-python-benchmark.md`
 - Generated datasets and repository caches: `.benchmarks/` (ignored)
 - Raw P1.2 reports: `.contextpack/evals/p12-*` (ignored)
+- Prepared Python datasets:
+  `.benchmarks/datasets/swe-bench-lite-python-{full-300,balanced-57}.jsonl`
+- P1.2 JavaScript/TypeScript parity report:
+  `.contextpack/evals/p12-js-ts-full-43/results.json`
+- Stable parity reference: `.contextpack/evals/p10-full-43/results.json`
 
 ## Decision Log
 
