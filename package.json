@@ -21,6 +21,7 @@
     "test:package": "tsx scripts/package-smoke.ts",
     "benchmark:prepare:swebench": "tsx scripts/prepare-swebench.ts",
     "benchmark:prepare:swebench-python": "tsx scripts/prepare-swebench-python.ts",
+    "benchmark:validate:python": "tsx scripts/validate-python-benchmark.ts",
     "benchmark:prepare:diagnostics": "tsx scripts/prepare-issue-diagnostic-subset.ts",
     "perf:smoke": "tsx scripts/performance-smoke.ts",
     "perf:python": "tsx scripts/python-smoke.ts",
