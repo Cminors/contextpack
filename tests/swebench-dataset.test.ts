@@ -1,8 +1,30 @@
 import { describe, expect, it } from "vitest";
 import { readIssueDataset as readNormalizedIssueDataset } from "../src/evaluation/issue-dataset.js";
 import { adaptSweBenchMultilingualRow, readIssueDataset } from "../src/evaluation/swebench-dataset.js";
+import { asSweBenchRow, sha256 } from "../src/evaluation/swebench-source.js";
 
 describe("SWE-bench Multilingual adapter", () => {
+  it("uses shared source normalization and hashing mechanics", () => {
+    expect(asSweBenchRow({
+      instance_id: "axios__axios-1",
+      repo: "axios/axios",
+      base_commit: "1234567890abcdef",
+      problem_statement: "Fix cancellation behavior.",
+      patch: "patch",
+      issue_url: "",
+    })).toEqual({
+      instance_id: "axios__axios-1",
+      repo: "axios/axios",
+      base_commit: "1234567890abcdef",
+      problem_statement: "Fix cancellation behavior.",
+      patch: "patch",
+      issue_url: null,
+      pr_url: null,
+      created_at: null,
+    });
+    expect(sha256("patch")).toBe("a4895eb44afc336fecbba6e520cd67e178dace0276655d102fceffa8e5f70570");
+  });
+
   it("preserves the normalized dataset reader facade", () => {
     expect(readIssueDataset).toBe(readNormalizedIssueDataset);
   });
