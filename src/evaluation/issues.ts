@@ -365,6 +365,14 @@ export async function runIssueBenchmark(options: IssueBenchmarkOptions): Promise
   const normalizedOptions: IssueBenchmarkOptions = { ...options, lineBudgets };
   const allInstances = await readIssueDataset(options.datasetPath);
   const instances = selectInstances(allInstances, normalizedOptions);
+  const language = instances[0]?.language ?? "javascript-typescript";
+  if (instances.some((instance) => instance.language !== language)) {
+    throw new ContextPackError(
+      "Mixed benchmark languages are not supported in one report.",
+      2,
+      "MIXED_DATASET_LANGUAGE",
+    );
+  }
   const sourceDataset = instances[0]?.sourceDataset ?? "unknown";
   const sourceRevision = instances[0]?.sourceRevision ?? "unknown";
   if (instances.some((instance) => instance.sourceDataset !== sourceDataset || instance.sourceRevision !== sourceRevision)) {
@@ -444,6 +452,9 @@ export async function runIssueBenchmark(options: IssueBenchmarkOptions): Promise
       "NO_VALID_INSTANCES",
     );
   }
+  const sourceFileLimitation = language === "python"
+    ? "Only existing Python patch files are scored; new and unsupported files are excluded."
+    : "Only existing JavaScript and TypeScript patch files are scored; new and unsupported files are excluded.";
   return {
     version: 1,
     generatedAt: new Date().toISOString(),
@@ -466,7 +477,7 @@ export async function runIssueBenchmark(options: IssueBenchmarkOptions): Promise
     limitations: [
       "Gold regions are old-side unified-diff hunks, not human-authored context annotations.",
       "Insertion-only hunks are represented by a one-line anchor in the base checkout.",
-      "Only existing JavaScript and TypeScript patch files are scored; new and unsupported files are excluded.",
+      sourceFileLimitation,
       "Retrieval quality does not measure whether an agent can produce a correct patch or pass tests.",
     ],
   };

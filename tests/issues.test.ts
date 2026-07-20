@@ -24,7 +24,9 @@ afterEach(async () => Promise.all(created.splice(0).map((item) => fs.rm(item, {
   retryDelay: 100,
 }))));
 
-async function fixture(): Promise<{ root: string; dataset: string; cache: string }> {
+async function fixture(
+  language: IssueBenchmarkInstance["language"] = "javascript-typescript",
+): Promise<{ root: string; dataset: string; cache: string; instance: IssueBenchmarkInstance }> {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "contextpack-issues-test-"));
   created.push(root);
   const source = path.join(root, "source");
@@ -33,11 +35,24 @@ async function fixture(): Promise<{ root: string; dataset: string; cache: string
   git(source, ["init", "-q"]);
   git(source, ["config", "user.email", "contextpack@example.test"]);
   git(source, ["config", "user.name", "ContextPack Test"]);
-  await fs.writeFile(path.join(source, "package.json"), JSON.stringify({ name: "fixture" }));
-  await fs.writeFile(
-    path.join(source, "src", "timeout.ts"),
-    "export function timeoutErrorMessage() {\n  return 'timed out';\n}\n",
-  );
+  if (language === "python") {
+    await fs.mkdir(path.join(source, "tests"), { recursive: true });
+    await fs.writeFile(path.join(source, "pyproject.toml"), "[project]\nname = \"fixture\"\nversion = \"0.1.0\"\n");
+    await fs.writeFile(
+      path.join(source, "src", "client.py"),
+      "def timeout_error_message():\n    return \"timed out\"\n",
+    );
+    await fs.writeFile(
+      path.join(source, "tests", "test_client.py"),
+      "def test_client():\n    assert True\n",
+    );
+  } else {
+    await fs.writeFile(path.join(source, "package.json"), JSON.stringify({ name: "fixture" }));
+    await fs.writeFile(
+      path.join(source, "src", "timeout.ts"),
+      "export function timeoutErrorMessage() {\n  return 'timed out';\n}\n",
+    );
+  }
   git(source, ["add", "."]);
   git(source, ["commit", "-qm", "initial timeout implementation"]);
   const commit = git(source, ["rev-parse", "HEAD"]);
@@ -47,13 +62,17 @@ async function fixture(): Promise<{ root: string; dataset: string; cache: string
   git(bare, ["remote", "set-url", "origin", "https://github.com/example/fixture.git"]);
   const instance: IssueBenchmarkInstance = {
     instanceId: "example__fixture-1",
-    sourceDataset: "fixture/issues",
+    sourceDataset: language === "python" ? "fixture/python-issues" : "fixture/issues",
     sourceRevision: "fixture-v1",
     repo: "example/fixture",
     baseCommit: commit,
-    issueText: "Fix the timeout error message",
-    language: "javascript-typescript",
-    goldRegions: [{ path: "src/timeout.ts", startLine: 1, endLine: 3, kind: "patch-hunk" }],
+    issueText: language === "python"
+      ? "Fix the timeout error message returned by timeout_error_message"
+      : "Fix the timeout error message",
+    language,
+    goldRegions: language === "python"
+      ? [{ path: "src/client.py", startLine: 1, endLine: 2, kind: "patch-hunk" }]
+      : [{ path: "src/timeout.ts", startLine: 1, endLine: 3, kind: "patch-hunk" }],
     metadata: {
       issueUrl: null,
       prUrl: null,
@@ -64,10 +83,60 @@ async function fixture(): Promise<{ root: string; dataset: string; cache: string
   };
   const dataset = path.join(root, "issues.jsonl");
   await fs.writeFile(dataset, `${JSON.stringify(instance)}\n`);
-  return { root: source, dataset, cache };
+  return { root: source, dataset, cache, instance };
 }
 
 describe("real issue benchmark", () => {
+  it("evaluates Python retrieval and describes Python source-file scoring", async () => {
+    const data = await fixture("python");
+    const report = await runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [2, 10],
+      historyCount: 1,
+    });
+
+    expect(report).toMatchObject({
+      version: 1,
+      sourceDataset: "fixture/python-issues",
+      validInstances: 1,
+      requestedInstances: 1,
+      skipped: [],
+      aggregate: { recallAt5: 1, recallAt10: 1, mrr: 1 },
+    });
+    expect(report.results[0]?.predictions).toContain("src/client.py");
+    expect(report.aggregate.regionMetrics["10"]).toMatchObject({
+      lineRecall: 1,
+      usefulHitRate: 1,
+    });
+    expect(report.limitations).toEqual([
+      "Gold regions are old-side unified-diff hunks, not human-authored context annotations.",
+      "Insertion-only hunks are represented by a one-line anchor in the base checkout.",
+      "Only existing Python patch files are scored; new and unsupported files are excluded.",
+      "Retrieval quality does not measure whether an agent can produce a correct patch or pass tests.",
+    ]);
+  }, 30_000);
+
+  it("rejects mixed benchmark languages before repository evaluation", async () => {
+    const data = await fixture();
+    const pythonInstance: IssueBenchmarkInstance = {
+      ...data.instance,
+      instanceId: "example__fixture-2",
+      language: "python",
+      goldRegions: [{ path: "src/client.py", startLine: 1, endLine: 2, kind: "patch-hunk" }],
+    };
+    await fs.writeFile(data.dataset, `${JSON.stringify(data.instance)}\n${JSON.stringify(pythonInstance)}\n`);
+    await expect(runIssueBenchmark({
+      datasetPath: data.dataset,
+      cacheDirectory: data.cache,
+      tokenBudget: 4000,
+      lineBudgets: [10],
+      historyCount: 1,
+      instanceTimeoutMs: 1,
+    })).rejects.toMatchObject({ code: "MIXED_DATASET_LANGUAGE" });
+  }, 30_000);
+
   it("evaluates an existing cached base commit without changing the source workspace", async () => {
     const data = await fixture();
     const checkpoint = path.join(path.dirname(data.dataset), "checkpoint.json");
