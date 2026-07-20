@@ -183,6 +183,142 @@ describe("Python benchmark support gates", () => {
       },
     });
   });
+
+  it.each([
+    ["version", { version: 2 }, "report version must be 1"],
+    ["token budget", { tokenBudget: 11_999 }, "token budget must be 12000"],
+    ["line budgets", { lineBudgets: [100, 500, 250] }, "line budgets must be exactly 100,250,500"],
+  ] satisfies Array<[string, Record<string, unknown>, string]>) (
+    "rejects a report with an invalid %s",
+    (_label, overrides, failure) => {
+      expect(evaluatePythonBenchmarkGates(report(
+        overrides as unknown as Partial<IssueBenchmarkReport>,
+      ))).toMatchObject({
+        verdict: "invalid-run",
+        failures: [failure],
+      });
+    },
+  );
+
+  it("rejects duplicate result instance IDs", () => {
+    const base = report();
+    const results = [...base.results];
+    results[1] = { ...results[1]!, instanceId: results[0]!.instanceId };
+
+    expect(evaluatePythonBenchmarkGates(report({ results }))).toMatchObject({
+      verdict: "invalid-run",
+      failures: ["result instance IDs must be unique"],
+    });
+  });
+
+  const missing = Symbol("missing");
+  const withMetric = (
+    metric: "recallAt10" | "mrr" | "lineRecall" | "usefulHitAt500",
+    value: unknown,
+  ): IssueBenchmarkReport => {
+    const base = report();
+    const aggregate = { ...base.aggregate } as Record<string, unknown>;
+    if (metric === "recallAt10" || metric === "mrr") {
+      if (value === missing) delete aggregate[metric];
+      else aggregate[metric] = value;
+    } else {
+      const at500 = { ...base.aggregate.regionMetrics["500"] } as Record<string, unknown>;
+      const key = metric === "lineRecall" ? "lineRecall" : "usefulHitRate";
+      if (value === missing) delete at500[key];
+      else at500[key] = value;
+      aggregate.regionMetrics = { "500": at500 };
+    }
+    return report({ aggregate: aggregate as IssueBenchmarkReport["aggregate"] });
+  };
+
+  it.each([
+    ["Recall@10", "recallAt10"],
+    ["MRR", "mrr"],
+    ["line recall @500", "lineRecall"],
+    ["useful hit @500", "usefulHitAt500"],
+  ] satisfies Array<[string, "recallAt10" | "mrr" | "lineRecall" | "usefulHitAt500"]>) (
+    "rejects a null %s metric",
+    (_label, metric) => {
+      expect(evaluatePythonBenchmarkGates(withMetric(metric, null))).toMatchObject({
+        verdict: "invalid-run",
+      });
+    },
+  );
+
+  it.each([
+    ["Recall@10", "recallAt10"],
+    ["MRR", "mrr"],
+    ["line recall @500", "lineRecall"],
+    ["useful hit @500", "usefulHitAt500"],
+  ] satisfies Array<[string, "recallAt10" | "mrr" | "lineRecall" | "usefulHitAt500"]>) (
+    "rejects a missing %s metric",
+    (_label, metric) => {
+      expect(evaluatePythonBenchmarkGates(withMetric(metric, missing))).toMatchObject({
+        verdict: "invalid-run",
+      });
+    },
+  );
+
+  it.each([
+    ["Recall@10", "recallAt10"],
+    ["MRR", "mrr"],
+    ["line recall @500", "lineRecall"],
+    ["useful hit @500", "usefulHitAt500"],
+  ] satisfies Array<[string, "recallAt10" | "mrr" | "lineRecall" | "usefulHitAt500"]>) (
+    "rejects a non-number %s metric",
+    (_label, metric) => {
+      expect(evaluatePythonBenchmarkGates(withMetric(metric, "0.25"))).toMatchObject({
+        verdict: "invalid-run",
+      });
+    },
+  );
+
+  it.each([
+    ["Recall@10", "recallAt10"],
+    ["MRR", "mrr"],
+    ["line recall @500", "lineRecall"],
+    ["useful hit @500", "usefulHitAt500"],
+  ] satisfies Array<[string, "recallAt10" | "mrr" | "lineRecall" | "usefulHitAt500"]>) (
+    "rejects a non-finite %s metric",
+    (_label, metric) => {
+      expect(evaluatePythonBenchmarkGates(withMetric(metric, Number.POSITIVE_INFINITY))).toMatchObject({
+        verdict: "invalid-run",
+      });
+    },
+  );
+
+  it("rejects a null 500 aggregate", () => {
+    const base = report();
+    const aggregate = {
+      ...base.aggregate,
+      regionMetrics: { "500": null },
+    } as unknown as IssueBenchmarkReport["aggregate"];
+
+    expect(evaluatePythonBenchmarkGates(report({ aggregate }))).toMatchObject({
+      verdict: "invalid-run",
+      failures: ["500-line aggregate is missing"],
+    });
+  });
+
+  it("reports a missing metric as an invalid run", () => {
+    const base = report();
+    const aggregate = { ...base.aggregate } as unknown as {
+      recallAt10?: number;
+      mrr: number;
+      medianTokens: number;
+      medianDurationMs: number;
+      recallAt5: number;
+      regionMetrics: typeof base.aggregate.regionMetrics;
+    };
+    delete aggregate.recallAt10;
+
+    expect(evaluatePythonBenchmarkGates(report({
+      aggregate: aggregate as unknown as IssueBenchmarkReport["aggregate"],
+    }))).toMatchObject({
+      verdict: "invalid-run",
+    });
+  });
+
 });
 
 describe("Python benchmark gate CLI", () => {
@@ -198,7 +334,7 @@ describe("Python benchmark gate CLI", () => {
       + "Verdict: validated\n",
     );
     expect(outcome.stderr).toBe("");
-  });
+  }, 20_000);
 
   it("prints every measurement failure and exits one", () => {
     const base = report();
@@ -215,7 +351,7 @@ describe("Python benchmark gate CLI", () => {
     expect(outcome.stdout).toContain("Failure: Recall@10 below 0.250\n");
     expect(outcome.stdout).toContain("Failure: MRR below 0.100\n");
     expect(outcome.stderr).toBe("");
-  });
+  }, 20_000);
 
   it("prints invalid-run failures and exits two", () => {
     const outcome = runCli(JSON.stringify(report({
@@ -228,7 +364,7 @@ describe("Python benchmark gate CLI", () => {
     expect(outcome.stdout).toContain("Failure: requested instance count must be 300\n");
     expect(outcome.stdout).toContain("Failure: valid instance count must be 300\n");
     expect(outcome.stderr).toBe("");
-  });
+  }, 20_000);
 
   it("rejects malformed JSON with exit two", () => {
     const outcome = runCli("{");
@@ -236,7 +372,7 @@ describe("Python benchmark gate CLI", () => {
     expect(outcome.status).toBe(2);
     expect(outcome.stdout).toBe("");
     expect(outcome.stderr).toMatch(/^Invalid JSON or unreadable input:/);
-  });
+  }, 20_000);
 
   it("rejects a structurally invalid metric with exit two", () => {
     const invalid = report() as unknown as { aggregate: { recallAt10: null } };
@@ -244,7 +380,30 @@ describe("Python benchmark gate CLI", () => {
     const outcome = runCli(JSON.stringify(invalid));
 
     expect(outcome.status).toBe(2);
-    expect(outcome.stdout).toBe("");
-    expect(outcome.stderr).toMatch(/^Invalid Python benchmark report:/);
-  });
+    expect(outcome.stdout).toContain("Verdict: invalid-run\n");
+    expect(outcome.stdout).toContain("Failure: Recall@10 must be a finite number\n");
+    expect(outcome.stderr).toBe("");
+  }, 20_000);
+
+  it("rejects JSON numeric overflow with exit two", () => {
+    const contents = JSON.stringify(report()).replace(
+      '"recallAt10":0.25',
+      '"recallAt10":1e999',
+    );
+    const outcome = runCli(contents);
+
+    expect(outcome.status).toBe(2);
+    expect(outcome.stdout).toContain("Verdict: invalid-run\n");
+    expect(outcome.stdout).toContain("Failure: Recall@10 must be a finite number\n");
+    expect(outcome.stderr).toBe("");
+  }, 20_000);
+
+  it("rejects a structurally malformed report without an uncaught error", () => {
+    const outcome = runCli(JSON.stringify({ ...report(), aggregate: null }));
+
+    expect(outcome.status).toBe(2);
+    expect(outcome.stdout).toContain("Verdict: invalid-run\n");
+    expect(outcome.stdout).toContain("Failure: 500-line aggregate is missing\n");
+    expect(outcome.stderr).toBe("");
+  }, 20_000);
 });

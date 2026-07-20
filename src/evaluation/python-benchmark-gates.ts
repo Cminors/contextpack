@@ -25,24 +25,62 @@ export interface PythonBenchmarkGateResult {
   };
 }
 
+const isRecord = (value: unknown): value is Record<string, unknown> => (
+  typeof value === "object" && value !== null && !Array.isArray(value)
+);
+
+const finiteMetric = (value: unknown): number => (
+  typeof value === "number" && Number.isFinite(value) ? value : Number.NaN
+);
+
 export const evaluatePythonBenchmarkGates = (
   report: IssueBenchmarkReport,
 ): PythonBenchmarkGateResult => {
-  const at500 = report.aggregate.regionMetrics["500"];
+  const rawReport: Record<string, unknown> = isRecord(report) ? report : {};
+  const aggregate = isRecord(rawReport.aggregate) ? rawReport.aggregate : {};
+  const regionMetrics = isRecord(aggregate.regionMetrics) ? aggregate.regionMetrics : {};
+  const rawAt500 = regionMetrics["500"];
+  const at500 = isRecord(rawAt500) ? rawAt500 : undefined;
   const metrics = {
-    recallAt10: report.aggregate.recallAt10,
-    mrr: report.aggregate.mrr,
-    lineRecallAt500: at500?.lineRecall ?? Number.NaN,
-    usefulHitAt500: at500?.usefulHitRate ?? Number.NaN,
+    recallAt10: finiteMetric(aggregate.recallAt10),
+    mrr: finiteMetric(aggregate.mrr),
+    lineRecallAt500: finiteMetric(at500?.lineRecall),
+    usefulHitAt500: finiteMetric(at500?.usefulHitRate),
   };
+  const results = Array.isArray(rawReport.results) ? rawReport.results : [];
+  const resultInstanceIds = results.map((result) => (
+    isRecord(result) && typeof result.instanceId === "string" && result.instanceId.length > 0
+      ? result.instanceId
+      : null
+  ));
+  const hasUniqueResultInstanceIds = resultInstanceIds.every((instanceId) => instanceId !== null)
+    && new Set(resultInstanceIds).size === resultInstanceIds.length;
+  const expectedLineBudgets = [100, 250, 500];
+  const hasExpectedLineBudgets = Array.isArray(rawReport.lineBudgets)
+    && rawReport.lineBudgets.length === expectedLineBudgets.length
+    && rawReport.lineBudgets.every((budget, index) => budget === expectedLineBudgets[index]);
   const infrastructureFailures = [
-    ...(report.sourceDataset === SWE_BENCH_LITE_PYTHON.id ? [] : ["source dataset mismatch"]),
-    ...(report.sourceRevision === SWE_BENCH_LITE_PYTHON.revision ? [] : ["source revision mismatch"]),
-    ...(report.requestedInstances === 300 ? [] : ["requested instance count must be 300"]),
-    ...(report.validInstances === 300 ? [] : ["valid instance count must be 300"]),
-    ...(report.results.length === 300 ? [] : ["result count must be 300"]),
-    ...(report.skipped.length === 0 ? [] : ["skipped instances must be empty"]),
+    ...(rawReport.sourceDataset === SWE_BENCH_LITE_PYTHON.id ? [] : ["source dataset mismatch"]),
+    ...(rawReport.sourceRevision === SWE_BENCH_LITE_PYTHON.revision ? [] : ["source revision mismatch"]),
+    ...(rawReport.version === 1 ? [] : ["report version must be 1"]),
+    ...(rawReport.requestedInstances === 300 ? [] : ["requested instance count must be 300"]),
+    ...(rawReport.validInstances === 300 ? [] : ["valid instance count must be 300"]),
+    ...(rawReport.tokenBudget === 12_000 ? [] : ["token budget must be 12000"]),
+    ...(hasExpectedLineBudgets ? [] : ["line budgets must be exactly 100,250,500"]),
+    ...(results.length === 300 ? [] : ["result count must be 300"]),
+    ...(results.length !== 300 || hasUniqueResultInstanceIds ? [] : ["result instance IDs must be unique"]),
+    ...(Array.isArray(rawReport.skipped) && rawReport.skipped.length === 0
+      ? []
+      : ["skipped instances must be empty"]),
     ...(at500 === undefined ? ["500-line aggregate is missing"] : []),
+    ...(Number.isFinite(metrics.recallAt10) ? [] : ["Recall@10 must be a finite number"]),
+    ...(Number.isFinite(metrics.mrr) ? [] : ["MRR must be a finite number"]),
+    ...(at500 === undefined || Number.isFinite(metrics.lineRecallAt500)
+      ? []
+      : ["line recall @500 must be a finite number"]),
+    ...(at500 === undefined || Number.isFinite(metrics.usefulHitAt500)
+      ? []
+      : ["useful hit @500 must be a finite number"]),
   ];
   if (infrastructureFailures.length > 0) {
     return { verdict: "invalid-run", failures: infrastructureFailures, metrics };
