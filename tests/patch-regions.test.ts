@@ -82,4 +82,30 @@ new file mode 100644
       { path: "image.png", reason: "new-file" },
     ]));
   });
+
+  it("filters source hunks by the declared benchmark language", () => {
+    const patch = `diff --git a/src/service.py b/src/service.py
+--- a/src/service.py
++++ b/src/service.py
+@@ -7,2 +7,2 @@
+-old
++new
+ context
+diff --git a/src/service.ts b/src/service.ts
+--- a/src/service.ts
++++ b/src/service.ts
+@@ -3 +3 @@
+-old
++new
+`;
+
+    expect(parsePatchRegions(patch, "python")).toMatchObject({
+      regions: [{ path: "src/service.py", startLine: 7, endLine: 8 }],
+      excludedFiles: [{ path: "src/service.ts", reason: "unsupported-file" }],
+    });
+    expect(parsePatchRegions(patch)).toMatchObject({
+      regions: [{ path: "src/service.ts", startLine: 3, endLine: 3 }],
+      excludedFiles: [{ path: "src/service.py", reason: "unsupported-file" }],
+    });
+  });
 });

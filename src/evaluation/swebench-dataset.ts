@@ -26,6 +26,8 @@ export const SWE_BENCH_JS_TS_REPOSITORIES = new Set([
   "vuejs/core",
 ]);
 
+export { readIssueDataset } from "./issue-dataset.js";
+
 interface SweBenchRow {
   instance_id: string;
   repo: string;
@@ -211,45 +213,4 @@ export async function prepareSweBenchMultilingual(
     excludedInstances: rows.length - instances.length,
     parquetSha256,
   };
-}
-
-function isIssueInstance(value: unknown): value is IssueBenchmarkInstance {
-  if (!value || typeof value !== "object") return false;
-  const item = value as Partial<IssueBenchmarkInstance>;
-  return typeof item.instanceId === "string"
-    && typeof item.sourceDataset === "string"
-    && typeof item.sourceRevision === "string"
-    && typeof item.repo === "string"
-    && /^[0-9a-f]{7,40}$/i.test(item.baseCommit ?? "")
-    && typeof item.issueText === "string"
-    && item.language === "javascript-typescript"
-    && Array.isArray(item.goldRegions)
-    && item.goldRegions.length > 0
-    && item.goldRegions.every((region) =>
-      typeof region.path === "string"
-      && Number.isInteger(region.startLine)
-      && Number.isInteger(region.endLine)
-      && region.startLine > 0
-      && region.endLine >= region.startLine
-    );
-}
-
-export async function readIssueDataset(filePath: string): Promise<IssueBenchmarkInstance[]> {
-  const content = await fs.readFile(path.resolve(filePath), "utf8");
-  const instances: IssueBenchmarkInstance[] = [];
-  for (const [index, line] of content.split(/\r?\n/).entries()) {
-    if (!line.trim()) continue;
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(line);
-    } catch {
-      throw new ContextPackError(`Invalid JSONL at line ${index + 1}.`, 2, "INVALID_DATASET");
-    }
-    if (!isIssueInstance(parsed)) {
-      throw new ContextPackError(`Invalid issue instance at line ${index + 1}.`, 2, "INVALID_DATASET");
-    }
-    instances.push(parsed);
-  }
-  if (instances.length === 0) throw new ContextPackError("Issue dataset is empty.", 2, "INVALID_DATASET");
-  return instances;
 }

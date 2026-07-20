@@ -10,7 +10,7 @@ import type {
   IssueBenchmarkInstance,
   IssueBenchmarkReport,
 } from "../src/evaluation/issue-types.js";
-import { readIssueDataset } from "../src/evaluation/swebench-dataset.js";
+import { readIssueDataset } from "../src/evaluation/issue-dataset.js";
 import { discoverRepository } from "../src/repository/discover.js";
 import { scoreContentMatches } from "../src/ranking/lexical.js";
 import {

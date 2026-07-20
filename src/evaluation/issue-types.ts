@@ -10,6 +10,8 @@ export interface GoldPatchRegion extends LineRegion {
   kind: "patch-hunk";
 }
 
+export type IssueBenchmarkLanguage = "javascript-typescript" | "python";
+
 export interface IssueBenchmarkInstance {
   instanceId: string;
   sourceDataset: string;
@@ -17,7 +19,7 @@ export interface IssueBenchmarkInstance {
   repo: string;
   baseCommit: string;
   issueText: string;
-  language: "javascript-typescript";
+  language: IssueBenchmarkLanguage;
   goldRegions: GoldPatchRegion[];
   metadata: {
     issueUrl: string | null;

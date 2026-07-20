@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { IssueFailureAudit } from "../src/evaluation/issue-audit.js";
 import { selectIssueDiagnosticInstances } from "../src/evaluation/issue-diagnostic-subset.js";
-import { readIssueDataset } from "../src/evaluation/swebench-dataset.js";
+import { readIssueDataset } from "../src/evaluation/issue-dataset.js";
 
 const root = process.cwd();
 const auditPath = path.resolve(

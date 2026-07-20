@@ -1,5 +1,5 @@
 import { toPosixPath } from "../utils/path.js";
-import type { GoldPatchRegion } from "./issue-types.js";
+import type { GoldPatchRegion, IssueBenchmarkLanguage } from "./issue-types.js";
 
 export interface ExcludedPatchFile {
   path: string;
@@ -11,7 +11,10 @@ export interface PatchRegionResult {
   excludedFiles: ExcludedPatchFile[];
 }
 
-const SOURCE_FILE = /\.[cm]?[jt]sx?$/i;
+const SOURCE_FILE: Record<IssueBenchmarkLanguage, RegExp> = {
+  "javascript-typescript": /\.[cm]?[jt]sx?$/i,
+  python: /\.py$/i,
+};
 const HUNK_HEADER = /^@@ -(?<start>\d+)(?:,(?<count>\d+))? \+\d+(?:,\d+)? @@/;
 
 function unquoteGitPath(value: string): string {
@@ -46,9 +49,13 @@ function pushExcluded(
  * changed lines and the surrounding context available at base_commit. An
  * insertion-only hunk is anchored to one existing line at the insertion site.
  */
-export function parsePatchRegions(patch: string): PatchRegionResult {
+export function parsePatchRegions(
+  patch: string,
+  language: IssueBenchmarkLanguage = "javascript-typescript",
+): PatchRegionResult {
   const regions: GoldPatchRegion[] = [];
   const excludedFiles: ExcludedPatchFile[] = [];
+  const sourceFile = SOURCE_FILE[language];
   let oldPath: string | null = null;
   let newPath: string | null = null;
   let oldPathWasNull = false;
@@ -58,7 +65,7 @@ export function parsePatchRegions(patch: string): PatchRegionResult {
     const candidate = oldPath ?? newPath;
     if (!candidate || sawHunk) return;
     if (oldPathWasNull) pushExcluded(excludedFiles, candidate, "new-file");
-    else if (!SOURCE_FILE.test(candidate)) pushExcluded(excludedFiles, candidate, "unsupported-file");
+    else if (!sourceFile.test(candidate)) pushExcluded(excludedFiles, candidate, "unsupported-file");
     else pushExcluded(excludedFiles, candidate, "no-old-side-hunk");
   };
 
@@ -89,7 +96,7 @@ export function parsePatchRegions(patch: string): PatchRegionResult {
       pushExcluded(excludedFiles, candidate, "new-file");
       continue;
     }
-    if (!SOURCE_FILE.test(candidate)) {
+    if (!sourceFile.test(candidate)) {
       pushExcluded(excludedFiles, candidate, "unsupported-file");
       continue;
     }

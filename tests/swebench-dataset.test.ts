@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { adaptSweBenchMultilingualRow } from "../src/evaluation/swebench-dataset.js";
+import { readIssueDataset as readNormalizedIssueDataset } from "../src/evaluation/issue-dataset.js";
+import { adaptSweBenchMultilingualRow, readIssueDataset } from "../src/evaluation/swebench-dataset.js";
 
 describe("SWE-bench Multilingual adapter", () => {
+  it("preserves the normalized dataset reader facade", () => {
+    expect(readIssueDataset).toBe(readNormalizedIssueDataset);
+  });
+
   it("normalizes a supported JS/TS issue without retaining the gold patch", () => {
     const instance = adaptSweBenchMultilingualRow({
       instance_id: "axios__axios-1",

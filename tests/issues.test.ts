@@ -5,7 +5,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { runIssueBenchmark } from "../src/evaluation/issues.js";
 import type { IssueBenchmarkInstance } from "../src/evaluation/issue-types.js";
-import { readIssueDataset } from "../src/evaluation/swebench-dataset.js";
+import { readIssueDataset } from "../src/evaluation/issue-dataset.js";
 import { renderIssueEvaluation } from "../src/output/markdown.js";
 import { gitStatusFingerprint } from "../src/utils/git.js";
 

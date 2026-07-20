@@ -18,7 +18,7 @@ import type {
 } from "./issue-types.js";
 import type { IssueWorkerResponse } from "./issue-worker.js";
 import { aggregateRegionMetrics, evaluateRegionBudgets } from "./region-metrics.js";
-import { readIssueDataset } from "./swebench-dataset.js";
+import { readIssueDataset } from "./issue-dataset.js";
 
 export interface IssueBenchmarkOptions {
   datasetPath: string;
