@@ -51,6 +51,8 @@ describe("normalized issue datasets", () => {
     ["empty issue text", { issueText: "  " }],
     ["empty gold regions", { goldRegions: [] }],
     ["invalid line ranges", { goldRegions: [{ path: "src/client.py", startLine: 8, endLine: 4, kind: "patch-hunk" }] }],
+    ["null metadata", { metadata: null }],
+    ["a null gold region", { goldRegions: [null] }],
     ["non-hex patch hash", { metadata: { ...pythonInstance.metadata, patchSha256: "g".repeat(64) } }],
     ["negative excluded count", { metadata: { ...pythonInstance.metadata, excludedPatchFiles: -1 } }],
   ])("rejects an instance with %s", async (_description, invalid) => {

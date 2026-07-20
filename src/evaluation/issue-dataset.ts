@@ -12,7 +12,7 @@ const isNullableString = (value: unknown): value is string | null =>
 const isIssueInstance = (value: unknown): value is IssueBenchmarkInstance => {
   if (!value || typeof value !== "object") return false;
   const item = value as Partial<IssueBenchmarkInstance>;
-  const metadata = item.metadata as Partial<IssueBenchmarkInstance["metadata"]> | undefined;
+  const metadata = item.metadata as Partial<IssueBenchmarkInstance["metadata"]> | null | undefined;
   return typeof item.instanceId === "string" && item.instanceId.length > 0
     && typeof item.sourceDataset === "string" && item.sourceDataset.length > 0
     && typeof item.sourceRevision === "string" && item.sourceRevision.length > 0
@@ -21,13 +21,16 @@ const isIssueInstance = (value: unknown): value is IssueBenchmarkInstance => {
     && typeof item.issueText === "string" && item.issueText.trim().length > 0
     && isIssueBenchmarkLanguage(item.language)
     && Array.isArray(item.goldRegions) && item.goldRegions.length > 0
-    && item.goldRegions.every((region) => typeof region.path === "string"
+    && item.goldRegions.every((region) => region !== null
+      && typeof region === "object"
+      && typeof region.path === "string"
       && region.path.length > 0
       && !region.path.startsWith("/")
       && !region.path.split("/").includes("..")
       && Number.isInteger(region.startLine) && region.startLine > 0
       && Number.isInteger(region.endLine) && region.endLine >= region.startLine
       && region.kind === "patch-hunk")
+    && metadata !== null
     && metadata !== undefined
     && isNullableString(metadata.issueUrl)
     && isNullableString(metadata.prUrl)
