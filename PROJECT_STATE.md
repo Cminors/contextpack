@@ -144,8 +144,8 @@ against the test set.
 The balanced engineering run completed 57/57 requested instances with 57
 unique results and zero skips. The report contains all configured region
 budgets (`100`, `250`, and `500`). This is an engineering validity gate only;
-it is not the Python support verdict, which remains pending the frozen 300-task
-run.
+it is not the Python support verdict. The completed frozen 300-task run
+supersedes it for support decisions and ended as `invalid-run`.
 
 | Metric | Result |
 |---|---:|
@@ -230,10 +230,10 @@ window `100`, and line budgets `100,250,500`. The environment was Node
 | 2026-07-20 | Use 57-task engineering and 300-task final gates | Fast infrastructure feedback without weakening the final evidence |
 | 2026-07-20 | Keep scoring frozen during P1.2 | This milestone measures Python retrieval; it does not tune against the test set |
 | 2026-07-20 | Maintain this root status file each iteration | Give humans and external models one current, versioned handoff |
-| 2026-07-21 | Balanced Python engineering gate passed | 57/57 valid with zero skips; the full 300-task support verdict remains pending |
+| 2026-07-21 | Balanced Python engineering gate passed | 57/57 valid with zero skips; engineering evidence only, superseded for support decisions by the completed full `invalid-run` |
 | 2026-07-21 | Full Python support-claim run is `invalid-run` | Four SymPy instances persistently exceeded the frozen 600-second timeout; useful-hit @500 also missed its numeric floor |
 | 2026-07-21 | Withhold the Python retrieval support claim | A partial 296-instance aggregate cannot satisfy the declared 300/300 zero-skip gate |
-| 2026-07-21 | Final P1.2 evidence commit | `docs: validate Python retrieval on real issues (P1.2)` (this documentation commit) |
+| 2026-07-21 | Final P1.2 evidence commit | `9946b97` (`docs: validate Python retrieval on real issues (P1.2)`) |
 
 ## Roadmap
 
