@@ -25,9 +25,9 @@ ContextPack does not call an LLM, require an API key, upload your repository, or
 
 ## Internal architecture
 
-P1.1 places language-specific discovery and source analysis behind a small internal adapter boundary. A deterministic registry supplies the source and configuration patterns, validates that every discovered source file has exactly one owner, and dispatches analysis in stable order. JavaScript/TypeScript uses its compiler-backed adapter; Python uses a Python 3.8+ standard-library `ast` worker with a controlled lexical fallback when no interpreter is available. Both produce the normalized `FileAnalysis` data consumed by the language-neutral ranking, region selection, and rendering pipeline. Compatibility facades preserve the existing analysis API and manifest format.
+P1.1 places language-specific discovery and source analysis behind a small internal adapter boundary. A deterministic registry supplies the source and configuration patterns, validates that every discovered source file has exactly one owner, and dispatches analysis in stable order. JavaScript/TypeScript uses its compiler-backed adapter; the experimental Python adapter uses a Python 3.8+ standard-library `ast` worker with a controlled lexical fallback when no interpreter is available. Both produce the normalized `FileAnalysis` data consumed by the language-neutral ranking, region selection, and rendering pipeline. Compatibility facades preserve the existing analysis API and manifest format.
 
-This is an internal implementation boundary, not a plugin, Skills, MCP, or public SDK surface. Python support covers source discovery, top-level symbols, internal imports, test/config classification, Python comments and strings, and evidence-based verification commands. It does not imply framework semantics or full type inference.
+This is an internal implementation boundary, not a plugin, Skills, MCP, or public SDK surface. The experimental Python adapter covers source discovery, top-level symbols, internal imports, test/config classification, Python comments and strings, and evidence-based verification commands. Its full real-issue benchmark was invalid because four instances persistently timed out, so Python retrieval support is not yet validated. It does not imply framework semantics or full type inference.
 
 > [!IMPORTANT]
 > ContextPack is still an unpublished source preview. There is no npm release or formal beta yet. It is suitable for small, guided tests using this document, not for presenting as a finished product.
@@ -371,7 +371,7 @@ Automated filtering cannot guarantee that every sensitive value will be recogniz
 
 Supported today:
 
-- JavaScript, JSX, TypeScript, TSX, MJS, CJS, MTS, CTS, and Python 3.8+;
+- JavaScript, JSX, TypeScript, TSX, MJS, CJS, MTS, and CTS, plus an experimental Python 3.8+ adapter;
 - Python top-level functions, async functions, classes, methods, variables, internal imports, pytest-style test files, and common packaging/configuration files;
 - Python-only and mixed JavaScript/Python repositories, with lexical fallback when Python is unavailable;
 - npm, pnpm, Yarn, and Bun project metadata;
@@ -386,6 +386,7 @@ Not supported or not yet proven:
 - automatic code changes or automatic agent execution;
 - Go, Rust, Java, and other languages;
 - Python framework semantics, full type inference, dynamic imports, and semantic call/reference graphs;
+- benchmark-validated Python real-issue retrieval;
 - public language-plugin APIs, Skills, and MCP integrations;
 - arbitrary large refactors, security audits, or complete bug diagnosis;
 - hosted accounts, team collaboration, or built-in LLM calls;
@@ -393,10 +394,11 @@ Not supported or not yet proven:
 
 ## Benchmark and current capability
 
-ContextPack currently has two evaluation tracks:
+ContextPack currently has three evaluation tracks:
 
 1. historical replay, which checks whether real changed files are retrieved;
-2. SWE-bench Multilingual JS/TS, which evaluates file and line-level retrieval for real issues.
+2. SWE-bench Multilingual JS/TS, which evaluates file and line-level retrieval for real issues;
+3. SWE-bench Lite Python, whose P1.2 full run is currently invalid.
 
 Current key results:
 
@@ -407,6 +409,16 @@ Current key results:
 | SWE-bench Axios issues | 6 | 0.617 | 0.205 | real-issue file and region smoke test |
 | SWE-bench JS/TS fixed set | 43 valid / 43 attempted | 0.299 | 0.079 | seven-repository P0.5 zero-skip baseline |
 | SWE-bench JS/TS P1.0 parity run | 43 valid / 43 attempted | 0.389 | 0.177 | P0.9 predictions reproduced exactly |
+| SWE-bench Lite Python engineering set | 57 valid / 57 attempted | 0.474 | 0.188 | zero-skip infrastructure gate, not a support verdict |
+| SWE-bench Lite Python full P1.2 run | 296 valid / 300 attempted | 0.311 | 0.126 | **invalid-run:** four persistent SymPy timeouts |
+
+P1.2 does not validate Python real-issue retrieval. The full frozen run retained
+four skipped instances after the permitted retry, so its deterministic verdict
+is `invalid-run`. On the 296 valid instances, line recall @500 was `0.066718`
+but useful hit @500 was `0.097973`, below the declared `0.100` floor. These
+partial metrics are diagnostic only and do not validate file or region support;
+they do not measure code generation or patch correctness. See the
+[P1.2 benchmark evidence](benchmarks/README.md#p12-python-benchmark).
 
 Query-aware region localization raises Axios line recall from `0.000` at every budget to `0.167`, `0.355`, and `0.411` at 100, 250, and 500 emitted lines. Useful-hit rate reaches `0.667` at 500 lines, but this is still a six-task smoke result with high region noise—not evidence of general agent success.
 

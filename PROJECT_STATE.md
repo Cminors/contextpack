@@ -12,8 +12,8 @@ for complete benchmark history.
 | Updated | 2026-07-21 |
 | Base commit | `32dcf5f` |
 | Active branch | `codex/p1.2-python-benchmark` |
-| Active milestone | P1.2 Python Benchmark |
-| Phase | Python engineering benchmark complete; full 300-task claim gate pending |
+| Active milestone | P1.2 Python Benchmark follow-up |
+| Phase | Measurement complete with `invalid-run`; Python support claim withheld |
 | Product status | Unpublished source preview moving toward a beta candidate |
 
 ## Current Position
@@ -24,10 +24,12 @@ controlled lexical fallback. It proved that adding Python did not change the
 pinned JavaScript/TypeScript evaluation outputs. It did not measure retrieval
 quality on real Python issues.
 
-P1.2 closes that evidence gap. It adds no ranking experiment. The milestone
+P1.2 attempted to close that evidence gap. It adds no ranking experiment. The milestone
 generalizes the real-issue evaluator to Python, prepares a pinned Python issue
 dataset, runs a balanced engineering gate, and then runs the full support-
-claim gate.
+claim gate. The balanced run was valid, but the full run retained four
+persistent timeouts and is therefore an `invalid-run`; Python real-issue
+retrieval remains unvalidated.
 
 ## Verified Baselines
 
@@ -115,8 +117,8 @@ against the test set.
 | Automated Python support gates | Complete; Task 4 review clean (`eee54e0`) |
 | Quality, performance, data, and JS/TS parity validation | Complete; Task 5 passed |
 | 57-task engineering run | Complete; 57/57 valid, zero skips; Task 6 |
-| 300-task support-claim run | Not started |
-| Documentation and final verdict | Not started |
+| 300-task support-claim run | Complete; 296/300 valid, 4 persistent skips; `invalid-run` |
+| Documentation and final verdict | Complete; support claim withheld |
 
 ### P1.2 Compatibility Checkpoint
 
@@ -163,6 +165,41 @@ the top 20. Its aggregate failure counts were 30 file-ranking misses and 21
 region-localization misses. The run environment was Node `v24.13.0`, Python
 `3.9.11`, and Windows 10 Pro `10.0.19041` x64.
 
+### P1.2 Python Full-Set Verdict
+
+**Verdict: `invalid-run`.** The frozen full run requested all 300 instances but
+produced 296 valid, unique results and four persistent skips. The skipped
+instances were `sympy__sympy-17630`, `sympy__sympy-17655`,
+`sympy__sympy-18057`, and `sympy__sympy-18087`; each timed out after the fixed
+600,000 ms analysis limit on both its initial attempt and the permitted
+`--resume --retry-skipped` retry. No timeout, dataset, scorer, region policy,
+selection rule, budget, or floor was changed.
+
+| Metric | Observed on 296 valid instances | Frozen floor | Result |
+|---|---:|---:|---|
+| File Recall@5 | `0.20270270270270271` | - | Diagnostic only |
+| File Recall@10 | `0.3108108108108108` | `0.250` | Numeric pass; not claimable |
+| File MRR | `0.12599583761541977` | `0.100` | Numeric pass; not claimable |
+| Line recall @100 | `0.022093749067433277` | - | Diagnostic only |
+| Line recall @250 | `0.04989810621961652` | - | Diagnostic only |
+| Line recall @500 | `0.06671778756556317` | `0.050` | Numeric pass; not claimable |
+| Useful hit @500 | `0.09797297297297297` | `0.100` | **Fail** |
+| Median estimated tokens | `3997` | - | Diagnostic only |
+| Median duration | `56072 ms` | - | Diagnostic only |
+
+The zero-skip validity gate failed independently of the metric floors. The
+frozen checker exited `2` and reported `Verdict: invalid-run`, plus failures for
+the valid-instance count, result count, and skipped list. Its reported metrics
+match `results.json`. The partial aggregate cannot validate Python file or
+region retrieval and says nothing about code generation or patch correctness.
+
+Independent raw validation confirmed version `1`, 300 requested checkpoint
+IDs matching the 300 unique prepared dataset IDs, 296 unique result IDs, the
+four missing IDs listed above, zero unexpected result IDs, source revision
+`6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2`, token budget `12000`, history
+window `100`, and line budgets `100,250,500`. The environment was Node
+`v24.13.0`, Python `3.9.11`, and Windows 10 Pro `10.0.19041` x64.
+
 ## Evidence And Artifacts
 
 - Benchmark methodology and recorded results: `benchmarks/README.md`
@@ -176,6 +213,12 @@ region-localization misses. The run environment was Node `v24.13.0`, Python
   `.contextpack/evals/p12-js-ts-full-43/results.json`
 - P1.2 Python balanced engineering artifacts:
   `.contextpack/evals/p12-python-balanced-57/{results,checkpoint,audit,diagnostics}.json`
+- P1.2 Python full invalid-run artifacts:
+  `.contextpack/evals/p12-python-full-300/{results,checkpoint,audit,diagnostics}.json`
+- P1.2 frozen checker stdout and stderr:
+  `.contextpack/evals/p12-python-full-300/task7-gate.{stdout,stderr}.log`
+- P1.2 full-run resume and retry logs:
+  `.contextpack/evals/p12-python-full-300/task7-{resume,retry-skipped}.{stdout,stderr}.log`
 - Stable parity reference: `.contextpack/evals/p10-full-43/results.json`
 
 ## Decision Log
@@ -188,12 +231,18 @@ region-localization misses. The run environment was Node `v24.13.0`, Python
 | 2026-07-20 | Keep scoring frozen during P1.2 | This milestone measures Python retrieval; it does not tune against the test set |
 | 2026-07-20 | Maintain this root status file each iteration | Give humans and external models one current, versioned handoff |
 | 2026-07-21 | Balanced Python engineering gate passed | 57/57 valid with zero skips; the full 300-task support verdict remains pending |
+| 2026-07-21 | Full Python support-claim run is `invalid-run` | Four SymPy instances persistently exceeded the frozen 600-second timeout; useful-hit @500 also missed its numeric floor |
+| 2026-07-21 | Withhold the Python retrieval support claim | A partial 296-instance aggregate cannot satisfy the declared 300/300 zero-skip gate |
+| 2026-07-21 | Final P1.2 evidence commit | `docs: validate Python retrieval on real issues (P1.2)` (this documentation commit) |
 
 ## Roadmap
 
-1. P1.2 Python Benchmark: active.
-2. P1.3 Agent Skill: expose the validated core through an installable agent workflow.
-3. P1.4 MCP Server: expose `build_context_pack`, `explain_candidate`, and `doctor` as structured tools.
+1. P1.2 Python Benchmark follow-up: obtain a valid 300/300 report under a new,
+   predeclared iteration before making any Python retrieval support claim.
+2. P1.3 Agent Skill: pending a valid P1.2 report; expose the validated core
+   through an installable agent workflow.
+3. P1.4 MCP Server: pending P1.3; expose `build_context_pack`,
+   `explain_candidate`, and `doctor` as structured tools.
 
 The remaining 11 JS/TS localization misses are a future retrieval hypothesis,
 not part of P1.2.

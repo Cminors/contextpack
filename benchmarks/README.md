@@ -318,6 +318,117 @@ JavaScript/TypeScript retrieval output. A real Python issue benchmark remains
 a future measurement, so the synthetic smoke does not establish Python
 retrieval quality on external repositories.
 
+## P1.2 Python Benchmark
+
+**Verdict: invalid-run.** The frozen full SWE-bench Lite Python run completed
+296 of 300 instances. Four SymPy instances timed out at the declared 600-second
+analysis limit on both the initial attempt and the permitted skipped-instance
+retry. The run therefore cannot validate Python real-issue retrieval. The
+observed 296-instance aggregate also missed the useful-hit @500 floor; the
+other three numeric floors passed, but they cannot support a product claim
+because the zero-skip validity gate failed.
+
+The source is the `test` split of `princeton-nlp/SWE-bench_Lite`, pinned at
+revision `6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2`. The pinned Parquet file is
+MIT licensed and has SHA-256
+`7a21f37b8bc179c7db5beeb14e88ac538ba283455c776e6b2535bbfb6e3551b4`.
+Preparation keeps all 300 instances whose old-side patch contains at least one
+existing Python file. The engineering set applies a deterministic cap of five
+instances per repository, producing 57 instances across the same 12
+repositories; the support-claim set contains all 300.
+
+| Metric | Balanced engineering set | Full support-claim attempt |
+|---|---:|---:|
+| Requested / valid / skipped | 57 / 57 / 0 | 300 / 296 / 4 |
+| File Recall@5 | 0.2982456140350877 | 0.20270270270270271 |
+| File Recall@10 | 0.47368421052631576 | 0.3108108108108108 |
+| File MRR | 0.18793068529910634 | 0.12599583761541977 |
+| Line recall @100 | 0.01417004048582996 | 0.022093749067433277 |
+| Line recall @250 | 0.058953050642801326 | 0.04989810621961652 |
+| Line recall @500 | 0.10338114576749088 | 0.06671778756556317 |
+| Useful hit @500 | 0.17543859649122806 | 0.09797297297297297 |
+| Median estimated tokens | 3,996 | 3,997 |
+| Median duration | 26,590 ms | 56,072 ms |
+
+The full metrics above describe only the 296 valid instances. They are retained
+for diagnosis and are not a 300-task aggregate.
+
+| Frozen full-set gate | Requirement | Observed | Status |
+|---|---:|---:|---|
+| Run validity | 300 valid, 0 skipped | 296 valid, 4 skipped | **Fail** |
+| File Recall@10 | >= 0.250 | 0.3108108108108108 | Numeric pass; not claimable |
+| File MRR | >= 0.100 | 0.12599583761541977 | Numeric pass; not claimable |
+| Line recall @500 | >= 0.050 | 0.06671778756556317 | Numeric pass; not claimable |
+| Useful hit @500 | >= 0.100 | 0.09797297297297297 | **Fail** |
+
+The frozen checker exited with code `2` and reported `Verdict: invalid-run`,
+with failures for the valid-instance count, result count, and non-empty skipped
+list. The persistent skips were `sympy__sympy-17630`,
+`sympy__sympy-17655`, `sympy__sympy-18057`, and
+`sympy__sympy-18087`; each reason was `Analysis timed out after 600000 ms.`
+
+The largest-budget failure-stage audit covers the 296 valid results:
+
+| Stage | Count |
+|---|---:|
+| File hit, region hit | 23 |
+| File hit, region miss | 69 |
+| File miss, rank 11-20 | 43 |
+| File miss, outside top 20 | 161 |
+| All file-ranking misses | 204 |
+| All region-localization misses | 69 |
+
+| Repository | File+region hit | File hit / region miss | Rank 11-20 miss | Outside top 20 |
+|---|---:|---:|---:|---:|
+| `astropy/astropy` | 1 | 1 | 0 | 4 |
+| `django/django` | 10 | 21 | 13 | 70 |
+| `matplotlib/matplotlib` | 0 | 3 | 2 | 18 |
+| `mwaskom/seaborn` | 0 | 2 | 1 | 1 |
+| `pallets/flask` | 0 | 2 | 1 | 0 |
+| `psf/requests` | 4 | 2 | 0 | 0 |
+| `pydata/xarray` | 0 | 3 | 0 | 2 |
+| `pylint-dev/pylint` | 1 | 2 | 2 | 1 |
+| `pytest-dev/pytest` | 2 | 5 | 2 | 8 |
+| `scikit-learn/scikit-learn` | 0 | 5 | 5 | 13 |
+| `sphinx-doc/sphinx` | 0 | 2 | 3 | 11 |
+| `sympy/sympy` | 5 | 21 | 14 | 33 |
+
+Both runs used Node `v24.13.0`, Python `3.9.11`, and Windows 10 Pro
+`10.0.19041` x64. The full run used a 12,000-token budget, a 100-commit history
+window, line budgets 100/250/500, a 600-second per-instance analysis timeout,
+and a 300-second Git timeout. It was resumed only from its atomic checkpoint;
+after the first 296-valid/4-skipped pass, only the four recorded skips were
+retried.
+
+```powershell
+$root = 'C:\Users\Administrator\Documents\contextpack'
+npm run benchmark:prepare:swebench-python
+node dist/cli.js eval-issues `
+  --dataset "$root\.benchmarks\datasets\swe-bench-lite-python-full-300.jsonl" `
+  --cache "$root\.benchmarks\repositories" `
+  --history 100 --budget 12000 --line-budgets 100,250,500 `
+  --instance-timeout 600 --git-timeout 300 `
+  --output "$root\.contextpack\evals\p12-python-full-300"
+node dist/cli.js eval-issues `
+  --dataset "$root\.benchmarks\datasets\swe-bench-lite-python-full-300.jsonl" `
+  --cache "$root\.benchmarks\repositories" `
+  --history 100 --budget 12000 --line-budgets 100,250,500 `
+  --instance-timeout 600 --git-timeout 300 `
+  --output "$root\.contextpack\evals\p12-python-full-300" `
+  --resume --retry-skipped
+npm run benchmark:validate:python -- `
+  "$root\.contextpack\evals\p12-python-full-300\results.json"
+```
+
+Raw artifacts remain ignored under
+`.contextpack/evals/p12-python-balanced-57/` and
+`.contextpack/evals/p12-python-full-300/`; prepared datasets and manifests
+remain ignored under `.benchmarks/datasets/`. Gold regions are old-side diff
+hunks rather than human context labels, insertion-only hunks use a one-line
+base anchor, new or unsupported patch files are excluded, and the evaluation
+measures retrieval rather than patch correctness or agent task success. The
+audit localizes the failure stage but does not prove the scoring cause.
+
 ## Baseline Comparison
 
 The first MCP SDK run used the original mixed-commit evaluator and V0.1 ranking:
@@ -372,7 +483,7 @@ The V0.2 content scorer and P0.3 query-aware region localizer are retained as th
 - Final median token use is lower than V0.1 on both tracks.
 - The P0.3 Axios track produces non-zero line recall at 100/250/500 lines without reducing file Recall@10.
 
-The external track still measures retrieval rather than Coding Agent success. P0.8 proves that P0.7 term discrimination improves the full 43-task baseline, and P0.9 reduces file-hit/region-miss cases from 13 to 11 while preserving every file prediction array. The expanded ten-commit keyword-ablated replay aggregate still misses its historical MRR floor, but P0.9 reproduces all P0.8 replay predictions exactly. No further retrieval experiment is selected yet; the remaining 11 localization misses and the inherited replay-floor caveat should be reviewed before choosing the next hypothesis. Adding a UI, more languages, or an embedded LLM is not justified by these results alone.
+The external track still measures retrieval rather than Coding Agent success. P0.8 proves that P0.7 term discrimination improves the full 43-task baseline, and P0.9 reduces file-hit/region-miss cases from 13 to 11 while preserving every file prediction array. The expanded ten-commit keyword-ablated replay aggregate still misses its historical MRR floor, but P0.9 reproduces all P0.8 replay predictions exactly. P1.2 does not validate Python real-issue retrieval: four persistent skips make the full run invalid, and the observed 296-instance useful-hit rate also misses its floor. P1.3 remains pending a valid Python benchmark report. The remaining 11 JS/TS localization misses and the inherited replay-floor caveat remain future retrieval hypotheses. Adding a UI, more languages, or an embedded LLM is not justified by these results alone.
 
 ## Reproduce
 
